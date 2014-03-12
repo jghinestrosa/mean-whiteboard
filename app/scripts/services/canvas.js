@@ -2,7 +2,6 @@
 
 angular.module('meanWhiteboardApp')
   .factory('canvasFactory', function () {
-    // Service logic
 
     // General properties
     var properties = {
@@ -13,7 +12,9 @@ angular.module('meanWhiteboardApp')
 	pencilWidth: 5,
 	pencilCap: 'round',
 	firstColor: '#000',
-	secondColor: '#fff'
+	secondColor: '#fff',
+	width: 500,
+	height: 500
     };
 
     var layers = [];
