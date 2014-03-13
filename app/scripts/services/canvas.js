@@ -14,7 +14,7 @@ angular.module('meanWhiteboardApp')
       firstColor: '#000',
       secondColor: '#fff',
       width: 500,
-      height: 500
+      height: 500,
     };
 
     var setProperties = function(updatedProperties) {
@@ -28,7 +28,7 @@ angular.module('meanWhiteboardApp')
       }
     };
 
-    var layers = [],
+    var layers = {},
         nextLayerId = 0;
 
     var getNextLayerId = function() {
@@ -43,17 +43,24 @@ angular.module('meanWhiteboardApp')
     };
 
     var addLayer = function() {
-      layers.push(new Layer());
+      var newLayer = new Layer();
+      layers[newLayer.id] = newLayer;
     };
 
     var getLayers = function() {
       return layers;
     };
 
+    // Set context 2d to a layer
+    var setContext = function(id, ctx) {
+      layers[id].ctx = ctx;
+    };
+
     return {
       properties: properties,
       setProperties: setProperties,
       addLayer: addLayer,
-      getLayers: getLayers
+      getLayers: getLayers,
+      setContext: setContext
     };
   });
