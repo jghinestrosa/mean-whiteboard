@@ -70,7 +70,7 @@ describe('Service: canvasFactory', function () {
 
   it('should have zero layers', function() {
     var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(1);
+    expect(numberOfLayers).toEqual(0);
   });
 
   it('should have one layer', function(){
@@ -78,7 +78,7 @@ describe('Service: canvasFactory', function () {
     canvasFactory.layers.addNewLayer();
 
     var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(2);
+    expect(numberOfLayers).toEqual(1);
   
   });
 
@@ -89,6 +89,9 @@ describe('Service: canvasFactory', function () {
     var id = 0;
     var context = jasmine.createSpy('ctx');
 
+    // Add a new layer
+    canvasFactory.layers.addNewLayer();
+
     // Associate context to layer
     canvasFactory.layers.setContextToLayer(id, context);
 
@@ -96,6 +99,24 @@ describe('Service: canvasFactory', function () {
     expect(layer.ctx).toBeDefined();
     expect(layer.ctx).toBe(context);
   
+  });
+
+  it('should set offset values to a layer object', function(){
+
+    var id = 0,
+        offsetLeft = 10,
+        offsetTop = 10;
+
+    // Add a new layer
+    canvasFactory.layers.addNewLayer();
+
+    // Set offsets to layer 'id'
+    canvasFactory.layers.setOffsetToLayer(id, offsetLeft, offsetTop);
+
+    expect(canvasFactory.layers.getLayers()[id].offsetLeft).toEqual(offsetLeft);
+    expect(canvasFactory.layers.getLayers()[id].offsetTop).toEqual(offsetTop);
+
+
   });
 
 });

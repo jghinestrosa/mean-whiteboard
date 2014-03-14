@@ -10,11 +10,13 @@ describe('Directive: layer', function () {
     $rootScope = _$rootScope_;
   }));
 
-  it('assigns the layer-id attribute to a scope property', function() {
+  it('assigns the id property of scope to the layer-id attribute', function() {
     
     // Set mock properties and methods in scope
     $rootScope.id = 0;
     $rootScope.setContextToLayer = jasmine.createSpy('mock setContext');
+    $rootScope.setOffsetToLayer = jasmine.createSpy('mock setOffsetToLayer');
+    $rootScope.getNumberOfLayers = jasmine.createSpy('mock getNumberOfLayers').andReturn(0);
     
     // Compile HTML and fire all the watches
     var element = $compile("<canvas layer-id='{{id}}'></canvas>")($rootScope);
@@ -30,6 +32,9 @@ describe('Directive: layer', function () {
     // Set properties in scope
     $rootScope.id = 0;
     $rootScope.setContextToLayer = canvasFactory.layers.setContextToLayer;
+    $rootScope.setOffsetToLayer = jasmine.createSpy('mock setOffsetToLayer');
+    $rootScope.getNumberOfLayers = jasmine.createSpy('mock getNumberOfLayers').andReturn(0);
+    canvasFactory.layers.addNewLayer();
 
     // Compile HTML and fire all the watches
     var element = $compile("<canvas layer-id='{{id}}'></canvas>")($rootScope);
