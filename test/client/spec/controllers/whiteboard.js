@@ -34,4 +34,12 @@ describe('Controller: WhiteboardCtrl', function () {
     expect($scope.addNewLayer).toBe(canvasFactory.layers.addNewLayer);
   });
 
+  it('should reference to setMode method in canvasFactory', function() {
+    expect($scope.setMode).toBe(canvasFactory.canvasOperations.setMode);
+  });
+
+  it('should reference to getSelectedMode method in canvasFactory', function() {
+    expect($scope.getSelectedMode).toBe(canvasFactory.canvasOperations.getSelectedMode);
+  });
+
 });

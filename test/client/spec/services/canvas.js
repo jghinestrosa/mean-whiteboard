@@ -29,7 +29,7 @@ describe('Service: canvasFactory', function () {
 
     // Get properties from factory
     var properties = canvasFactory.properties;
-    
+
     // Check each property value
     var prop;
     for (prop in properties) {
@@ -65,7 +65,7 @@ describe('Service: canvasFactory', function () {
         }
       }
     }
-  
+
   });
 
   it('should have zero layers', function() {
@@ -73,17 +73,17 @@ describe('Service: canvasFactory', function () {
     expect(numberOfLayers).toEqual(0);
   });
 
-  it('should have one layer', function(){
+  it('should add one layer', function(){
 
     canvasFactory.layers.addNewLayer();
 
     var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
     expect(numberOfLayers).toEqual(1);
-  
+
   });
 
 
-  it('should set a context to a layer object', function(){
+  it('should set a context to a layer object', function() {
 
     // Set id and mock context
     var id = 0;
@@ -98,14 +98,14 @@ describe('Service: canvasFactory', function () {
     var layer = canvasFactory.layers.getLayers()[id];
     expect(layer.ctx).toBeDefined();
     expect(layer.ctx).toBe(context);
-  
+
   });
 
-  it('should set offset values to a layer object', function(){
+  it('should set offset values to a layer object', function() {
 
     var id = 0,
-        offsetLeft = 10,
-        offsetTop = 10;
+    offsetLeft = 10,
+    offsetTop = 10;
 
     // Add a new layer
     canvasFactory.layers.addNewLayer();
@@ -116,7 +116,32 @@ describe('Service: canvasFactory', function () {
     expect(canvasFactory.layers.getLayers()[id].offsetLeft).toEqual(offsetLeft);
     expect(canvasFactory.layers.getLayers()[id].offsetTop).toEqual(offsetTop);
 
+  });
 
+  it('should select a layer', function() {
+
+    // Check that canvasFactory does not have any layer selected by default
+    expect(canvasFactory.layers.getSelectedLayer()).toBeUndefined();
+
+    canvasFactory.layers.addNewLayer();
+    canvasFactory.layers.selectLayer(0);
+
+    var layer = canvasFactory.layers.getLayers()[0];
+    expect(canvasFactory.layers.getSelectedLayer()).toBe(layer);
+  });
+
+  it('should select a mode', function() {
+
+    var mode = 'drawPencil';
+
+    // Check that canvasFactory does not have any mode selected by default
+    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('');
+    
+    // Select a mode
+    canvasFactory.canvasOperations.setMode(mode);
+
+    // Check that the mode has been selected
+    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual(mode);
   });
 
 });

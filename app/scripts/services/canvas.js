@@ -74,20 +74,31 @@ angular.module('meanWhiteboardApp')
     };
 
     // Select active context
-    var selectLayer = function(id){
+    var selectLayer = function(id) {
       selectedLayer = layersMap[id];
+    };
+
+    var getSelectedLayer = function() {
+      return selectedLayer;
     };
 
     layers.addNewLayer = addNewLayer;
     layers.getLayers = getLayers;
     layers.getNumberOfLayers = getNumberOfLayers;
+    layers.getSelectedLayer = getSelectedLayer;
     layers.selectLayer = selectLayer;
     layers.setContextToLayer = setContextToLayer;
     layers.setOffsetToLayer = setOffsetToLayer;
 
     /** Canvas Operations **/
 
-    var canvasOperations = {};
+    var canvasOperations = {},
+        selectedMode = '';
+
+    // Public get selected mode
+    var getSelectedMode = function() {
+      return selectedMode;
+    };
 
     // Private drawPencil function
     var drawPencil = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
@@ -117,11 +128,16 @@ angular.module('meanWhiteboardApp')
 
         // TODO: Finish with else ifs...
 
+        // Update selected mode
+        selectedMode = mode;
+
       }(mode));
     };
 
     canvasOperations.setMode = setMode;
+    canvasOperations.getSelectedMode = getSelectedMode;
 
+    /** Factory **/
     return {
       properties: properties,
       setProperties: setProperties,

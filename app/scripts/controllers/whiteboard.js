@@ -16,11 +16,11 @@ angular.module('meanWhiteboardApp')
     $scope.selectLayer = canvasFactory.layers.selectLayer;
 
     // Mouse events management for canvas
-    $scope.handleMouseDown = function(event){
+    $scope.handleMouseDown = function(event) {
       canvasFactory.canvasOperations.handleMouseDown(event);
     };
 
-    $scope.handleMouseMove = function(event){
+    $scope.handleMouseMove = function(event) {
       canvasFactory.canvasOperations.handleMouseMove(event);
     };
 
@@ -30,5 +30,6 @@ angular.module('meanWhiteboardApp')
 
     // Mode
     $scope.setMode = canvasFactory.canvasOperations.setMode;
+    $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
   });
