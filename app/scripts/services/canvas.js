@@ -63,6 +63,9 @@ angular.module('meanWhiteboardApp')
       layers[id].ctx = ctx;
     };
 
+    // Initialize layers
+    addNewLayer();
+
     return {
       properties: properties,
       setProperties: setProperties,

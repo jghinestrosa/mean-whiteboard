@@ -68,26 +68,22 @@ describe('Service: canvasFactory', function () {
   
   });
 
-  // TODO Change when whiteboard starts with one layer
   it('should have zero layers', function() {
     var numberOfLayers = canvasFactory.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(0);
+    expect(numberOfLayers).toEqual(1);
   });
 
-  // TODO Change to two layers when whiteboard starts with one layer
   it('should have one layer', function(){
 
     canvasFactory.addNewLayer();
 
     var numberOfLayers = canvasFactory.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(1);
+    expect(numberOfLayers).toEqual(2);
   
   });
 
 
   it('should set a context to a layer object', function(){
-    //TODO This won't be necessary when whiteboard starts with one layer by default
-    canvasFactory.addNewLayer();
 
     // Set id and mock context
     var id = 0;
