@@ -23,13 +23,14 @@ angular.module('meanWhiteboardApp')
       var prop;
       for (prop in updatedProperties) {
         if (updatedProperties.hasOwnProperty(prop)) {
-          properties[prop] = updatedProperties.prop;
+          properties[prop] = updatedProperties[prop];
         }
       }
     };
 
     var layers = {},
-        nextLayerId = 0;
+        nextLayerId = 0,
+        numberOfLayers = 0;
 
     var getNextLayerId = function() {
       return nextLayerId++;
@@ -37,18 +38,24 @@ angular.module('meanWhiteboardApp')
 
     // Layer constructor
     var Layer = function() {
-      this.id = getNextLayerId();
       this.globalCompositeOperation = 'source-over';
       this.globalAlpha = 1.0;
     };
 
-    var addLayer = function() {
+    var addNewLayer = function() {
       var newLayer = new Layer();
-      layers[newLayer.id] = newLayer;
+      var id = getNextLayerId();
+
+      layers[id] = newLayer;
+      numberOfLayers++;
     };
 
     var getLayers = function() {
       return layers;
+    };
+
+    var getNumberOfLayers = function() {
+      return numberOfLayers;
     };
 
     // Set context 2d to a layer
@@ -59,7 +66,8 @@ angular.module('meanWhiteboardApp')
     return {
       properties: properties,
       setProperties: setProperties,
-      addLayer: addLayer,
+      addNewLayer: addNewLayer,
+      getNumberOfLayers: getNumberOfLayers,
       getLayers: getLayers,
       setContext: setContext
     };

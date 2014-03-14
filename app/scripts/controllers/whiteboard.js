@@ -7,6 +7,6 @@ angular.module('meanWhiteboardApp')
     $scope.getLayers = canvasFactory.getLayers;
     $scope.getLastLayerAdded = canvasFactory.getLastLayerAdded;
     $scope.setContext = canvasFactory.setContext;
-    $scope.addNewLayer = canvasFactory.addLayer;
+    $scope.addNewLayer = canvasFactory.addNewLayer;
 
   });
