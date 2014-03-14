@@ -6,7 +6,10 @@ angular.module('meanWhiteboardApp')
       templateUrl: 'templates/whiteboard.html',
       restrict: 'E',
       link: function(scope, element, attrs) {
-
+        
+        // Initialization
+        scope.addNewLayer();
+        scope.setMode('drawPencil');
       }
     };
   });

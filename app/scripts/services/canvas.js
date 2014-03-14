@@ -11,7 +11,7 @@ angular.module('meanWhiteboardApp')
       eraserCap: 'round',
       pencilWidth: 5,
       pencilCap: 'square',
-      firstColor: '#000',
+      firstColor: '#000000',
       secondColor: '#fff',
       width: 500,
       height: 500,
@@ -67,26 +67,27 @@ angular.module('meanWhiteboardApp')
       layersMap[id].ctx = ctx;
     };
 
+    // Set offset of canvas to layer
+    var setOffsetToLayer = function(id, offsetLeft, offsetTop) {
+      layersMap[id].offsetLeft = offsetLeft;
+      layersMap[id].offsetTop = offsetTop;
+    };
+
     // Select active context
     var selectLayer = function(id){
       selectedLayer = layersMap[id];
     };
-
-    // Initialize layers
-    addNewLayer();
 
     layers.addNewLayer = addNewLayer;
     layers.getLayers = getLayers;
     layers.getNumberOfLayers = getNumberOfLayers;
     layers.selectLayer = selectLayer;
     layers.setContextToLayer = setContextToLayer;
+    layers.setOffsetToLayer = setOffsetToLayer;
 
     /** Canvas Operations **/
 
-    var canvasOperations = {},
-        handleMouseDown,
-        handleMouseMove,
-        handleMouseUp;
+    var canvasOperations = {};
 
     // Private drawPencil function
     var drawPencil = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
@@ -95,22 +96,31 @@ angular.module('meanWhiteboardApp')
       ctx.lineCap = pencilCap;
       ctx.globalCompositeOperation = globalCompositeOperation;
 
-      ctx.beginPath();
-      ctx.moveTo(x,y);
+      ctx.lineTo(x, y);
       ctx.stroke();
+
     };
 
-    // Public drawPencil method
-    canvasOperations.drawPencil = function(event) {
-      drawPencil(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.clientX, event.clientY);
+    var beginPath = function() {
+      selectedLayer.ctx.beginPath();
     };
-
+    
     var setMode = function(mode) {
-      if (mode === 'drawPencil') {
-        handleMouseDown = canvasOperations.drawPencil;
-        handleMouseMove = canvasOperations.drawPencil;
-      }
+      (function(mode) {
+        if (mode === 'drawPencil') {
+          canvasOperations.handleMouseMove = function(event) {
+            drawPencil(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.clientX-selectedLayer.offsetLeft, event.clientY-selectedLayer.offsetTop);
+          };
+          canvasOperations.handleMouseDown = canvasOperations.handleMouseMove;
+          canvasOperations.handleMouseUp = beginPath;
+        }
+
+        // TODO: Finish with else ifs...
+
+      }(mode));
     };
+
+    canvasOperations.setMode = setMode;
 
     return {
       properties: properties,

@@ -9,6 +9,12 @@ angular.module('meanWhiteboardApp')
         // When layerId is loaded, the model is updated with the context of the canvas
         attrs.$observe('layerId', function(id){
           scope.setContextToLayer(id, element[0].getContext('2d'));
+          scope.setOffsetToLayer(id, element[0].offsetLeft, element[0].offsetTop);
+
+          // If this is the first layer it is automatically selected
+          if (scope.getNumberOfLayers() === 1) {
+            scope.selectLayer(id);
+          }
         });
 
       }
