@@ -10,7 +10,7 @@ angular.module('meanWhiteboardApp')
       eraserWidth: 5,
       eraserCap: 'round',
       pencilWidth: 5,
-      pencilCap: 'round',
+      pencilCap: 'square',
       firstColor: '#000',
       secondColor: '#fff',
       width: 500,
@@ -28,9 +28,13 @@ angular.module('meanWhiteboardApp')
       }
     };
 
+    /** Layers configuration **/
+
     var layers = {},
+        layersMap = {},
         nextLayerId = 0,
-        numberOfLayers = 0;
+        numberOfLayers = 0,
+        selectedLayer;
 
     var getNextLayerId = function() {
       return nextLayerId++;
@@ -46,12 +50,12 @@ angular.module('meanWhiteboardApp')
       var newLayer = new Layer();
       var id = getNextLayerId();
 
-      layers[id] = newLayer;
+      layersMap[id] = newLayer;
       numberOfLayers++;
     };
 
     var getLayers = function() {
-      return layers;
+      return layersMap;
     };
 
     var getNumberOfLayers = function() {
@@ -59,19 +63,59 @@ angular.module('meanWhiteboardApp')
     };
 
     // Set context 2d to a layer
-    var setContext = function(id, ctx) {
-      layers[id].ctx = ctx;
+    var setContextToLayer = function(id, ctx) {
+      layersMap[id].ctx = ctx;
+    };
+
+    // Select active context
+    var selectLayer = function(id){
+      selectedLayer = layersMap[id];
     };
 
     // Initialize layers
     addNewLayer();
 
+    layers.addNewLayer = addNewLayer;
+    layers.getLayers = getLayers;
+    layers.getNumberOfLayers = getNumberOfLayers;
+    layers.selectLayer = selectLayer;
+    layers.setContextToLayer = setContextToLayer;
+
+    /** Canvas Operations **/
+
+    var canvasOperations = {},
+        handleMouseDown,
+        handleMouseMove,
+        handleMouseUp;
+
+    // Private drawPencil function
+    var drawPencil = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
+      ctx.lineWidth = pencilWidth;
+      ctx.strokeStyle = color;
+      ctx.lineCap = pencilCap;
+      ctx.globalCompositeOperation = globalCompositeOperation;
+
+      ctx.beginPath();
+      ctx.moveTo(x,y);
+      ctx.stroke();
+    };
+
+    // Public drawPencil method
+    canvasOperations.drawPencil = function(event) {
+      drawPencil(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.clientX, event.clientY);
+    };
+
+    var setMode = function(mode) {
+      if (mode === 'drawPencil') {
+        handleMouseDown = canvasOperations.drawPencil;
+        handleMouseMove = canvasOperations.drawPencil;
+      }
+    };
+
     return {
       properties: properties,
       setProperties: setProperties,
-      addNewLayer: addNewLayer,
-      getNumberOfLayers: getNumberOfLayers,
-      getLayers: getLayers,
-      setContext: setContext
+      layers: layers,
+      canvasOperations: canvasOperations
     };
   });

@@ -4,10 +4,10 @@ angular.module('meanWhiteboardApp')
   .controller('WhiteboardCtrl', function ($scope, canvasFactory) {
     
     $scope.properties = canvasFactory.properties;
-    $scope.getLayers = canvasFactory.getLayers;
-    $scope.getLastLayerAdded = canvasFactory.getLastLayerAdded;
-    $scope.setContext = canvasFactory.setContext;
-    $scope.addNewLayer = canvasFactory.addNewLayer;
+    $scope.getLayers = canvasFactory.layers.getLayers;
+    $scope.getLastLayerAdded = canvasFactory.layers.getLastLayerAdded;
+    $scope.setContextToLayer = canvasFactory.layers.setContextToLayer;
+    $scope.addNewLayer = canvasFactory.layers.addNewLayer;
 
     $scope.handleMouseDown = function(event) {
       console.log('mouseDown ' + event);

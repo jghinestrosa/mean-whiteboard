@@ -7,8 +7,8 @@ angular.module('meanWhiteboardApp')
       link: function(scope, element, attrs) {
 
         // When layerId is loaded, the model is updated with the context of the canvas
-        attrs.$observe('layerId', function(value){
-          scope.setContext(value, element[0].getContext('2d'));
+        attrs.$observe('layerId', function(id){
+          scope.setContextToLayer(id, element[0].getContext('2d'));
         });
 
       }

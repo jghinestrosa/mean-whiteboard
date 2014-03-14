@@ -19,19 +19,19 @@ describe('Controller: WhiteboardCtrl', function () {
   });
   
   it('should reference to getLayers method in canvasFactory', function() {
-    expect($scope.getLayers).toBe(canvasFactory.getLayers);
+    expect($scope.getLayers).toBe(canvasFactory.layers.getLayers);
   });
 
   it('should reference to getLastLayerAdded method in canvasFactory', function() {
-    expect($scope.getLastLayerAdded).toBe(canvasFactory.getLastLayerAdded);
+    expect($scope.getLastLayerAdded).toBe(canvasFactory.layers.getLastLayerAdded);
   });
 
   it('should reference to setContext method in canvasFactory', function() {
-    expect($scope.setContext).toBe(canvasFactory.setContext);
+    expect($scope.setContext).toBe(canvasFactory.layers.setContext);
   });
 
   it('should reference to addNewLayer method in canvasFactory', function() {
-    expect($scope.addNewLayer).toBe(canvasFactory.addNewLayer);
+    expect($scope.addNewLayer).toBe(canvasFactory.layers.addNewLayer);
   });
 
 });

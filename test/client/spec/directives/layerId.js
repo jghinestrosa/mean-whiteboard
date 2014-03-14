@@ -14,7 +14,7 @@ describe('Directive: layer', function () {
     
     // Set mock properties and methods in scope
     $rootScope.id = 0;
-    $rootScope.setContext = jasmine.createSpy('mock setContext');
+    $rootScope.setContextToLayer = jasmine.createSpy('mock setContext');
     
     // Compile HTML and fire all the watches
     var element = $compile("<canvas layer-id='{{id}}'></canvas>")($rootScope);
@@ -29,7 +29,7 @@ describe('Directive: layer', function () {
 
     // Set properties in scope
     $rootScope.id = 0;
-    $rootScope.setContext = canvasFactory.setContext;
+    $rootScope.setContextToLayer = canvasFactory.layers.setContextToLayer;
 
     // Compile HTML and fire all the watches
     var element = $compile("<canvas layer-id='{{id}}'></canvas>")($rootScope);
@@ -37,7 +37,7 @@ describe('Directive: layer', function () {
 
     // Check that the canvas element context is the same that is stored in the layer object
     var ctx = element[0].getContext('2d');
-    var layer = canvasFactory.getLayers()[$rootScope.id];
+    var layer = canvasFactory.layers.getLayers()[$rootScope.id];
     expect(layer.ctx).toBe(ctx);
 
   }));

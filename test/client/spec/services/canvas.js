@@ -69,15 +69,15 @@ describe('Service: canvasFactory', function () {
   });
 
   it('should have zero layers', function() {
-    var numberOfLayers = canvasFactory.getNumberOfLayers();
+    var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
     expect(numberOfLayers).toEqual(1);
   });
 
   it('should have one layer', function(){
 
-    canvasFactory.addNewLayer();
+    canvasFactory.layers.addNewLayer();
 
-    var numberOfLayers = canvasFactory.getNumberOfLayers();
+    var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
     expect(numberOfLayers).toEqual(2);
   
   });
@@ -90,10 +90,11 @@ describe('Service: canvasFactory', function () {
     var context = jasmine.createSpy('ctx');
 
     // Associate context to layer
-    canvasFactory.setContext(id, context);
+    canvasFactory.layers.setContextToLayer(id, context);
 
-    var layer = canvasFactory.getLayers()[id];
+    var layer = canvasFactory.layers.getLayers()[id];
     expect(layer.ctx).toBeDefined();
+    expect(layer.ctx).toBe(context);
   
   });
 
