@@ -1,3 +1,6 @@
+<div id="buttons">
+  <button ng-repeat='(key, value) in getButtons()'>{{value.name}}</button>
+</div>
 <div id='mouseEventsDiv' class='board' listen-mouse-events handler-mouse-move='handleMouseMove(event)' handler-mouse-down='handleMouseDown(event)' handler-mouse-up='handleMouseUp(event)'>
 	<canvas layer-id='{{key}}' ng-repeat='(key, value) in getLayers()'></canvas>
 </div>

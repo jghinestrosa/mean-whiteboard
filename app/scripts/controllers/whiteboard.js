@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .controller('WhiteboardCtrl', function ($scope, canvasFactory) {
-    
+  .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory) {
+
+    /** canvasFactory **/
     // General properties
     $scope.properties = canvasFactory.properties;
 
@@ -31,5 +32,8 @@ angular.module('meanWhiteboardApp')
     // Mode
     $scope.setMode = canvasFactory.canvasOperations.setMode;
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
+
+    /** Button Factory **/
+    $scope.getButtons = buttonFactory.getButtons;
 
   });

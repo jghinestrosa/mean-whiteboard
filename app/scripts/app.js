@@ -8,7 +8,10 @@ angular.module('meanWhiteboardApp', [
       .when('/', {
         templateUrl: 'partials/whiteboard',
         controller: 'WhiteboardCtrl',
-	resolve: {canvasFactory: 'canvasFactory'}
+        resolve: {
+          canvasFactory: 'canvasFactory',
+          buttonFactory: 'buttonFactory'
+        }
       })
       .otherwise({
         redirectTo: '/'

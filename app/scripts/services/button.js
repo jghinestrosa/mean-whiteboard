@@ -34,13 +34,20 @@ angular.module('meanWhiteboardApp')
 
     };
 
+    var getButtons = function() {
+      return buttonsMap;
+    };
+
     var getNumberOfButtons = function() {
       return numberOfButtons;
     };
 
+    addNewButton('drawBrush');
+
     // Public API here
     return {
       addNewButton: addNewButton,
+      getButtons: getButtons,
       getNumberOfButtons: getNumberOfButtons
     };
 
