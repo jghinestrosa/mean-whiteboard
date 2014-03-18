@@ -9,7 +9,7 @@ angular.module('meanWhiteboardApp')
         
         // Initialization
         scope.addNewLayer();
-        scope.setMode('drawPencil');
+        scope.setMode(scope.getSelectedMode());
       }
     };
   });

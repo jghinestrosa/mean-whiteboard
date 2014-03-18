@@ -36,10 +36,10 @@ describe('Directive: whiteboard', function () {
 
   it('should select a mode', function(){
 
-    var mode = 'drawPencil';
+    var mode = 'drawBrush';
 
-    // Check that there is no selected mode
-    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('');
+    // Check that brush mode is selected
+    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('drawBrush');
 
     //Compile the 'whiteboard' directive and check that a mode has been selected
     $compile('<whiteboard></whiteboard>')($rootScope);

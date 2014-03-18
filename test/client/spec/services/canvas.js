@@ -135,7 +135,7 @@ describe('Service: canvasFactory', function () {
     var mode = 'drawPencil';
 
     // Check that canvasFactory does not have any mode selected by default
-    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('');
+    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('drawBrush');
     
     // Select a mode
     canvasFactory.canvasOperations.setMode(mode);
