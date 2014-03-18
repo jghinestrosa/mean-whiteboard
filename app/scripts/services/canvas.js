@@ -30,8 +30,7 @@ angular.module('meanWhiteboardApp')
 
     /** Layers configuration **/
 
-    var layers = {},
-        layersMap = {},
+    var layersMap = {},
         nextLayerId = 0,
         numberOfLayers = 0,
         selectedLayer;
@@ -46,92 +45,88 @@ angular.module('meanWhiteboardApp')
       this.globalAlpha = 1.0;
     };
 
-    var addNewLayer = function() {
-      var newLayer = new Layer();
-      var id = getNextLayerId();
+    /** API for layers **/
+    var layers = {
 
-      layersMap[id] = newLayer;
-      numberOfLayers++;
+      addNewLayer:  function() {
+        var newLayer = new Layer();
+        var id = getNextLayerId();
+
+        layersMap[id] = newLayer;
+        numberOfLayers++;
+      },
+
+      getLayers: function() {
+        return layersMap;
+      },
+
+      getNumberOfLayers: function() {
+        return numberOfLayers;
+      },
+
+      getSelectedLayer: function() {
+        return selectedLayer;
+      },
+
+      // Select active context
+      selectLayer: function(id) {
+        selectedLayer = layersMap[id];
+      },
+
+      // Set context 2d to a layer
+      setContextToLayer: function(id, ctx) {
+        layersMap[id].ctx = ctx;
+      },
+
+      // Set offset of canvas to layer
+      setOffsetToLayer: function(id, offsetLeft, offsetTop) {
+        layersMap[id].offsetLeft = offsetLeft;
+        layersMap[id].offsetTop = offsetTop;
+      }
     };
-
-    var getLayers = function() {
-      return layersMap;
-    };
-
-    var getNumberOfLayers = function() {
-      return numberOfLayers;
-    };
-
-    // Set context 2d to a layer
-    var setContextToLayer = function(id, ctx) {
-      layersMap[id].ctx = ctx;
-    };
-
-    // Set offset of canvas to layer
-    var setOffsetToLayer = function(id, offsetLeft, offsetTop) {
-      layersMap[id].offsetLeft = offsetLeft;
-      layersMap[id].offsetTop = offsetTop;
-    };
-
-    // Select active context
-    var selectLayer = function(id) {
-      selectedLayer = layersMap[id];
-    };
-
-    var getSelectedLayer = function() {
-      return selectedLayer;
-    };
-
-    layers.addNewLayer = addNewLayer;
-    layers.getLayers = getLayers;
-    layers.getNumberOfLayers = getNumberOfLayers;
-    layers.getSelectedLayer = getSelectedLayer;
-    layers.selectLayer = selectLayer;
-    layers.setContextToLayer = setContextToLayer;
-    layers.setOffsetToLayer = setOffsetToLayer;
 
     /** Canvas Operations **/
 
     var canvasOperations = {},
         selectedMode = 'drawBrush';
 
-        // Public get selected mode
-        var getSelectedMode = function() {
-          return selectedMode;
-        };
+    // Public get selected mode
+    var getSelectedMode = function() {
+      return selectedMode;
+    };
 
-        // Points needed to draw using the pencil or the brush
-        var drawingPoints = {
-          oldPoint : {
-            x: 0,
-            y: 0
-          },
+    // Points needed to draw using the pencil or the brush
+    var drawingPoints = {
+      oldPoint : {
+        x: 0,
+        y: 0
+      },
 
-          currentPoint : {
-            x: 0,
-            y: 0
-          },
+      currentPoint : {
+        x: 0,
+        y: 0
+      },
 
-          currentMidPoint : {
-            x: 0,
-            y: 0
-          },
+      currentMidPoint : {
+        x: 0,
+        y: 0
+      },
 
-          oldMidPoint : {
-            x: 0,
-            y: 0
-          },
+      oldMidPoint : {
+        x: 0,
+        y: 0
+      },
 
-          updatePoints : function() {
-            // update old point for next iteration
-            this.oldPoint.x = this.currentPoint.x;
-            this.oldPoint.y = this.currentPoint.y;
+      updatePoints : function() {
+        // update old point for next iteration
+        this.oldPoint.x = this.currentPoint.x;
+        this.oldPoint.y = this.currentPoint.y;
 
-            // update old middle point for next iteration
-            this.oldMidPoint.x = this.currentMidPoint.x;
-            this.oldMidPoint.y = this.currentMidPoint.y;
-          }
-        };
+        // update old middle point for next iteration
+        this.oldMidPoint.x = this.currentMidPoint.x;
+        this.oldMidPoint.y = this.currentMidPoint.y;
+      }
+    };
 
     // Private drawPencil function
     var drawBrush = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
@@ -174,7 +169,7 @@ angular.module('meanWhiteboardApp')
         selectedLayer.ctx.beginPath();
       };
 
-      
+
       /** setMode function **/
       return function(mode) {
         // Update selected mode
@@ -186,7 +181,7 @@ angular.module('meanWhiteboardApp')
           canvasOperations.handleMouseUp = _drawBrushMouseUp;
         }
         else if (mode === 'drawPencil') {
-        
+
         }
         else {
           selectedMode = '';
