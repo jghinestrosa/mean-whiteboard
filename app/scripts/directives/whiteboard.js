@@ -7,9 +7,6 @@ angular.module('meanWhiteboardApp')
       restrict: 'E',
       link: function(scope, element, attrs) {
         
-        // Initialization
-        scope.addNewLayer();
-        scope.setMode(scope.getSelectedMode());
       }
     };
   });

@@ -68,9 +68,9 @@ describe('Service: canvasFactory', function () {
 
   });
 
-  it('should have zero layers', function() {
+  it('should have one layer as initial state of the whiteboard', function() {
     var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(0);
+    expect(numberOfLayers).toEqual(1);
   });
 
   it('should add one layer', function(){
@@ -78,7 +78,7 @@ describe('Service: canvasFactory', function () {
     canvasFactory.layers.addNewLayer();
 
     var numberOfLayers = canvasFactory.layers.getNumberOfLayers();
-    expect(numberOfLayers).toEqual(1);
+    expect(numberOfLayers).toEqual(2);
 
   });
 
@@ -86,11 +86,8 @@ describe('Service: canvasFactory', function () {
   it('should set a context to a layer object', function() {
 
     // Set id and mock context
-    var id = 0;
-    var context = jasmine.createSpy('ctx');
-
-    // Add a new layer
-    canvasFactory.layers.addNewLayer();
+    var id = 0,
+        context = jasmine.createSpy('ctx');
 
     // Associate context to layer
     canvasFactory.layers.setContextToLayer(id, context);
@@ -104,11 +101,8 @@ describe('Service: canvasFactory', function () {
   it('should set offset values to a layer object', function() {
 
     var id = 0,
-    offsetLeft = 10,
-    offsetTop = 10;
-
-    // Add a new layer
-    canvasFactory.layers.addNewLayer();
+        offsetLeft = 10,
+        offsetTop = 10;
 
     // Set offsets to layer 'id'
     canvasFactory.layers.setOffsetToLayer(id, offsetLeft, offsetTop);
@@ -118,30 +112,45 @@ describe('Service: canvasFactory', function () {
 
   });
 
+  it('should select a layer by default', function() {
+  
+    var id = 0,
+        layer = canvasFactory.layers.getLayers()[id];
+    
+    expect(canvasFactory.layers.getSelectedLayer()).not.toBeUndefined();
+    expect(canvasFactory.layers.getSelectedLayer()).toBe(layer);
+  
+  });
+
   it('should select a layer', function() {
 
-    // Check that canvasFactory does not have any layer selected by default
-    expect(canvasFactory.layers.getSelectedLayer()).toBeUndefined();
+    var id = 1;
 
     canvasFactory.layers.addNewLayer();
-    canvasFactory.layers.selectLayer(0);
+    canvasFactory.layers.selectLayer(id);
 
-    var layer = canvasFactory.layers.getLayers()[0];
+    var layer = canvasFactory.layers.getLayers()[id];
     expect(canvasFactory.layers.getSelectedLayer()).toBe(layer);
+
+  });
+
+  it('should select a mode by default', function() {
+
+    var defaultMode = canvasFactory.canvasOperations.getDefaultMode();
+    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual(defaultMode);
+
   });
 
   it('should select a mode', function() {
 
     var mode = 'drawPencil';
 
-    // Check that canvasFactory does not have any mode selected by default
-    expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual('drawBrush');
-    
     // Select a mode
     canvasFactory.canvasOperations.setMode(mode);
 
     // Check that the mode has been selected
     expect(canvasFactory.canvasOperations.getSelectedMode()).toEqual(mode);
+
   });
 
 });

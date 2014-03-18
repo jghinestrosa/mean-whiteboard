@@ -52,7 +52,9 @@ angular.module('meanWhiteboardApp')
         var newLayer = new Layer();
         var id = getNextLayerId();
 
+        // a new layer is selected and added to the map
         layersMap[id] = newLayer;
+        selectedLayer = layersMap[id];
         numberOfLayers++;
       },
 
@@ -85,14 +87,23 @@ angular.module('meanWhiteboardApp')
       }
     };
 
+    // Initialize with one layer
+    layers.addNewLayer();
+
     /** Canvas Operations **/
 
     var canvasOperations = {},
-        selectedMode = 'drawBrush';
+        defaultMode = 'drawBrush',
+        selectedMode = defaultMode;
 
-    // Public get selected mode
+    // Public method to get selected mode
     var getSelectedMode = function() {
       return selectedMode;
+    };
+
+    // Public method get default mode
+    var getDefaultMode = function() {
+      return defaultMode;
     };
 
     // Points needed to draw using the pencil or the brush
@@ -184,7 +195,7 @@ angular.module('meanWhiteboardApp')
 
         }
         else {
-          selectedMode = '';
+          selectedMode = defaultMode;
         }
 
         // TODO: Finish with else ifs...
@@ -195,7 +206,11 @@ angular.module('meanWhiteboardApp')
     }());
 
     canvasOperations.setMode = setMode;
+    canvasOperations.getDefaultMode = getDefaultMode;
     canvasOperations.getSelectedMode = getSelectedMode;
+
+    // Initialize mode
+    canvasOperations.setMode(defaultMode);
 
     /** Factory **/
     return {

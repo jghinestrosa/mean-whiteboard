@@ -69,29 +69,4 @@ describe('Directive: layer', function () {
 
   }));
 
-  it('should select the initial layer', inject(function(canvasFactory) {
-
-    $rootScope.id = 0;
-    $rootScope.setContextToLayer = jasmine.createSpy('mock setContextToLayer');
-    $rootScope.setOffsetToLayer = jasmine.createSpy('mock setOffsetToLayer');
-    $rootScope.getNumberOfLayers = canvasFactory.layers.getNumberOfLayers;
-    $rootScope.selectLayer = canvasFactory.layers.selectLayer;
-
-    canvasFactory.layers.addNewLayer();
-
-    // Check there is no layer selected
-    expect(canvasFactory.layers.getSelectedLayer()).toBeUndefined();
-
-    // Get inserted layer
-    var layer = canvasFactory.layers.getLayers()[$rootScope.id];
-
-    // Compile HTML and fire all the watches
-    $compile("<canvas layer-id='{{id}}'></canvas>")($rootScope);
-    $rootScope.$digest();
-
-    // Check that the selected layer is the same inserted before
-    expect(canvasFactory.layers.getSelectedLayer()).toBe(layer);
-
-  }));
-
 });
