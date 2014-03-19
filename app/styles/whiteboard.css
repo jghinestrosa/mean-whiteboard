@@ -10,3 +10,44 @@ canvas {
   width: 100%;
   height: 100%;
 }
+
+#selectedColors {
+
+	position: relative;
+  border: 1px solid black;
+	display: inline-block;
+	width: 45px;
+	height: 55px;
+
+}
+
+#backgroundColor {
+	position:absolute;
+	z-index: 1;
+	border: 1px solid black;
+	width: 25px;
+	height: 25px;
+  top: 10px;
+
+	margin-left: 12px;
+	margin-top: 10px;
+}
+
+#foregroundColor {
+	position:absolute;
+	z-index: 2;
+	border: 1px solid black;
+	width: 25px;
+	height: 25px;
+  top: 10px;
+}
+
+#swapColors {
+	position: absolute;
+	width:8px;
+	height:8px;
+	border: 1px solid black;
+	background-color: #0f0;
+	top: 0px;
+	right: 5px;
+}

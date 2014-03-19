@@ -11,8 +11,8 @@ angular.module('meanWhiteboardApp')
       eraserCap: 'round',
       pencilWidth: 35,
       pencilCap: 'round',
-      firstColor: '#000000',
-      secondColor: '#fff',
+      foregroundColor: '#000000',
+      backgroundColor: '#fff',
       width: 500,
       height: 500,
     };
@@ -26,6 +26,13 @@ angular.module('meanWhiteboardApp')
           properties[prop] = updatedProperties[prop];
         }
       }
+    };
+
+    var swapColors = function() {
+      console.log('swapColors');
+      var oldForegroundColor = properties.foregroundColor;
+      properties.foregroundColor = properties.backgroundColor;
+      properties.backgroundColor = oldForegroundColor;
     };
 
     /** Layers configuration **/
@@ -216,6 +223,7 @@ angular.module('meanWhiteboardApp')
     return {
       properties: properties,
       setProperties: setProperties,
+      swapColors: swapColors,
       layers: layers,
       canvasOperations: canvasOperations
     };

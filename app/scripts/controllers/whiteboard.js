@@ -6,6 +6,7 @@ angular.module('meanWhiteboardApp')
     /** canvasFactory **/
     // General properties
     $scope.properties = canvasFactory.properties;
+    $scope.swapColors = canvasFactory.swapColors;
 
     // Layer management
     $scope.getLayers = canvasFactory.layers.getLayers;

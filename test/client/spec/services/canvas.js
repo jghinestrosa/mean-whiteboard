@@ -19,8 +19,8 @@ describe('Service: canvasFactory', function () {
       eraserCap: 'butt',
       pencilWidth: 4,
       pencilCap: 'square',
-      firstColor: '#00f',
-      secondColor: '#f0f',
+      foregroundColor: '#00f',
+      backgroundColor: '#f0f',
       width: 300,
       height: 500,
     };
