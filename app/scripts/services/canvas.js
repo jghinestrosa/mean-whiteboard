@@ -165,15 +165,15 @@ angular.module('meanWhiteboardApp')
 
       /** Private event handlers when drawing **/
       var _drawBrushMouseDown = function(event) {
-        drawingPoints.oldPoint.x = event.clientX-selectedLayer.offsetLeft;
-        drawingPoints.oldPoint.y = event.clientY-selectedLayer.offsetTop;
+        drawingPoints.oldPoint.x = event.layerX-selectedLayer.offsetLeft;
+        drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
         drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
         drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
         _drawBrushMouseMove(event);
       };
 
       var _drawBrushMouseMove = function(event) {
-        drawBrush(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.clientX-selectedLayer.offsetLeft, event.clientY-selectedLayer.offsetTop);
+        drawBrush(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
       var _drawBrushMouseUp = function() {
