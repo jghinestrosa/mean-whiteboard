@@ -11,7 +11,10 @@ angular.module('meanWhiteboardApp')
       },
       link: function (scope, element, attrs) {
         element.on('mousedown', function(e) {
-          scope.handlerMouseDown({event: e});
+
+          // TODO Check the selected mode because while drawing 'apply' won't be necessary
+          scope.$apply(scope.handlerMouseDown({event: e}));
+
 
           // Listen mouseMove events just when the mouse is down
           element.on('mousemove', function(e) {
@@ -20,8 +23,8 @@ angular.module('meanWhiteboardApp')
         });
 
         element.on('mouseup', function(e) {
-          scope.handlerMouseUp({event: e});
           element.off('mousemove');
+          scope.handlerMouseUp({event: e});
         });
       }
     };

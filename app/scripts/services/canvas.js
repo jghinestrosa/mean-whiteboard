@@ -5,14 +5,14 @@ angular.module('meanWhiteboardApp')
 
     // General properties
     var properties = {
-      brushWidth: 5,
+      brushWidth: 30,
       brushCap: 'round',
       eraserWidth: 5,
       eraserCap: 'round',
       pencilWidth: 35,
       pencilCap: 'round',
-      foregroundColor: '#000000',
-      backgroundColor: '#fff',
+      foregroundColor: '#00FF00',
+      backgroundColor: '#ffffff',
       width: 500,
       height: 500,
     };
@@ -91,6 +91,12 @@ angular.module('meanWhiteboardApp')
       setOffsetToLayer: function(id, offsetLeft, offsetTop) {
         layersMap[id].offsetLeft = offsetLeft;
         layersMap[id].offsetTop = offsetTop;
+      },
+      
+      // Set offset of canvas to layer
+      setSizeToLayer: function(id, width, height) {
+        layersMap[id].width = width;
+        layersMap[id].height = height;
       }
     };
 
@@ -168,6 +174,35 @@ angular.module('meanWhiteboardApp')
       drawingPoints.updatePoints();
     };
 
+    // Function to convert rgb to hex
+    var rgbToHex = function(red, green, blue) {
+      var redToHex = red.toString(16);
+      var greenToHex = green.toString(16);
+      var blueToHex = blue.toString(16);
+
+      if(redToHex.length === 1) {
+        redToHex = '0' + redToHex;
+      }
+
+      if(greenToHex.length === 1) {
+        greenToHex = '0' + greenToHex;
+      }
+
+      if(blueToHex.length === 1) {
+        blueToHex = '0' + blueToHex;
+      }
+
+      return '#' + redToHex + greenToHex + blueToHex;
+    };
+
+
+    // Private function for eyedropper
+    var eyedropper = function(ctx, x, y) {
+      var imageData = ctx.getImageData(x, y, 1, 1);
+      properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
+    };
+
+
     var setMode = (function() {
 
       /** Private event handlers when drawing **/
@@ -176,20 +211,29 @@ angular.module('meanWhiteboardApp')
         drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
         drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
         drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
+        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
+        selectedLayer.ctx.beginPath();
         _drawBrushMouseMove(event);
       };
 
       var _drawBrushMouseMove = function(event) {
-        drawBrush(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.firstColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        drawBrush(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
       var _drawBrushMouseUp = function() {
-        selectedLayer.ctx.beginPath();
+        //selectedLayer.ctx.beginPath();
+      };
+
+      /** Private event handlers when eyedropping **/
+      var _eyedropper = function(event) {
+        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
+        eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
 
       /** setMode function **/
       return function(mode) {
+
         // Update selected mode
         selectedMode = mode;
 
@@ -200,6 +244,11 @@ angular.module('meanWhiteboardApp')
         }
         else if (mode === 'drawPencil') {
 
+        }
+        else if (mode === 'eyedropper') {
+          canvasOperations.handleMouseDown = _eyedropper;
+          canvasOperations.handleMouseMove = '';
+          canvasOperations.handleMouseUp = '';
         }
         else {
           selectedMode = defaultMode;

@@ -28,7 +28,7 @@ angular.module('meanWhiteboardApp')
       img = img || '';
 
       // create a new button and add it to the map
-      var button = new Button(id);
+      var button = new Button(id, name, caption, img);
       buttonsMap[id] = button;
       numberOfButtons++;
 
@@ -43,6 +43,7 @@ angular.module('meanWhiteboardApp')
     };
 
     addNewButton('drawBrush');
+    addNewButton('eyedropper');
 
     // Public API here
     return {
