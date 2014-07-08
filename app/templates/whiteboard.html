@@ -2,8 +2,8 @@
   <button ng-repeat='(key, value) in getButtons()' ng-click='setMode(value.name)'>{{value.name}}</button>
 </div>
 <div id='selectedColors'>
-  <div id='foregroundColor' selected-color color='properties.foregroundColor'></div>
-  <div id='backgroundColor' selected-color color='properties.backgroundColor'></div>
+  <div id='foregroundColor' selected-color='properties.foregroundColor'></div>
+  <div id='backgroundColor' selected-color='properties.backgroundColor'></div>
   <div id='swapColors' swap-colors='swapColors()'></div>
 </div>
   <div id='mouseEventsDiv' class='board' listen-mouse-events='getSelectedMode()'>

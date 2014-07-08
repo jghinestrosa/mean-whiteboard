@@ -5,7 +5,7 @@ angular.module('meanWhiteboardApp')
     return {
       restrict: 'A',
       scope: {
-        color: '='
+        color: '=selectedColor'
       },
       link: function (scope, element, attrs) {
 
