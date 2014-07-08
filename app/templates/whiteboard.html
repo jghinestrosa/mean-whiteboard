@@ -6,7 +6,7 @@
   <div id='backgroundColor' selected-color color='properties.backgroundColor'></div>
   <div id='swapColors' swap-colors='swapColors()'></div>
 </div>
-<div id='mouseEventsDiv' class='board' listen-mouse-events handler-mouse-move='handleMouseMove(event)' handler-mouse-down='handleMouseDown(event)' handler-mouse-up='handleMouseUp(event)'>
+  <div id='mouseEventsDiv' class='board' listen-mouse-events='getSelectedMode()'>
 	<canvas layer-id='{{key}}' ng-repeat='(key, value) in getLayers()'></canvas>
 </div>
 

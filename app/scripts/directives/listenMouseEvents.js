@@ -5,27 +5,46 @@ angular.module('meanWhiteboardApp')
     return {
       restrict: 'A',
       scope: {
-        handlerMouseDown: '&',
-        handlerMouseMove: '&',
-        handlerMouseUp: '&'
+        listenMouseEvents: '&'
       },
       link: function (scope, element, attrs) {
-        element.on('mousedown', function(e) {
+        var stopListeningMouseEvents = function() {
+          element.off('mousedown mousemove mouseup');
+        };
 
-          // TODO Check the selected mode because while drawing 'apply' won't be necessary
-          scope.$apply(scope.handlerMouseDown({event: e}));
+        var changeMouseEventHandlers = function(mode) {
+          var name = mode.name;
+          if (name === 'brush') {
+            element.on('mousedown', function(e) {
+              mode.handleMouseDown(e);
 
+              // listen mouseMove events only when the mouse is pressed (dragging)
+              element.on('mousemove', mode.handleMouseDrag);
+            });
 
-          // Listen mouseMove events just when the mouse is down
-          element.on('mousemove', function(e) {
-            scope.handlerMouseMove({event: e});
-          });
-        });
+            element.on('mouseup', function() {
+              element.off('mousemove');
+            });
+          }
+          else if (name === 'eyedropper') {
+            element.on('mousedown', function(e) {
+              
+              // it is needed to use $apply because the model is being changed and
+              // another directive has to be notified to update the DOM
+              scope.$apply(mode.handleMouseDown(e));
+            });
+          }
+          else {
+            
+          }
+        };
 
-        element.on('mouseup', function(e) {
-          element.off('mousemove');
-          scope.handlerMouseUp({event: e});
-        });
+        // when the mode is changed, the handlers for the mouse events have to change too
+       scope.$watch('listenMouseEvents()', function(newMode) {
+        stopListeningMouseEvents();
+        changeMouseEventHandlers(newMode);
+       });
+
       }
     };
   });

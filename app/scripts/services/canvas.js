@@ -105,8 +105,124 @@ angular.module('meanWhiteboardApp')
 
     /** Canvas Operations **/
 
+    // map of modes
+    var modes = {};
+
+    // Mode constructor
+    var Mode = function(mouseEventsHandlers) {
+      this.name = mouseEventsHandlers.name;
+      this.handleMouseDown = mouseEventsHandlers.handleMouseDown;
+      this.handleMouseDrag = mouseEventsHandlers.handleMouseDrag;
+      this.handleMouseMove = mouseEventsHandlers.handleMouseMove;
+      this.handleMouseUp = mouseEventsHandlers.handleMouseUp;
+    };
+
+    // create new Mode and add it to the map of available modes
+    var createNewMode = function(name, handleMouseDown, handleMouseDrag, handleMouseMove, handleMouseUp) {
+      var newMode = new Mode({
+        name: name,
+        handleMouseDown: handleMouseDown,
+        handleMouseDrag: handleMouseDrag,
+        handleMouseMove: handleMouseMove,
+        handleMouseUp: handleMouseUp
+      });
+      modes[name] = newMode;
+      return newMode;
+    };
+
+    /** Brush Mode **/
+    var brushMode = (function() {
+
+      // Points needed to draw using the brush
+      var drawingPoints = {
+        oldPoint : {
+          x: 0,
+          y: 0
+        },
+        currentPoint : {
+          x: 0,
+          y: 0
+        },
+        currentMidPoint : {
+          x: 0,
+          y: 0
+        },
+        oldMidPoint : {
+          x: 0,
+          y: 0
+        },
+        updatePoints : function() {
+          // update old point for next iteration
+          this.oldPoint.x = this.currentPoint.x;
+          this.oldPoint.y = this.currentPoint.y;
+
+          // update old middle point for next iteration
+          this.oldMidPoint.x = this.currentMidPoint.x;
+          this.oldMidPoint.y = this.currentMidPoint.y;
+        }
+      };
+
+      // private function for smooth drawing
+      var draw = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
+        // set properties
+        ctx.lineWidth = pencilWidth;
+        ctx.strokeStyle = color;
+        ctx.lineCap = pencilCap;
+        ctx.globalCompositeOperation = globalCompositeOperation;
+
+        drawingPoints.currentPoint.x = x;
+        drawingPoints.currentPoint.y = y;
+
+        drawingPoints.currentMidPoint.x = (drawingPoints.currentPoint.x + drawingPoints.oldPoint.x)/2;
+        drawingPoints.currentMidPoint.y = (drawingPoints.currentPoint.y + drawingPoints.oldPoint.y)/2;
+
+        ctx.moveTo(drawingPoints.currentMidPoint.x, drawingPoints.currentMidPoint.y);
+        ctx.quadraticCurveTo(drawingPoints.oldPoint.x, drawingPoints.oldPoint.y, drawingPoints.oldMidPoint.x, drawingPoints.oldMidPoint.y);
+        ctx.stroke();
+
+        // update points for next iteration
+        drawingPoints.updatePoints();
+      };
+
+      var handleMouseDown = function(event) {
+        drawingPoints.oldPoint.x = event.layerX-selectedLayer.offsetLeft;
+        drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
+        drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
+        drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
+        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
+        selectedLayer.ctx.beginPath();
+        this.handleMouseDrag(event);
+      };
+
+      var handleMouseDrag = function(event) {
+        draw(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+
+      };
+
+      return createNewMode('brush', handleMouseDown, handleMouseDrag);
+
+    }());
+
+    /** Eyedropper Mode **/
+    var eyedropperMode = (function() {
+
+    // Private function for eyedropper
+    var eyedropper = function(ctx, x, y) {
+      var imageData = ctx.getImageData(x, y, 1, 1);
+      properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
+    };
+
+    var handleMouseDown = function(event) {
+      console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
+      eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+    };
+
+    return createNewMode('eyedropper', handleMouseDown);
+
+    }());
+
     var canvasOperations = {},
-        defaultMode = 'drawBrush',
+        defaultMode = brushMode,
         selectedMode = defaultMode;
 
     // Public method to get selected mode
@@ -119,154 +235,37 @@ angular.module('meanWhiteboardApp')
       return defaultMode;
     };
 
-    // Points needed to draw using the pencil or the brush
-    var drawingPoints = {
-      oldPoint : {
-        x: 0,
-        y: 0
-      },
-
-      currentPoint : {
-        x: 0,
-        y: 0
-      },
-
-      currentMidPoint : {
-        x: 0,
-        y: 0
-      },
-
-      oldMidPoint : {
-        x: 0,
-        y: 0
-      },
-
-      updatePoints : function() {
-        // update old point for next iteration
-        this.oldPoint.x = this.currentPoint.x;
-        this.oldPoint.y = this.currentPoint.y;
-
-        // update old middle point for next iteration
-        this.oldMidPoint.x = this.currentMidPoint.x;
-        this.oldMidPoint.y = this.currentMidPoint.y;
-      }
-    };
-
-    // Private drawPencil function
-    var drawBrush = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
-      // set properties
-      ctx.lineWidth = pencilWidth;
-      ctx.strokeStyle = color;
-      ctx.lineCap = pencilCap;
-      ctx.globalCompositeOperation = globalCompositeOperation;
-
-      drawingPoints.currentPoint.x = x;
-      drawingPoints.currentPoint.y = y;
-
-      drawingPoints.currentMidPoint.x = (drawingPoints.currentPoint.x + drawingPoints.oldPoint.x)/2;
-      drawingPoints.currentMidPoint.y = (drawingPoints.currentPoint.y + drawingPoints.oldPoint.y)/2;
-
-      ctx.moveTo(drawingPoints.currentMidPoint.x, drawingPoints.currentMidPoint.y);
-      ctx.quadraticCurveTo(drawingPoints.oldPoint.x, drawingPoints.oldPoint.y, drawingPoints.oldMidPoint.x, drawingPoints.oldMidPoint.y);
-      ctx.stroke();
-
-      // update points for next iteration
-      drawingPoints.updatePoints();
-    };
-
     // Function to convert rgb to hex
     var rgbToHex = function(red, green, blue) {
       var redToHex = red.toString(16);
       var greenToHex = green.toString(16);
       var blueToHex = blue.toString(16);
 
-      if(redToHex.length === 1) {
+      if (redToHex.length === 1) {
         redToHex = '0' + redToHex;
       }
 
-      if(greenToHex.length === 1) {
+      if (greenToHex.length === 1) {
         greenToHex = '0' + greenToHex;
       }
 
-      if(blueToHex.length === 1) {
+      if (blueToHex.length === 1) {
         blueToHex = '0' + blueToHex;
       }
 
       return '#' + redToHex + greenToHex + blueToHex;
     };
 
-
-    // Private function for eyedropper
-    var eyedropper = function(ctx, x, y) {
-      var imageData = ctx.getImageData(x, y, 1, 1);
-      properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
+    var setMode = function(nameMode) {
+      selectedMode = modes[nameMode];
     };
-
-
-    var setMode = (function() {
-
-      /** Private event handlers when drawing **/
-      var _drawBrushMouseDown = function(event) {
-        drawingPoints.oldPoint.x = event.layerX-selectedLayer.offsetLeft;
-        drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
-        drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
-        drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
-        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
-        selectedLayer.ctx.beginPath();
-        _drawBrushMouseMove(event);
-      };
-
-      var _drawBrushMouseMove = function(event) {
-        drawBrush(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-      };
-
-      var _drawBrushMouseUp = function() {
-        //selectedLayer.ctx.beginPath();
-      };
-
-      /** Private event handlers when eyedropping **/
-      var _eyedropper = function(event) {
-        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
-        eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-      };
-
-
-      /** setMode function **/
-      return function(mode) {
-
-        // Update selected mode
-        selectedMode = mode;
-
-        if (mode === 'drawBrush') {
-          canvasOperations.handleMouseDown = _drawBrushMouseDown;
-          canvasOperations.handleMouseMove = _drawBrushMouseMove;
-          canvasOperations.handleMouseUp = _drawBrushMouseUp;
-        }
-        else if (mode === 'drawPencil') {
-
-        }
-        else if (mode === 'eyedropper') {
-          canvasOperations.handleMouseDown = _eyedropper;
-          canvasOperations.handleMouseMove = '';
-          canvasOperations.handleMouseUp = '';
-        }
-        else {
-          selectedMode = defaultMode;
-        }
-
-        // TODO: Finish with else ifs...
-
-
-      };
-
-    }());
 
     canvasOperations.setMode = setMode;
     canvasOperations.getDefaultMode = getDefaultMode;
     canvasOperations.getSelectedMode = getSelectedMode;
 
     // Initialize mode
-    canvasOperations.setMode(defaultMode);
+    canvasOperations.setMode(defaultMode.name);
 
     /** Factory **/
     return {
