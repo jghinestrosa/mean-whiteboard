@@ -45,6 +45,7 @@ angular.module('meanWhiteboardApp')
     addNewButton('brush');
     addNewButton('eyedropper');
     addNewButton('eraserBrush');
+    addNewButton('pencil');
 
     // Public API here
     return {

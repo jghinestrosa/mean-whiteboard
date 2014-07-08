@@ -9,7 +9,7 @@ angular.module('meanWhiteboardApp')
       brushCap: 'round',
       eraserWidth: 5,
       eraserCap: 'round',
-      pencilWidth: 35,
+      pencilWidth: 10,
       pencilCap: 'round',
       foregroundColor: '#00FF00',
       backgroundColor: '#ffffff',
@@ -230,6 +230,38 @@ angular.module('meanWhiteboardApp')
       var handleMouseDrag = modes.brush.handleMouseDrag;
     
       return createNewMode('eraserBrush', 'destination-out', handleMouseDown, handleMouseDrag);
+
+    }());
+
+    /** Pencil Mode **/
+    var pencilMode = (function() {
+
+      var draw = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
+        // set properties
+        ctx.lineWidth = pencilWidth;
+        ctx.strokeStyle = color;
+        ctx.lineCap = pencilCap;
+        ctx.globalCompositeOperation = globalCompositeOperation;
+
+        ctx.lineTo(x,y);
+        ctx.stroke();
+
+      };
+    
+      var handleMouseDown = function(event) {
+        var ctx = selectedLayer.ctx;
+
+        ctx.beginPath();
+        ctx.moveTo(event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        this.handleMouseDrag(event);
+      };
+
+      var handleMouseDrag = function(event) {
+        draw(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+      };
+
+      return createNewMode('pencil', 'source-over', handleMouseDown, handleMouseDrag);
+
     }());
 
     var canvasOperations = {},

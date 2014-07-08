@@ -12,8 +12,8 @@ angular.module('meanWhiteboardApp')
           element.off('mousedown mousemove mouseup');
         };
 
-        // For brush mode and eraser brush mode
-        var changeToBrushMode = function(mode) {
+        // For brush, eraser and pencil modes
+        var changeToSomeDrawingMode = function(mode) {
             element.on('mousedown', function(e) {
               mode.handleMouseDown(e);
 
@@ -39,14 +39,18 @@ angular.module('meanWhiteboardApp')
         var changeMouseEventHandlers = function(mode) {
           var name = mode.name;
           if (name === 'brush') {
-            changeToBrushMode(mode);
+            changeToSomeDrawingMode(mode);
           }
           else if (name === 'eyedropper') {
             changeToEyedropperMode(mode);
           }
           else if (name === 'eraserBrush') {
             // the handlers are the same than brushMode, only the globalCompositeOperation of the mode is different
-            changeToBrushMode(mode);
+            changeToSomeDrawingMode(mode);
+          }
+          else if (name === 'pencil') {
+            // the handlers are different but
+            changeToSomeDrawingMode(mode);
           }
         };
 
