@@ -109,18 +109,20 @@ angular.module('meanWhiteboardApp')
     var modes = {};
 
     // Mode constructor
-    var Mode = function(mouseEventsHandlers) {
-      this.name = mouseEventsHandlers.name;
-      this.handleMouseDown = mouseEventsHandlers.handleMouseDown;
-      this.handleMouseDrag = mouseEventsHandlers.handleMouseDrag;
-      this.handleMouseMove = mouseEventsHandlers.handleMouseMove;
-      this.handleMouseUp = mouseEventsHandlers.handleMouseUp;
+    var Mode = function(modeConfig) {
+      this.name = modeConfig.name;
+      this.globalCompositeOperation = modeConfig.globalCompositeOperation;
+      this.handleMouseDown = modeConfig.handleMouseDown;
+      this.handleMouseDrag = modeConfig.handleMouseDrag;
+      this.handleMouseMove = modeConfig.handleMouseMove;
+      this.handleMouseUp = modeConfig.handleMouseUp;
     };
 
     // create new Mode and add it to the map of available modes
-    var createNewMode = function(name, handleMouseDown, handleMouseDrag, handleMouseMove, handleMouseUp) {
+    var createNewMode = function(name, globalCompositeOperation, handleMouseDown, handleMouseDrag, handleMouseMove, handleMouseUp) {
       var newMode = new Mode({
         name: name,
+        globalCompositeOperation: globalCompositeOperation || 'source-over',
         handleMouseDown: handleMouseDown,
         handleMouseDrag: handleMouseDrag,
         handleMouseMove: handleMouseMove,
@@ -195,11 +197,11 @@ angular.module('meanWhiteboardApp')
       };
 
       var handleMouseDrag = function(event) {
-        draw(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedLayer.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        draw(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
 
       };
 
-      return createNewMode('brush', handleMouseDown, handleMouseDrag);
+      return createNewMode('brush', 'source-over', handleMouseDown, handleMouseDrag);
 
     }());
 
@@ -217,8 +219,17 @@ angular.module('meanWhiteboardApp')
       eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
     };
 
-    return createNewMode('eyedropper', handleMouseDown);
+    return createNewMode('eyedropper', 'source-over', handleMouseDown);
 
+    }());
+
+    /** EraserBrush Mode **/
+    var eraserBrushMode = (function() {
+    
+      var handleMouseDown = modes.brush.handleMouseDown;
+      var handleMouseDrag = modes.brush.handleMouseDrag;
+    
+      return createNewMode('eraserBrush', 'destination-out', handleMouseDown, handleMouseDrag);
     }());
 
     var canvasOperations = {},
