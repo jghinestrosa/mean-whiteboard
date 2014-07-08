@@ -256,6 +256,29 @@ angular.module('meanWhiteboardApp')
       return '#' + redToHex + greenToHex + blueToHex;
     };
 
+    // Function to convert hex to rgb
+    var hexToRgb = function(hexValue) {
+      // remove '#'
+      hexValue = hexValue.slice(1);
+
+      if (hexValue.length === 3) {
+        return {
+          red: parseInt(hexValue[0], 16),
+          green: parseInt(hexValue[1], 16),
+          blue: parseInt(hexValue[2], 16)
+        };
+      }
+
+      if (hexValue.length === 6) {
+        return {
+          red: parseInt(hexValue.slice(0,2), 16),
+          green: parseInt(hexValue.slice(2,4), 16),
+          blue: parseInt(hexValue.slice(4,6), 16)
+        };
+      }
+      
+    };
+
     var setMode = function(nameMode) {
       selectedMode = modes[nameMode];
     };
