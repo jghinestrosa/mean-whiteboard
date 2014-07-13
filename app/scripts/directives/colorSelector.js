@@ -32,6 +32,10 @@ angular.module('meanWhiteboardApp')
         // input values
         var hex = angular.element(content.children()[2].querySelector('#hex'));
 
+        // menu bar
+        var closeButton = angular.element(element.children()[0].firstElementChild);
+        //console.log(angular.element(element.children()[0]).children());
+
         // functions to change position of the elements
         var setX = function(element, x) {
           var left = x.toString() + 'px';
@@ -99,7 +103,17 @@ angular.module('meanWhiteboardApp')
           console.log(newVal);
           if (newVal) {
             element.css('display', 'inline-block');
-            hex.val(scope.initialColor);
+            hex.val(scope.initialColor.slice(1));
+          }
+        });
+
+        scope.$watch(function() {
+          return element.css('display');
+        },
+        function(val) {
+          if (val === 'none') {
+            scope.visible = false;
+            console.log('changes!');
           }
         });
       }

@@ -154,3 +154,7 @@ label {
   margin-bottom: 7px;
 }
 
+input {
+  text-transform: uppercase;
+}
+
