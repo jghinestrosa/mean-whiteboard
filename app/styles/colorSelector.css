@@ -1,9 +1,7 @@
 #color-selector {
   border: 1px solid black;
-  display: inline-block;
-  /*position: relative;*/
-  /*margin-top: 10px;*/
-  /*margin-left: 10px;*/
+  /*display: inline-block;*/
+  display: none;
   position: absolute;
   top: 10px;
   left: 10px;

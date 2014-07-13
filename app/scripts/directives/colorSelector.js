@@ -7,7 +7,7 @@ angular.module('meanWhiteboardApp')
       restrict: 'E',
       replace: true,
       scope: {
-        initialColor: '='
+        visible: '='
       },
       link: function postLink(scope, element, attrs) {
 
@@ -87,6 +87,14 @@ angular.module('meanWhiteboardApp')
 
         listenMouseEventsInSelector();
         listenMouseEventsInHueBar();
+
+        // set the color selector visible or not
+        scope.$watch('visible', function(newVal) {
+          console.log(newVal);
+          if (newVal) {
+            element.css('display', 'inline-block');
+          }
+        });
       }
     };
   });

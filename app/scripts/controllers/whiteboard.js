@@ -38,4 +38,15 @@ angular.module('meanWhiteboardApp')
     /** Button Factory **/
     $scope.getButtons = buttonFactory.getButtons;
 
+
+    $scope.colorSelectorVisible = false;
+
+    $scope.showColorSelector = function(value) {
+      $scope.colorSelectorVisible = value;
+    };
+
+    this.isColorSelectorVisible = function() {
+      return $scope.colorSelectorVisible;
+    };
+
   });
