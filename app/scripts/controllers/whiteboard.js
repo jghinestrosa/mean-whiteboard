@@ -40,9 +40,15 @@ angular.module('meanWhiteboardApp')
 
 
     $scope.colorSelectorVisible = false;
+    $scope.initialColorInColorSelector = $scope.properties.foregroundColor;
 
-    $scope.showColorSelector = function(value) {
+    $scope.toggleVisibilityColorSelector = function(value) {
       $scope.colorSelectorVisible = value;
+    };
+
+    $scope.showColorSelector = function(initialColor) {
+      $scope.toggleVisibilityColorSelector(true);
+      $scope.initialColorInColorSelector = initialColor;
     };
 
     this.isColorSelectorVisible = function() {

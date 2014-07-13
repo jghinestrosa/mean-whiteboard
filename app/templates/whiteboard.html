@@ -1,10 +1,10 @@
-<color-selector visible="colorSelectorVisible"></color-selector>
+<color-selector visible="colorSelectorVisible" initial-color="initialColorInColorSelector"></color-selector>
 <div id='tools'>
   <button ng-repeat='(key, value) in getButtons()' ng-click='setMode(value.name)'>{{value.name}}</button>
 </div>
 <div id='selectedColors'>
-  <div id='foregroundColor' selected-color='properties.foregroundColor' ng-click="showColorSelector(true)"></div>
-  <div id='backgroundColor' selected-color='properties.backgroundColor'></div>
+  <div id='foregroundColor' selected-color='properties.foregroundColor' ng-click="showColorSelector(properties.foregroundColor)"></div>
+  <div id='backgroundColor' selected-color='properties.backgroundColor' ng-click="showColorSelector(properties.backgroundColor)"></div>
   <div id='swapColors' swap-colors='swapColors()'></div>
 </div>
   <div id='mouseEventsDiv' class='board' listen-mouse-events='getSelectedMode()'>

@@ -7,7 +7,8 @@ angular.module('meanWhiteboardApp')
       restrict: 'E',
       replace: true,
       scope: {
-        visible: '='
+        visible: '=',
+        initialColor: '='
       },
       link: function postLink(scope, element, attrs) {
 
@@ -25,6 +26,9 @@ angular.module('meanWhiteboardApp')
 
         // arrows
         var arrows = angular.element(element.children()[1].querySelector('#arrows'));
+
+        // input values
+        var hex = angular.element(element.children()[2].querySelector('#hex'));
 
         // functions to change position of the elements
         var setX = function(element, x) {
@@ -93,6 +97,7 @@ angular.module('meanWhiteboardApp')
           console.log(newVal);
           if (newVal) {
             element.css('display', 'inline-block');
+            hex.val(scope.initialColor);
           }
         });
       }
