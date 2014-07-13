@@ -12,12 +12,14 @@ angular.module('meanWhiteboardApp')
       },
       link: function postLink(scope, element, attrs) {
 
+        var content = angular.element(element.children()[1]);
+
         // clickable areas
-        var selectorClickable = angular.element(element.children()[0].querySelector('.clickable'));
-        var hueBarClickable = angular.element(element.children()[1].querySelector('.clickable'));
+        var selectorClickable = angular.element(content.children()[0].querySelector('.clickable'));
+        var hueBarClickable = angular.element(content.children()[1].querySelector('.clickable'));
 
         // circle cursor
-        var circleCursor = angular.element(element.children()[0].querySelector('#circle-cursor'));
+        var circleCursor = angular.element(content.children()[0].querySelector('#circle-cursor'));
 
         // FIXME: it says the width is an empty string instead of getting the value from the css
         //var radius = parseInt(circleCursor.css('width'), 10)/2;
@@ -25,10 +27,10 @@ angular.module('meanWhiteboardApp')
         var radius = 5;
 
         // arrows
-        var arrows = angular.element(element.children()[1].querySelector('#arrows'));
+        var arrows = angular.element(content.children()[1].querySelector('#arrows'));
 
         // input values
-        var hex = angular.element(element.children()[2].querySelector('#hex'));
+        var hex = angular.element(content.children()[2].querySelector('#hex'));
 
         // functions to change position of the elements
         var setX = function(element, x) {
