@@ -47,6 +47,7 @@ angular.module('meanWhiteboardApp')
       return '#' + redToHex + greenToHex + blueToHex;
     };
 
+    // h [0..359]   s, v [0..100]
     var hsvToRgb = function(h, s, v) {
       var i, f, p, q, t,
           r, g, b;
@@ -71,11 +72,11 @@ angular.module('meanWhiteboardApp')
         };
       }
 
-      h = h/100;
+      h = (h*6)/360;
       s = s/100;
 
-      i = Math.round(h/60);
-      f = h/60 - i;
+      i = Math.round(h);
+      f = h - i;
       p = v * (1 - s);
       q = v * (1 - s * f);
       t = v * (1 - (1 - f) * s);
@@ -111,7 +112,6 @@ angular.module('meanWhiteboardApp')
           g = p;
           b = q;
       }
-
       return {
         red: Math.round(r * 255),
         green: Math.round(g * 255),
@@ -133,7 +133,7 @@ angular.module('meanWhiteboardApp')
         return {
           h: 0,
           s: 0,
-          v: max,
+          v: max*100,
         };
       }
 
@@ -154,16 +154,21 @@ angular.module('meanWhiteboardApp')
           h = r-g/diff + 4;
       }
 
+      h = 360*h/6;
+
       // set saturation
       if (max === 0) {
         s = 0;
       }
       else {
-        s = 1 - diff;
+        s = 1 - min/max;
       }
+
+      s = s*100;
 
       // set value
       v = max;
+      v = v*100;
 
       return {
         h: h,
