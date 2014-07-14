@@ -52,7 +52,7 @@ angular.module('meanWhiteboardApp')
           $scope.rgbToHex($scope.colors.r, $scope.colors.g, $scope.colors.b);
         };
 
-        $scope.setSaturationFromX = function(x) {
+        var setSaturationFromX = function(x) {
           if (x < 0) {
             $scope.colors.s = 0;
           }
@@ -61,7 +61,7 @@ angular.module('meanWhiteboardApp')
           }
         };
 
-        $scope.setValueFromY = function(y) {
+        var setValueFromY = function(y) {
           if (y < 0) {
             $scope.colors.v = 100;
           }
@@ -69,6 +69,12 @@ angular.module('meanWhiteboardApp')
             y = 100 - Math.round(y*100/255);
             $scope.colors.v = y;
           }
+        };
+
+        $scope.setSaturationValueFromXY = function(x, y) {
+          setSaturationFromX(x);
+          setValueFromY(y);
+          $scope.convertFromHsv();
         };
 
       },
@@ -118,22 +124,24 @@ angular.module('meanWhiteboardApp')
             var x = (e.offsetX || e.layerX) - radius;
             var y = (e.offsetY || e.layerY) - radius;
             setPosition(circleCursor, x, y);
-            scope.$apply(function() {
-              scope.setSaturationFromX(x);
-              scope.setValueFromY(y);
-              scope.convertFromHsv();
-            });
+            scope.$apply(scope.setSaturationValueFromXY(x,y));
+            //scope.$apply(function() {
+              //scope.setSaturationFromX(x);
+              //scope.setValueFromY(y);
+              //scope.convertFromHsv();
+            //});
 
             selectorClickable.on('mousemove', function(e) {
               console.log('mousemove');
               var x = (e.offsetX || e.layerX) - radius;
               var y = (e.offsetY || e.layerY) - radius;
               setPosition(circleCursor, x, y);
-              scope.$apply(function() {
-                scope.setSaturationFromX(x);
-                scope.setValueFromY(y);
-                scope.convertFromHsv();
-              });
+              scope.$apply(scope.setSaturationValueFromXY(x,y));
+              //scope.$apply(function() {
+                //scope.setSaturationFromX(x);
+                //scope.setValueFromY(y);
+                //scope.convertFromHsv();
+              //});
             });
 
           });
