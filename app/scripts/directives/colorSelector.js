@@ -113,7 +113,6 @@ angular.module('meanWhiteboardApp')
         function(val) {
           if (val === 'none') {
             scope.visible = false;
-            console.log('changes!');
           }
         });
       }
