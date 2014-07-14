@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .factory('canvasFactory', function () {
+  .factory('canvasFactory', ['colorConversionFactory', function (colorConversion) {
 
     // General properties
     var properties = {
@@ -280,46 +280,12 @@ angular.module('meanWhiteboardApp')
 
     // Function to convert rgb to hex
     var rgbToHex = function(red, green, blue) {
-      var redToHex = red.toString(16);
-      var greenToHex = green.toString(16);
-      var blueToHex = blue.toString(16);
-
-      if (redToHex.length === 1) {
-        redToHex = '0' + redToHex;
-      }
-
-      if (greenToHex.length === 1) {
-        greenToHex = '0' + greenToHex;
-      }
-
-      if (blueToHex.length === 1) {
-        blueToHex = '0' + blueToHex;
-      }
-
-      return '#' + redToHex + greenToHex + blueToHex;
+      return colorConversion.rgbToHex(red, green, blue);
     };
 
     // Function to convert hex to rgb
     var hexToRgb = function(hexValue) {
-      // remove '#'
-      hexValue = hexValue.slice(1);
-
-      if (hexValue.length === 3) {
-        return {
-          red: parseInt(hexValue[0], 16),
-          green: parseInt(hexValue[1], 16),
-          blue: parseInt(hexValue[2], 16)
-        };
-      }
-
-      if (hexValue.length === 6) {
-        return {
-          red: parseInt(hexValue.slice(0,2), 16),
-          green: parseInt(hexValue.slice(2,4), 16),
-          blue: parseInt(hexValue.slice(4,6), 16)
-        };
-      }
-      
+      return colorConversion.hexToRgb(hexValue);
     };
 
     var setMode = function(nameMode) {
@@ -341,4 +307,4 @@ angular.module('meanWhiteboardApp')
       layers: layers,
       canvasOperations: canvasOperations
     };
-  });
+  }]);
