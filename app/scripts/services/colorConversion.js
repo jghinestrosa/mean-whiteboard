@@ -64,7 +64,7 @@ angular.module('meanWhiteboardApp')
       v = v/100;
 
       if (s === 0) {
-        v = Math.round(v * 255);
+        v = Math.floor(v * 255);
         return {
           red: v,
           green: v,
@@ -75,7 +75,7 @@ angular.module('meanWhiteboardApp')
       h = (h*6)/360;
       s = s/100;
 
-      i = Math.round(h);
+      i = Math.floor(h);
       f = h - i;
       p = v * (1 - s);
       q = v * (1 - s * f);
@@ -112,17 +112,18 @@ angular.module('meanWhiteboardApp')
           g = p;
           b = q;
       }
+      console.log(r*255, g*255, b*255);
       return {
-        red: Math.round(r * 255),
-        green: Math.round(g * 255),
-        blue: Math.round(b * 255)
+        red: Math.floor(r * 255),
+        green: Math.floor(g * 255),
+        blue: Math.floor(b * 255)
       };
     };
 
     var rgbToHsv = function(r, g, b) {
-      r = Math.round(r/255);
-      g = Math.round(g/255);
-      b = Math.round(b/255);
+      r = Math.floor(r/255);
+      g = Math.floor(g/255);
+      b = Math.floor(b/255);
 
       var max = Math.max(r, g, b),
           min = Math.min(r, g, b);

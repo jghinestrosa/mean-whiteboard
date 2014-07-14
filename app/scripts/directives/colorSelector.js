@@ -66,14 +66,24 @@ angular.module('meanWhiteboardApp')
             $scope.colors.v = 100;
           }
           else {
-            y = 100 - Math.round(y*100/255);
-            $scope.colors.v = y;
+            $scope.colors.v = 100 - Math.round(y*100/255);
           }
         };
 
         $scope.setSaturationValueFromXY = function(x, y) {
           setSaturationFromX(x);
           setValueFromY(y);
+          $scope.convertFromHsv();
+        };
+
+        $scope.setHueFromY = function(y) {
+          if (y > 255 || y === 0) {
+            $scope.colors.h = 0;
+          }
+          else {
+            y = 255 - y;
+            $scope.colors.h = Math.round((y*360)/255);
+          }
           $scope.convertFromHsv();
         };
 
@@ -120,28 +130,16 @@ angular.module('meanWhiteboardApp')
         var listenMouseEventsInSelector = function() {
           selectorClickable.on('mousedown', function(e) {
 
-            console.log('mousedown');
             var x = (e.offsetX || e.layerX) - radius;
             var y = (e.offsetY || e.layerY) - radius;
             setPosition(circleCursor, x, y);
             scope.$apply(scope.setSaturationValueFromXY(x,y));
-            //scope.$apply(function() {
-              //scope.setSaturationFromX(x);
-              //scope.setValueFromY(y);
-              //scope.convertFromHsv();
-            //});
 
             selectorClickable.on('mousemove', function(e) {
-              console.log('mousemove');
               var x = (e.offsetX || e.layerX) - radius;
               var y = (e.offsetY || e.layerY) - radius;
               setPosition(circleCursor, x, y);
               scope.$apply(scope.setSaturationValueFromXY(x,y));
-              //scope.$apply(function() {
-                //scope.setSaturationFromX(x);
-                //scope.setValueFromY(y);
-                //scope.convertFromHsv();
-              //});
             });
 
           });
@@ -154,14 +152,14 @@ angular.module('meanWhiteboardApp')
         // move the arrows of the hue bar
         var listenMouseEventsInHueBar = function() {
           hueBarClickable.on('mousedown', function(e) {
-            console.log('mousedown');
             var y = e.offsetY || e.layerY;
             setY(arrows, y);
+            scope.$apply(scope.setHueFromY(y));
 
             hueBarClickable.on('mousemove', function(e) {
-              console.log('mousemove');
               var y = e.offsetY || e.layerY;
               setY(arrows, y);
+              scope.$apply(scope.setHueFromY(y));
             });
 
           });
@@ -179,7 +177,6 @@ angular.module('meanWhiteboardApp')
           console.log(newVal);
           if (newVal) {
             element.css('display', 'inline-block');
-            //scope.hexToRgb(scope.initialColor);
             hueSelected.css('background', scope.initialColor);
             scope.convertFromHex(scope.initialColor);
           }
