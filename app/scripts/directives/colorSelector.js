@@ -113,6 +113,10 @@ angular.module('meanWhiteboardApp')
           return (255 - convertToCoordinates(v, 100));
         };
 
+        $scope.setYFromHue = function(h) {
+          return (255 - convertToCoordinates(h, 360));
+        };
+
       },
       link: function postLink(scope, element, attrs) {
 
@@ -208,6 +212,7 @@ angular.module('meanWhiteboardApp')
             scope.convertFromHex(scope.initialColor);
             hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
             setPosition(circleCursor, scope.setXFromSaturation(scope.colors.s) - radius, scope.setYFromValue(scope.colors.v) - radius);
+            setY(arrows, scope.setYFromHue(scope.colors.h));
           }
         });
 
