@@ -58,6 +58,7 @@ angular.module('meanWhiteboardApp')
           $scope.rgbToHex($scope.colors.r, $scope.colors.g, $scope.colors.b);
         };
 
+        // calculate saturation from x coordinate
         var setSaturationFromX = function(x) {
           if (x < 0) {
             $scope.colors.s = 0;
@@ -67,6 +68,7 @@ angular.module('meanWhiteboardApp')
           }
         };
 
+        // calculate value from y coordinate
         var setValueFromY = function(y) {
           if (y < 0) {
             $scope.colors.v = 100;
@@ -76,12 +78,14 @@ angular.module('meanWhiteboardApp')
           }
         };
 
+        // calculate saturation and value from x and y coordinates
         $scope.setSaturationValueFromXY = function(x, y) {
           setSaturationFromX(x);
           setValueFromY(y);
           $scope.convertFromHsv();
         };
 
+        // calculate hue from y coordinate in hue bar
         $scope.setHueFromY = function(y) {
           if (y > 255 || y === 0) {
             $scope.colors.h = 0;
@@ -91,6 +95,22 @@ angular.module('meanWhiteboardApp')
             $scope.colors.h = Math.round((y*360)/255);
           }
           $scope.convertFromHsv();
+        };
+
+        // generic function to calculate a coordinate using a h, s or v value
+        // and the max value (100 for s and v, and 360 for h)
+        var convertToCoordinates = function(value, maxValue) {
+          return value*255/maxValue;
+        };
+
+        // calculate the x coordinate from the s value
+        $scope.setXFromSaturation = function(s) {
+          return convertToCoordinates(s, 100);
+        };
+
+        // calculate the y coordinate from the v value
+        $scope.setYFromValue = function(v) {
+          return (255 - convertToCoordinates(v, 100));
         };
 
       },
@@ -185,8 +205,9 @@ angular.module('meanWhiteboardApp')
           console.log(newVal);
           if (newVal) {
             element.css('display', 'inline-block');
-            hueSelected.css('background', scope.initialColor);
             scope.convertFromHex(scope.initialColor);
+            hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
+            setPosition(circleCursor, scope.setXFromSaturation(scope.colors.s) - radius, scope.setYFromValue(scope.colors.v) - radius);
           }
         });
 
