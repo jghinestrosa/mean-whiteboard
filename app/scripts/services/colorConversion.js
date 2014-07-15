@@ -112,7 +112,6 @@ angular.module('meanWhiteboardApp')
           g = p;
           b = q;
       }
-      console.log(r*255, g*255, b*255);
       return {
         red: Math.floor(r * 255),
         green: Math.floor(g * 255),

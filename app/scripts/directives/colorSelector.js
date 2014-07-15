@@ -41,6 +41,12 @@ angular.module('meanWhiteboardApp')
           $scope.colors.b = rgb.blue;
         };
 
+        // changes the background color of the clickable area
+        $scope.hueBarToHex = function(h) {
+          var rgb = colorConversion.hsvToRgb(h, 100, 100);
+          return colorConversion.rgbToHex(rgb.red, rgb.green, rgb.blue);
+        };
+
         $scope.convertFromHex = function(hexVal) {
           $scope.colors.hex = hexVal.slice(1);
           $scope.hexToRgb(hexVal);
@@ -155,11 +161,13 @@ angular.module('meanWhiteboardApp')
             var y = e.offsetY || e.layerY;
             setY(arrows, y);
             scope.$apply(scope.setHueFromY(y));
+            hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
 
             hueBarClickable.on('mousemove', function(e) {
               var y = e.offsetY || e.layerY;
               setY(arrows, y);
               scope.$apply(scope.setHueFromY(y));
+              hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
             });
 
           });
