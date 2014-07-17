@@ -117,6 +117,12 @@ angular.module('meanWhiteboardApp')
           return (255 - convertToCoordinates(h, 360));
         };
 
+        // convert from the text inputs
+        $scope.convertFromH = function(h) {
+          $scope.colors.h = h;
+          $scope.convertFromHsv();
+        };
+
       },
       link: function postLink(scope, element, attrs) {
 
