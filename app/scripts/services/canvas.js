@@ -280,7 +280,7 @@ angular.module('meanWhiteboardApp')
 
     // Function to convert rgb to hex
     var rgbToHex = function(red, green, blue) {
-      return colorConversion.rgbToHex(red, green, blue);
+      return '#' + colorConversion.rgbToHex(red, green, blue);
     };
 
     // Function to convert hex to rgb

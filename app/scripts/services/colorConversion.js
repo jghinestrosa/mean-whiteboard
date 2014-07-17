@@ -6,8 +6,11 @@ angular.module('meanWhiteboardApp')
     // TODO: Check if the parameters are correct values before starting the conversion
 
     var hexToRgb = function(hexValue) {
+      
       // remove '#'
-      hexValue = hexValue.slice(1);
+      if (hexValue[0] === '#') {
+        hexValue = hexValue.slice(1);
+      }
 
       if (hexValue.length === 3) {
         return {
@@ -44,7 +47,7 @@ angular.module('meanWhiteboardApp')
         blueToHex = '0' + blueToHex;
       }
 
-      return '#' + redToHex + greenToHex + blueToHex;
+      return redToHex + greenToHex + blueToHex;
     };
 
     // h [0..359]   s, v [0..100]
