@@ -16,8 +16,8 @@ angular.module('meanWhiteboardApp')
 
         $scope.colors = {h: '', s: '', v: '', r: '', g: '', b: '', hex: ''};
         
-        $scope.hexToRgb = function(hexVal) {
-          rgb = colorConversion.hexToRgb(hexVal);
+        $scope.hexToRgb = function(hex) {
+          rgb = colorConversion.hexToRgb(hex);
           $scope.colors.r = rgb.red;
           $scope.colors.g = rgb.green;
           $scope.colors.b = rgb.blue;
@@ -44,17 +44,22 @@ angular.module('meanWhiteboardApp')
         // changes the background color of the clickable area
         $scope.hueBarToHex = function(h) {
           var rgb = colorConversion.hsvToRgb(h, 100, 100);
-          return colorConversion.rgbToHex(rgb.red, rgb.green, rgb.blue);
+          return '#' + colorConversion.rgbToHex(rgb.red, rgb.green, rgb.blue);
         };
 
-        $scope.convertFromHex = function(hexVal) {
-          $scope.colors.hex = hexVal.slice(1);
-          $scope.hexToRgb(hexVal);
+        $scope.convertFromHex = function(hex) {
+          //$scope.colors.hex = hex.slice(1);
+          $scope.hexToRgb(hex);
           $scope.rgbToHsv(rgb.red, rgb.green, rgb.blue);
         };
 
         $scope.convertFromHsv = function() {
           $scope.hsvToRgb($scope.colors.h, $scope.colors.s, $scope.colors.v);  
+          $scope.rgbToHex($scope.colors.r, $scope.colors.g, $scope.colors.b);
+        };
+
+        $scope.convertFromRgb = function() {
+          $scope.rgbToHsv($scope.colors.r, $scope.colors.g, $scope.colors.b);
           $scope.rgbToHex($scope.colors.r, $scope.colors.g, $scope.colors.b);
         };
 
@@ -121,6 +126,31 @@ angular.module('meanWhiteboardApp')
         $scope.convertFromH = function(h) {
           $scope.colors.h = h;
           $scope.convertFromHsv();
+        };
+
+        $scope.convertFromS = function(s) {
+          $scope.colors.s = s;
+          $scope.convertFromHsv();
+        };
+
+        $scope.convertFromV = function(v) {
+          $scope.colors.v = v;
+          $scope.convertFromHsv();
+        };
+
+        $scope.convertFromR = function(r) {
+          $scope.colors.r = r;
+          $scope.convertFromRgb();
+        };
+
+        $scope.convertFromG = function(g) {
+          $scope.colors.g = g;
+          $scope.convertFromRgb();
+        };
+
+        $scope.convertFromB = function(b) {
+          $scope.colors.b = b;
+          $scope.convertFromRgb();
         };
 
       },
@@ -212,7 +242,6 @@ angular.module('meanWhiteboardApp')
 
         // set the color selector visible or not
         scope.$watch('visible', function(newVal) {
-          console.log(newVal);
           if (newVal) {
             element.css('display', 'inline-block');
             scope.convertFromHex(scope.initialColor);

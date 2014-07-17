@@ -5,32 +5,41 @@ angular.module('meanWhiteboardApp')
 
     // TODO: Check if the parameters are correct values before starting the conversion
 
-    var hexToRgb = function(hexValue) {
+    // convert string to int
+    var convertToInt = function(val) {
+      return parseInt(val, 10);
+    };
+
+    var hexToRgb = function(hex) {
       
       // remove '#'
-      if (hexValue[0] === '#') {
-        hexValue = hexValue.slice(1);
+      if (hex[0] === '#') {
+        hex = hex.slice(1);
       }
 
-      if (hexValue.length === 3) {
+      if (hex.length === 3) {
         return {
-          red: parseInt(hexValue[0], 16),
-          green: parseInt(hexValue[1], 16),
-          blue: parseInt(hexValue[2], 16)
+          red: parseInt(hex[0], 16),
+          green: parseInt(hex[1], 16),
+          blue: parseInt(hex[2], 16)
         };
       }
 
-      if (hexValue.length === 6) {
+      if (hex.length === 6) {
         return {
-          red: parseInt(hexValue.slice(0,2), 16),
-          green: parseInt(hexValue.slice(2,4), 16),
-          blue: parseInt(hexValue.slice(4,6), 16)
+          red: parseInt(hex.slice(0,2), 16),
+          green: parseInt(hex.slice(2,4), 16),
+          blue: parseInt(hex.slice(4,6), 16)
         };
       }
     };
 
     // Function to convert rgb to hex
     var rgbToHex = function(r, g, b) {
+      r = convertToInt(r);
+      g = convertToInt(g);
+      b = convertToInt(b);
+
       var redToHex = r.toString(16),
           greenToHex = g.toString(16),
           blueToHex = b.toString(16);
@@ -52,6 +61,10 @@ angular.module('meanWhiteboardApp')
 
     // h [0..359]   s, v [0..100]
     var hsvToRgb = function(h, s, v) {
+      h = convertToInt(h);
+      s = convertToInt(s);
+      v = convertToInt(v);
+
       var i, f, p, q, t,
           r, g, b;
 
@@ -123,9 +136,13 @@ angular.module('meanWhiteboardApp')
     };
 
     var rgbToHsv = function(r, g, b) {
-      r = Math.floor(r/255);
-      g = Math.floor(g/255);
-      b = Math.floor(b/255);
+      r = convertToInt(r);
+      g = convertToInt(g);
+      b = convertToInt(b);
+
+      r = r/255;
+      g = g/255;
+      b = b/255;
 
       var max = Math.max(r, g, b),
           min = Math.min(r, g, b);
@@ -158,6 +175,7 @@ angular.module('meanWhiteboardApp')
       }
 
       h = 360*h/6;
+      h = Math.floor(h);
 
       // set saturation
       if (max === 0) {
@@ -168,10 +186,12 @@ angular.module('meanWhiteboardApp')
       }
 
       s = s*100;
+      s = Math.floor(s);
 
       // set value
       v = max;
       v = v*100;
+      v = Math.floor(v);
 
       return {
         h: h,
