@@ -51,7 +51,7 @@ angular.module('meanWhiteboardApp')
           if (hex[0] === '#') {
             hex = hex.slice(1);
           }
-          $scope.colors.hex = hex;
+          //$scope.colors.hex = hex;
           $scope.hexToRgb(hex);
           $scope.rgbToHsv(rgb.red, rgb.green, rgb.blue);
         };
@@ -247,7 +247,8 @@ angular.module('meanWhiteboardApp')
         scope.$watch('visible', function(newVal) {
           if (newVal) {
             element.css('display', 'inline-block');
-            scope.convertFromHex(scope.initialColor);
+            scope.colors.hex = scope.initialColor.slice(1);
+            scope.convertFromHex(scope.colors.hex);
             hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
             setPosition(circleCursor, scope.setXFromSaturation(scope.colors.s) - radius, scope.setYFromValue(scope.colors.v) - radius);
             setY(arrows, scope.setYFromHue(scope.colors.h));
