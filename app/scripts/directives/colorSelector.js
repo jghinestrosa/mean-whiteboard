@@ -48,7 +48,10 @@ angular.module('meanWhiteboardApp')
         };
 
         $scope.convertFromHex = function(hex) {
-          //$scope.colors.hex = hex.slice(1);
+          if (hex[0] === '#') {
+            hex = hex.slice(1);
+          }
+          $scope.colors.hex = hex;
           $scope.hexToRgb(hex);
           $scope.rgbToHsv(rgb.red, rgb.green, rgb.blue);
         };

@@ -11,7 +11,6 @@ angular.module('meanWhiteboardApp')
             e.preventDefault();
             return;
           } 
-
         });
       }
     };
