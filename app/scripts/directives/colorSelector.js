@@ -14,7 +14,12 @@ angular.module('meanWhiteboardApp')
         var rgb,
             hsv;
 
+        var circleCursor = {top: '', left: '', radius: 5};
+        var arrows = {top: ''};
+
         $scope.colors = {h: '', s: '', v: '', r: '', g: '', b: '', hex: ''};
+
+        $scope.circleCursor = {top: '', left: '', radius: 5};
         
         $scope.hexToRgb = function(hex) {
           rgb = colorConversion.hexToRgb(hex);
@@ -113,16 +118,21 @@ angular.module('meanWhiteboardApp')
 
         // calculate the x coordinate from the s value
         $scope.setXFromSaturation = function(s) {
-          return convertToCoordinates(s, 100);
+          circleCursor.left = (convertToCoordinates(s, 100) - circleCursor.radius).toString() + 'px';
+          return circleCursor.left;
         };
 
         // calculate the y coordinate from the v value
         $scope.setYFromValue = function(v) {
-          return (255 - convertToCoordinates(v, 100));
+          //$scope.circleCursor.top = 255 - convertToCoordinates(v, 100);
+          circleCursor.top = ((255 - convertToCoordinates(v, 100)) - circleCursor.radius).toString() + 'px';
+          return circleCursor.top;
         };
 
         $scope.setYFromHue = function(h) {
-          return (255 - convertToCoordinates(h, 360));
+          //return (255 - convertToCoordinates(h, 360));
+          arrows.top = (255 - convertToCoordinates(h, 360)).toString() + 'px';
+          return arrows.top;
         };
 
         // convert from the text inputs
@@ -156,6 +166,34 @@ angular.module('meanWhiteboardApp')
           $scope.convertFromRgb();
         };
 
+        // update GUI
+        $scope.setCircleCursorPosition = function(x, y) {
+          circleCursor.left = x.toString() + 'px';
+          circleCursor.top = y.toString() + 'px';
+        };
+
+        $scope.setArrowsPosition = function(y) {
+          arrows.top = y.toString() + 'px';
+        };
+
+        $scope.getCircleCursorPosition = function() {
+          return {top: circleCursor.top, left: circleCursor.left};
+        };
+
+        $scope.getArrowsPosition = function() {
+          return {top: arrows.top};
+        };
+
+        $scope.getBackgroundColorFromHue = function() {
+          return {background: $scope.hueBarToHex(parseInt($scope.colors.h, 10))};
+        };
+
+        $scope.updateGUIFromHSV = function() {
+          $scope.setYFromHue(parseInt($scope.colors.h, 10));
+          $scope.setXFromSaturation(parseInt($scope.colors.s, 10));
+          $scope.setYFromValue(parseInt($scope.colors.v, 10));
+        };
+
       },
       link: function postLink(scope, element, attrs) {
 
@@ -168,32 +206,10 @@ angular.module('meanWhiteboardApp')
         var selectorClickable = angular.element(content.children()[0].querySelector('.clickable'));
         var hueBarClickable = angular.element(content.children()[1].querySelector('.clickable'));
 
-        // circle cursor
-        var circleCursor = angular.element(content.children()[0].querySelector('#circle-cursor'));
-
         // FIXME: it says the width is an empty string instead of getting the value from the css
         //var radius = parseInt(circleCursor.css('width'), 10)/2;
 
         var radius = 5;
-
-        // arrows
-        var arrows = angular.element(content.children()[1].querySelector('#arrows'));
-
-        // functions to change position of the elements
-        var setX = function(element, x) {
-          var left = x.toString() + 'px';
-          element.css('left', left);
-        };
-
-        var setY = function(element, y) {
-          var top = y.toString() + 'px';
-          element.css('top', top);
-        };
-
-        var setPosition = function(element, x, y) {
-          setX(element, x);
-          setY(element, y);
-        };
 
         // move the circle cursor
         var listenMouseEventsInSelector = function() {
@@ -201,13 +217,13 @@ angular.module('meanWhiteboardApp')
 
             var x = (e.offsetX || e.layerX) - radius;
             var y = (e.offsetY || e.layerY) - radius;
-            setPosition(circleCursor, x, y);
+            scope.setCircleCursorPosition(x, y);
             scope.$apply(scope.setSaturationValueFromXY(x,y));
 
             selectorClickable.on('mousemove', function(e) {
               var x = (e.offsetX || e.layerX) - radius;
               var y = (e.offsetY || e.layerY) - radius;
-              setPosition(circleCursor, x, y);
+              scope.setCircleCursorPosition(x, y);
               scope.$apply(scope.setSaturationValueFromXY(x,y));
             });
 
@@ -222,15 +238,13 @@ angular.module('meanWhiteboardApp')
         var listenMouseEventsInHueBar = function() {
           hueBarClickable.on('mousedown', function(e) {
             var y = e.offsetY || e.layerY;
-            setY(arrows, y);
+            scope.setArrowsPosition(y);
             scope.$apply(scope.setHueFromY(y));
-            hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
 
             hueBarClickable.on('mousemove', function(e) {
               var y = e.offsetY || e.layerY;
-              setY(arrows, y);
+              scope.setArrowsPosition(y);
               scope.$apply(scope.setHueFromY(y));
-              hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
             });
 
           });
@@ -250,8 +264,9 @@ angular.module('meanWhiteboardApp')
             scope.colors.hex = scope.initialColor.slice(1);
             scope.convertFromHex(scope.colors.hex);
             hueSelected.css('background', scope.hueBarToHex(scope.colors.h));
-            setPosition(circleCursor, scope.setXFromSaturation(scope.colors.s) - radius, scope.setYFromValue(scope.colors.v) - radius);
-            setY(arrows, scope.setYFromHue(scope.colors.h));
+            scope.setXFromSaturation(scope.colors.s);
+            scope.setYFromValue(scope.colors.v);
+            scope.setYFromHue(scope.colors.h);
           }
         });
 

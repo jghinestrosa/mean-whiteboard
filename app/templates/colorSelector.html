@@ -2,14 +2,14 @@
   <menu-bar></menu-bar>
   <div id="color-selector-content">
     <div id="selector">
-      <div id="hue-selected"></div>
+      <div id="hue-selected" ng-style="getBackgroundColorFromHue()"></div>
       <div id="white-gradient"></div>
       <div id="black-gradient"></div>
-      <div id="circle-cursor"></div>
+      <div id="circle-cursor" ng-style="getCircleCursorPosition()"></div>
       <div class="clickable"></div>
     </div>
     <div id="hue-bar">
-      <div id="arrows">
+      <div id="arrows" ng-style="getArrowsPosition()">
         <div id="left" class="arrow"></div>
         <div id="right" class="arrow"></div>
       </div>
@@ -17,13 +17,13 @@
       <div class="clickable"></div>
     </div>
     <div id="color-values">
-      <label for="H">H</label><input listen-keyup="convertFromH(val)" max-num="359" only-positive-numbers type="text" ng-model="colors.h" size="3" maxlength="3" name="H" value="" id="H">
-      <label for="S">S</label><input listen-keyup="convertFromS(val)" max-num="100" only-positive-numbers type="text" ng-model="colors.s" size="3" maxlength="3" name="S" value="" id="S">
-      <label for="B">B</label><input listen-keyup="convertFromV(val)" max-num="100" only-positive-numbers type="text" ng-model="colors.v" size="3" maxlength="3" name="B" value="" id="B">
+      <label for="H">H</label><input listen-keyup="convertFromH(val)" max-num="359" update-gui="setYFromHue(val)" only-positive-numbers type="text" ng-model="colors.h" size="3" maxlength="3" name="H" value="" id="H">
+      <label for="S">S</label><input listen-keyup="convertFromS(val)" max-num="100" update-gui="setXFromSaturation(val)" only-positive-numbers type="text" ng-model="colors.s" size="3" maxlength="3" name="S" value="" id="S">
+      <label for="B">B</label><input listen-keyup="convertFromV(val)" max-num="100" update-gui="setYFromValue(val)" only-positive-numbers type="text" ng-model="colors.v" size="3" maxlength="3" name="B" value="" id="B">
 
-      <label for="R">R</label><input listen-keyup="convertFromR(val)" max-num="255" only-positive-numbers type="text" ng-model="colors.r" size="3" maxlength="3" name="R" value="" id="R">
-      <label for="G">G</label><input listen-keyup="convertFromG(val)" max-num="255" only-positive-numbers type="text" ng-model="colors.g" size="3" maxlength="3" name="G" value="" id="G">
-      <label for="B">B</label><input listen-keyup="convertFromB(val)" max-num="255" only-positive-numbers type="text" ng-model="colors.b" size="3" maxlength="3" name="B" value="" id="B">
+      <label for="R">R</label><input listen-keyup="convertFromR(val)" max-num="255" update-gui="updateGUIFromHSV()" only-positive-numbers type="text" ng-model="colors.r" size="3" maxlength="3" name="R" value="" id="R">
+      <label for="G">G</label><input listen-keyup="convertFromG(val)" max-num="255" update-gui="updateGUIFromHSV()" only-positive-numbers type="text" ng-model="colors.g" size="3" maxlength="3" name="G" value="" id="G">
+      <label for="B">B</label><input listen-keyup="convertFromB(val)" max-num="255" update-gui="updateGUIFromHSV()" only-positive-numbers type="text" ng-model="colors.b" size="3" maxlength="3" name="B" value="" id="B">
 
       <label for="hex">#</label><input listen-keyup-hex="convertFromHex(val)" hex-format type="text" ng-model="colors.hex" maxlength="6" size="6" name="hex" value="" id="hex">
     </div>

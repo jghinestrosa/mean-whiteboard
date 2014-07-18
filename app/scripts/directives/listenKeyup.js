@@ -6,7 +6,8 @@ angular.module('meanWhiteboardApp')
       restrict: 'A',
       scope: {
         handler: '&listenKeyup',
-        maxNum: '@'
+        maxNum: '@',
+        updateGUI: '&updateGui'
       },
       link: function postLink(scope, element, attrs) {
         var value;
@@ -47,6 +48,9 @@ angular.module('meanWhiteboardApp')
           if (scope.handler) {
             scope.$apply(function() {
               scope.handler({val:parseInt(element.val(),10)});
+              if (scope.updateGUI) {
+                scope.updateGUI({val:parseInt(element.val(), 10)});
+              }
             });
           }
         }
