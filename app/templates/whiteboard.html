@@ -1,13 +1,13 @@
 <color-selector visible="colorSelector.visible" initial-color="colorSelector.selectedColor" select-color="colorSelector.selectColor(color)"></color-selector>
 <div id='tools'>
   <button ng-repeat='(key, value) in getButtons()' ng-click='setMode(value.name)'>{{value.name}}</button>
+  <div id='selectedColors'>
+    <div id='foregroundColor' selected-color='properties.foregroundColor' ng-click="colorSelector.show(properties.foregroundColor, true)"></div>
+    <div id='backgroundColor' selected-color='properties.backgroundColor' ng-click="colorSelector.show(properties.backgroundColor, false)"></div>
+    <div id='swapColors' swap-colors='swapColors()'></div>
+  </div>
 </div>
-<div id='selectedColors'>
-  <div id='foregroundColor' selected-color='properties.foregroundColor' ng-click="colorSelector.show(properties.foregroundColor, true)"></div>
-  <div id='backgroundColor' selected-color='properties.backgroundColor' ng-click="colorSelector.show(properties.backgroundColor, false)"></div>
-  <div id='swapColors' swap-colors='swapColors()'></div>
-</div>
-  <div id='mouseEventsDiv' class='board' listen-mouse-events='getSelectedMode()'>
-	<canvas layer-id='{{key}}' ng-repeat='(key, value) in getLayers()'></canvas>
+<div id='mouseEventsDiv' class='board' listen-mouse-events='getSelectedMode()'>
+  <canvas layer-id='{{key}}' ng-repeat='(key, value) in getLayers()'></canvas>
 </div>
 
