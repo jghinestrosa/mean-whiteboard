@@ -162,16 +162,16 @@ angular.module('meanWhiteboardApp')
       // set hue
       switch (max) {
         case r:
-          h = g-b/diff;
+          h = (g-b)/diff;
           if (g < b) {
             h += 6;
           }
           break;
         case g:
-          h = b-r/diff + 2;
+          h = (b-r)/diff + 2;
           break;
         case b:
-          h = r-g/diff + 4;
+          h = (r-g)/diff + 4;
       }
 
       h = 360*h/6;
