@@ -1,6 +1,7 @@
 #color-selector {
   border: 1px solid black;
   /*display: inline-block;*/
+  background: white;
   display: none;
   position: absolute;
   top: 10px;
@@ -9,7 +10,8 @@
 }
 
 #color-selector-content {
-  padding: 15px;
+  padding: 20px;
+  padding-top: 10px;
 }
 
 #selector {
@@ -70,9 +72,9 @@
 
 #hue-bar {
   float: left;
-  margin-left: 40px;
+  margin-left: 15px;
   width: 42px;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   position: relative;
   cursor: default;
 }
@@ -136,10 +138,18 @@
   background: linear-gradient(to bottom, rgba(255,0,0,1) 0%,rgba(255,0,255,1) 17%,rgba(0,0,255,1) 33%,rgba(0,255,255,1) 50%,rgba(0,255,0,1) 66%,rgba(255,255,0,1) 83%,rgba(255,0,0,1) 100%);
 }
 
+#values-buttons-wrapper {
+  /*border: 1px solid black;*/
+  display: inline-block;
+}
+
 #color-values {
   display: inline-block;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   margin-left: 25px;
+  position: relative;
+  float: left;
+  clear: both;
 }
 
 input, label {
@@ -158,3 +168,17 @@ input {
   text-transform: uppercase;
 }
 
+#color-selector-content button {
+  position: relative;
+  float: left;
+  clear: left;
+  width: 70px;
+  left: 20%;
+}
+
+#color-selector-buttons {
+  /*border: 1px solid black;*/
+  position: relative;
+  clear: both;
+  top: 15px;
+}
