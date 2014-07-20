@@ -8,7 +8,8 @@ angular.module('meanWhiteboardApp')
       replace: true,
       scope: {
         visible: '=',
-        initialColor: '='
+        initialColor: '=',
+        selectColor: '&'
       },
       controller: function($scope) {
         var rgb,
@@ -194,10 +195,22 @@ angular.module('meanWhiteboardApp')
           $scope.setYFromValue(parseInt($scope.colors.v, 10));
         };
 
+        $scope.saveColor = function() {
+          console.log($scope.colors.hex);
+          var color = '#' + $scope.colors.hex;
+          $scope.selectColor({color:color});
+          $scope.closeSelector();
+        };
+
+        $scope.closeSelector = function() {
+          $scope.visible = false;
+        };
+
       },
       link: function postLink(scope, element, attrs) {
 
-        var content = angular.element(element.children()[1]);
+        //var content = angular.element(element.children()[1]);
+        var content = angular.element(element.children()[0]);
 
         // hue selected
         var hueSelected = angular.element(content.children()[0].querySelector('#hue-selected'));
@@ -205,6 +218,8 @@ angular.module('meanWhiteboardApp')
         // clickable areas
         var selectorClickable = angular.element(content.children()[0].querySelector('.clickable'));
         var hueBarClickable = angular.element(content.children()[1].querySelector('.clickable'));
+
+        //angular.element(content.children()[0].querySelector('.clickable'));
 
         // FIXME: it says the width is an empty string instead of getting the value from the css
         //var radius = parseInt(circleCursor.css('width'), 10)/2;
@@ -229,7 +244,7 @@ angular.module('meanWhiteboardApp')
 
           });
 
-          selectorClickable.on('mouseup', function() {
+          selectorClickable.on('mouseup mouseleave', function() {
             selectorClickable.off('mousemove');
           });
         };
@@ -249,7 +264,7 @@ angular.module('meanWhiteboardApp')
 
           });
 
-          hueBarClickable.on('mouseup', function() {
+          hueBarClickable.on('mouseup mouseleave', function() {
             hueBarClickable.off('mousemove');
           });
         };
@@ -268,17 +283,20 @@ angular.module('meanWhiteboardApp')
             scope.setYFromValue(scope.colors.v);
             scope.setYFromHue(scope.colors.h);
           }
+          else {
+            element.css('display', 'none');
+          }
         });
 
         // when the color selector is hidden, set scope.visible to false
-        scope.$watch(function() {
-          return element.css('display');
-        },
-        function(val) {
-          if (val === 'none') {
-            scope.visible = false;
-          }
-        });
+        //scope.$watch(function() {
+          //return element.css('display');
+        //},
+        //function(val) {
+          //if (val === 'none') {
+            //scope.visible = false;
+          //}
+        //});
       }
     };
   }]);

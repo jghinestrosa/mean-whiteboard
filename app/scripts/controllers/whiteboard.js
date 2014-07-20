@@ -38,21 +38,30 @@ angular.module('meanWhiteboardApp')
     /** Button Factory **/
     $scope.getButtons = buttonFactory.getButtons;
 
+    // Color Selector setttings
+    $scope.colorSelector = {};
+    $scope.colorSelector.visible = false;
+    $scope.colorSelector.selectedColor = $scope.properties.foregroundColor;
+    $scope.colorSelector.isForegroundColor = '';
 
-    $scope.colorSelectorVisible = false;
-    $scope.initialColorInColorSelector = $scope.properties.foregroundColor;
-
-    $scope.toggleVisibilityColorSelector = function(value) {
-      $scope.colorSelectorVisible = value;
+    $scope.colorSelector.toggleVisibility = function(value) {
+      $scope.colorSelector.visible = value;
     };
 
-    $scope.showColorSelector = function(initialColor) {
-      $scope.toggleVisibilityColorSelector(true);
-      $scope.initialColorInColorSelector = initialColor;
+    $scope.colorSelector.selectColor = function(selectedColor) {
+      $scope.colorSelector.selectedColor = selectedColor;
+      if ($scope.colorSelector.isForegroundColor) {
+        $scope.properties.foregroundColor = selectedColor;
+      }
+      else {
+        $scope.properties.backgroundColor = selectedColor;
+      }
     };
 
-    this.isColorSelectorVisible = function() {
-      return $scope.colorSelectorVisible;
+    $scope.colorSelector.show = function(selectedColor, isForegroundColor) {
+      $scope.colorSelector.isForegroundColor = isForegroundColor;
+      $scope.colorSelector.selectColor(selectedColor);
+      $scope.colorSelector.toggleVisibility(true);
     };
 
   });

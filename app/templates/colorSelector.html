@@ -1,5 +1,5 @@
 <div id="color-selector">
-  <menu-bar></menu-bar>
+  <!--<menu-bar></menu-bar>-->
   <div id="color-selector-content">
     <div id="selector">
       <div id="hue-selected" ng-style="getBackgroundColorFromHue()"></div>
@@ -29,8 +29,8 @@
         <label for="hex">#</label><input listen-keyup-hex="convertFromHex(val)" hex-format type="text" ng-model="colors.hex" maxlength="6" size="6" name="hex" value="" id="hex">
       </div>
       <div id="color-selector-buttons">
-        <button>OK</button>
-        <button>Cancel</button>
+        <button ng-click="saveColor()">OK</button>
+        <button ng-click="closeSelector()">Cancel</button>
       </div>
     </div>
   </div>
