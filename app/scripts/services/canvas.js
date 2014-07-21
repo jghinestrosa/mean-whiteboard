@@ -187,6 +187,7 @@ angular.module('meanWhiteboardApp')
       };
 
       var handleMouseDown = function(event) {
+        event = event.originalEvent;
         drawingPoints.oldPoint.x = event.layerX-selectedLayer.offsetLeft;
         drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
         drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
@@ -197,6 +198,9 @@ angular.module('meanWhiteboardApp')
       };
 
       var handleMouseDrag = function(event) {
+        if (event.originalEvent) {
+          event = event.originalEvent;
+        }
         draw(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
 
       };
@@ -215,6 +219,7 @@ angular.module('meanWhiteboardApp')
     };
 
     var handleMouseDown = function(event) {
+        event = event.originalEvent;
       console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
       eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
     };
@@ -249,6 +254,7 @@ angular.module('meanWhiteboardApp')
       };
     
       var handleMouseDown = function(event) {
+        event = event.originalEvent;
         var ctx = selectedLayer.ctx;
 
         ctx.beginPath();

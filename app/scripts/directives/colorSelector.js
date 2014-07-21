@@ -229,6 +229,13 @@ angular.module('meanWhiteboardApp')
         // move the circle cursor
         var listenMouseEventsInSelector = function() {
           selectorClickable.on('mousedown', function(e) {
+            
+            console.dir(e);
+            
+            // jQuery support
+            if (e.originalEvent) {
+              e = e.originalEvent;
+            }
 
             var x = (e.offsetX || e.layerX) - radius;
             var y = (e.offsetY || e.layerY) - radius;
@@ -236,6 +243,10 @@ angular.module('meanWhiteboardApp')
             scope.$apply(scope.setSaturationValueFromXY(x,y));
 
             selectorClickable.on('mousemove', function(e) {
+              // jQuery support
+              if (e.originalEvent) {
+                e = e.originalEvent;
+              }
               var x = (e.offsetX || e.layerX) - radius;
               var y = (e.offsetY || e.layerY) - radius;
               scope.setCircleCursorPosition(x, y);
@@ -252,11 +263,21 @@ angular.module('meanWhiteboardApp')
         // move the arrows of the hue bar
         var listenMouseEventsInHueBar = function() {
           hueBarClickable.on('mousedown', function(e) {
+            // jQuery support
+            if (e.originalEvent) {
+              e = e.originalEvent;
+            }
+
             var y = e.offsetY || e.layerY;
             scope.setArrowsPosition(y);
             scope.$apply(scope.setHueFromY(y));
 
             hueBarClickable.on('mousemove', function(e) {
+              // jQuery support
+              if (e.originalEvent) {
+                e = e.originalEvent;
+              }
+
               var y = e.offsetY || e.layerY;
               scope.setArrowsPosition(y);
               scope.$apply(scope.setHueFromY(y));
@@ -287,16 +308,6 @@ angular.module('meanWhiteboardApp')
             element.css('display', 'none');
           }
         });
-
-        // when the color selector is hidden, set scope.visible to false
-        //scope.$watch(function() {
-          //return element.css('display');
-        //},
-        //function(val) {
-          //if (val === 'none') {
-            //scope.visible = false;
-          //}
-        //});
       }
     };
   }]);
