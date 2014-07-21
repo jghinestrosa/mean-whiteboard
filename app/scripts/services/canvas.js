@@ -263,6 +263,9 @@ angular.module('meanWhiteboardApp')
       };
 
       var handleMouseDrag = function(event) {
+        if (event.originalEvent) {
+          event = event.originalEvent;
+        }
         draw(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
