@@ -18,6 +18,8 @@ angular.module('meanWhiteboardApp')
     $scope.setOffsetToLayer = canvasFactory.layers.setOffsetToLayer;
     $scope.setSizeToLayer = canvasFactory.layers.setSizeToLayer;
     $scope.selectLayer = canvasFactory.layers.selectLayer;
+    $scope.moveLayerUp = canvasFactory.layers.moveUp;
+    $scope.moveLayerDown = canvasFactory.layers.moveDown;
 
     // Mouse events management for canvas
     $scope.handleMouseDown = function(event) {

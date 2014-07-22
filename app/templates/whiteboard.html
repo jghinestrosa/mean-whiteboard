@@ -7,11 +7,17 @@
     <div id="swapColors" swap-colors="swapColors()"></div>
   </div>
 </div>
-<div id="layers" drag>
-  <div class="layers-button" ng-click="addNewLayer()">+</div>
-  <div class="layer" ng-repeat="(key, value) in getLayers()" ng-class="{'layer-selected': value.isSelected}" ng-click="selectLayer(key)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{key}}</div>
+<div id="layers-manager" drag>
+  <div id="layers-buttons">
+    <div ng-click="addNewLayer()">+</div>
+    <div ng-click="moveLayerUp()">^</div>
+    <div ng-click="moveLayerDown()">v</div>
+  </div>
+  <div id="layers">
+    <div class="layer" ng-repeat="layer in getLayers()" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>
+  </div>
 </div>
 <div id="mouseEventsDiv" class='board' listen-mouse-events="getSelectedMode()">
-  <canvas layer-id="{{key}}" ng-repeat="(key, value) in getLayers()"></canvas>
+  <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers()"></canvas>
 </div>
 

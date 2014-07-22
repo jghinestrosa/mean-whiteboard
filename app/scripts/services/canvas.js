@@ -38,6 +38,7 @@ angular.module('meanWhiteboardApp')
     /** Layers configuration **/
 
     var layersMap = {},
+        layersArray = [],
         nextLayerId = 0,
         numberOfLayers = 0,
         selectedLayer;
@@ -62,8 +63,9 @@ angular.module('meanWhiteboardApp')
         var id = getNextLayerId();
         var newLayer = new Layer(id);
 
-        // the new layer is added to the map
+        // the new layer is added to the map and the array
         layersMap[id] = newLayer;
+        layersArray.push(newLayer);
 
         // if there was already a selected layer, unselect it first
         if (selectedLayer) {
@@ -76,7 +78,8 @@ angular.module('meanWhiteboardApp')
       },
 
       getLayers: function() {
-        return layersMap;
+        //return layersMap;
+        return layersArray;
       },
 
       getNumberOfLayers: function() {
@@ -109,6 +112,32 @@ angular.module('meanWhiteboardApp')
       setSizeToLayer: function(id, width, height) {
         layersMap[id].width = width;
         layersMap[id].height = height;
+      },
+
+      moveUp: function() {
+        for (var i = 0; i < layersArray.length; i++) {
+          if (layersArray[i].id === selectedLayer.id) {
+            if (i !== 0) {
+              var previousLayer = layersArray[i-1];
+              layersArray[i-1] = selectedLayer;
+              layersArray[i] = previousLayer;
+              break;
+            }
+          }
+        }
+      },
+
+      moveDown: function() {
+        for (var i = 0; i < layersArray.length; i++) {
+          if (layersArray[i].id === selectedLayer.id) {
+            if (i !== layersArray.length-1) {
+              var nextLayer = layersArray[i+1];
+              layersArray[i+1] = selectedLayer;
+              layersArray[i] = nextLayer;
+              break;
+            }
+          }
+        }
       }
     };
 

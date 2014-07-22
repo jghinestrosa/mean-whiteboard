@@ -1,10 +1,16 @@
-#layers {
+#layers-manager {
   border: 1px solid black;
   display: inline-block;
   position: absolute;
   top: 50px;
   left: 150px;
   z-index: 5;
+}
+
+#layers {
+  position: relative;
+  float: left;
+  clear: left;
 }
 
 .layer {
@@ -15,8 +21,7 @@
   clear: left;
 }
 
-.layers-button {
-  position: relative;
+#layers-buttons div {
   border: 1px solid black;
   display: inline-block;
 }
