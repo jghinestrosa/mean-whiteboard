@@ -12,6 +12,7 @@ angular.module('meanWhiteboardApp')
     $scope.getLayers = canvasFactory.layers.getLayers;
     $scope.getNumberOfLayers = canvasFactory.layers.getNumberOfLayers;
     $scope.getLastLayerAdded = canvasFactory.layers.getLastLayerAdded;
+    $scope.getSelectedLayer = canvasFactory.layers.getSelectedLayer;
     $scope.setContextToLayer = canvasFactory.layers.setContextToLayer;
     $scope.addNewLayer = canvasFactory.layers.addNewLayer;
     $scope.setOffsetToLayer = canvasFactory.layers.setOffsetToLayer;

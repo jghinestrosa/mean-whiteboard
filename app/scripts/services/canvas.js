@@ -47,20 +47,30 @@ angular.module('meanWhiteboardApp')
     };
 
     // Layer constructor
-    var Layer = function() {
+    var Layer = function(id) {
+      this.id = id;
       this.globalCompositeOperation = 'source-over';
       this.globalAlpha = 1.0;
+      this.isSelected = true;
     };
 
     /** API for layers **/
     var layers = {
 
       addNewLayer:  function() {
-        var newLayer = new Layer();
+        // create and select a new layer
         var id = getNextLayerId();
+        var newLayer = new Layer(id);
 
-        // a new layer is selected and added to the map
+        // the new layer is added to the map
         layersMap[id] = newLayer;
+
+        // if there was already a selected layer, unselect it first
+        if (selectedLayer) {
+          selectedLayer.isSelected = false;
+        }
+
+        // set the latest layer as the selected layer
         selectedLayer = layersMap[id];
         numberOfLayers++;
       },
@@ -79,6 +89,8 @@ angular.module('meanWhiteboardApp')
 
       // Select active context
       selectLayer: function(id) {
+        selectedLayer.isSelected = false;
+        layersMap[id].isSelected = true;
         selectedLayer = layersMap[id];
       },
 

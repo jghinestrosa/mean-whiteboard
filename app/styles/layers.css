@@ -1,0 +1,28 @@
+#layers {
+  border: 1px solid black;
+  display: inline-block;
+  position: absolute;
+  top: 50px;
+  left: 150px;
+  z-index: 5;
+}
+
+.layer {
+  border: 1px solid black;
+  display: inline-block;
+  position: relative;
+  float: left;
+  clear: left;
+}
+
+.layers-button {
+  position: relative;
+  border: 1px solid black;
+  display: inline-block;
+}
+
+.layer-selected {
+  background: #00aaff;
+  font-weight: bold;
+  color: white;
+}
