@@ -77,8 +77,11 @@ angular.module('meanWhiteboardApp')
         numberOfLayers++;
       },
 
-      getLayers: function() {
-        //return layersMap;
+      getLayers: function(reversed) {
+        if (reversed) {
+          return layersArray.slice().reverse();
+        }
+
         return layersArray;
       },
 

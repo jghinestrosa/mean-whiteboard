@@ -10,14 +10,14 @@
 <div id="layers-manager" drag>
   <div id="layers-buttons">
     <div ng-click="addNewLayer()">+</div>
-    <div ng-click="moveLayerUp()">^</div>
-    <div ng-click="moveLayerDown()">v</div>
+    <div ng-click="moveLayerDown()">^</div>
+    <div ng-click="moveLayerUp()">v</div>
   </div>
   <div id="layers">
-    <div class="layer" ng-repeat="layer in getLayers()" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>
+    <div class="layer" ng-repeat="layer in getLayers(true)" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>
   </div>
 </div>
-<div id="mouseEventsDiv" class='board' listen-mouse-events="getSelectedMode()">
-  <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers()"></canvas>
+<div id="whiteboard" class='board' listen-mouse-events="getSelectedMode()">
+  <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers(false)"></canvas>
 </div>
 
