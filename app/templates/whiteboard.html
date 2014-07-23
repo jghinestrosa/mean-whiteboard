@@ -12,6 +12,7 @@
     <div ng-click="addNewLayer()">+</div>
     <div ng-click="moveLayerDown()">^</div>
     <div ng-click="moveLayerUp()">v</div>
+    <div ng-click="deleteSelectedLayer()">x</div>
   </div>
   <div id="layers">
     <div class="layer" ng-repeat="layer in getLayers(true)" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>

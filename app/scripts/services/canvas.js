@@ -141,7 +141,32 @@ angular.module('meanWhiteboardApp')
             }
           }
         }
+      },
+
+      deleteSelectedLayer: function() {
+        if (numberOfLayers !== 1) {
+          var index = layersArray.indexOf(selectedLayer);
+          var idNewLayerSelected;
+
+          if (index !== -1) {
+            var idLayerSelected = selectedLayer.id;
+
+            if (index === layersArray.length-1) {
+              idNewLayerSelected = layersArray[index-1].id;
+
+            }
+            else {
+              idNewLayerSelected = layersArray[index+1].id;
+            }
+
+            this.selectLayer(idNewLayerSelected);
+            layersArray.splice(index, 1);
+
+            delete layersMap[idLayerSelected];
+          }
+        } 
       }
+
     };
 
     // Initialize with one layer
