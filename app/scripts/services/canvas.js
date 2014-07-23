@@ -5,11 +5,11 @@ angular.module('meanWhiteboardApp')
 
     // General properties
     var properties = {
-      brushWidth: 30,
+      brushSize: 30,
       brushCap: 'round',
       eraserWidth: 5,
       eraserCap: 'round',
-      pencilWidth: 10,
+      pencilSize: 10,
       pencilCap: 'round',
       foregroundColor: '#00FF00',
       backgroundColor: '#ffffff',
@@ -234,9 +234,9 @@ angular.module('meanWhiteboardApp')
       };
 
       // private function for smooth drawing
-      var draw = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
+      var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
         // set properties
-        ctx.lineWidth = pencilWidth;
+        ctx.lineWidth = pencilSize;
         ctx.strokeStyle = color;
         ctx.lineCap = pencilCap;
         ctx.globalCompositeOperation = globalCompositeOperation;
@@ -270,7 +270,8 @@ angular.module('meanWhiteboardApp')
         if (event.originalEvent) {
           event = event.originalEvent;
         }
-        draw(selectedLayer.ctx, properties.brushWidth, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        draw(selectedLayer.ctx, properties.brushSize
+, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
 
       };
 
@@ -310,9 +311,9 @@ angular.module('meanWhiteboardApp')
     /** Pencil Mode **/
     var pencilMode = (function() {
 
-      var draw = function(ctx, pencilWidth, pencilCap, color, globalCompositeOperation, x, y) {
+      var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
         // set properties
-        ctx.lineWidth = pencilWidth;
+        ctx.lineWidth = pencilSize;
         ctx.strokeStyle = color;
         ctx.lineCap = pencilCap;
         ctx.globalCompositeOperation = globalCompositeOperation;
@@ -335,7 +336,7 @@ angular.module('meanWhiteboardApp')
         if (event.originalEvent) {
           event = event.originalEvent;
         }
-        draw(selectedLayer.ctx, properties.pencilWidth, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        draw(selectedLayer.ctx, properties.pencilSize, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
       return createNewMode('pencil', 'source-over', handleMouseDown, handleMouseDrag);

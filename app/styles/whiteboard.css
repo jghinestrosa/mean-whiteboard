@@ -64,6 +64,12 @@ canvas {
   z-index: 5;
 }
 
+.brush-size {
+  width: 40px;
+  float: left;
+  clear: left;
+}
+
 #tools button {
   position: relative;
   float: left;

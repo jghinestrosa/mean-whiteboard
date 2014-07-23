@@ -12,7 +12,7 @@ angular.module('meanWhiteboardApp')
             position;
 
         element.on('mousedown', function(e) {
-          e.preventDefault();
+          //e.preventDefault();
           position = {top: parseInt(element.css('top'), 10), left: parseInt(element.css('left'), 10)};
           startX = e.pageX;
           startY = e.pageY;
