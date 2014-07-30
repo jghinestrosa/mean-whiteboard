@@ -13,6 +13,7 @@ angular.module('meanWhiteboardApp')
     $scope.getNumberOfLayers = canvasFactory.layers.getNumberOfLayers;
     $scope.getLastLayerAdded = canvasFactory.layers.getLastLayerAdded;
     $scope.getSelectedLayer = canvasFactory.layers.getSelectedLayer;
+    $scope.setCanvasToLayer = canvasFactory.layers.setCanvasToLayer;
     $scope.setContextToLayer = canvasFactory.layers.setContextToLayer;
     $scope.addNewLayer = canvasFactory.layers.addNewLayer;
     $scope.setOffsetToLayer = canvasFactory.layers.setOffsetToLayer;
@@ -21,6 +22,12 @@ angular.module('meanWhiteboardApp')
     $scope.moveLayerUp = canvasFactory.layers.moveUp;
     $scope.moveLayerDown = canvasFactory.layers.moveDown;
     $scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
+
+    // History management
+    $scope.addToHistory = canvasFactory.history.addToHistory;
+    $scope.undo = canvasFactory.history.undo;
+    $scope.redo = canvasFactory.history.redo;
+    $scope.isHistoryEmpty = canvasFactory.history.isHistoryEmpty;
 
     // Show tools
     $scope.showBrushSize = function() {

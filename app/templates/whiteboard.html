@@ -1,5 +1,7 @@
 <color-selector visible="colorSelector.visible" initial-color="colorSelector.selectedColor" select-color="colorSelector.selectColor(color)"></color-selector>
 <div id="tools" drag>
+  <button undo-redo="undo()">Undo</button>
+  <button undo-redo="redo()">Redo</button>
   <button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>
   <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" value="" min="1" max="100">
   <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" value="" min="1" max="100">

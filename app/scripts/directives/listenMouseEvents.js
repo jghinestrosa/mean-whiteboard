@@ -23,6 +23,7 @@ angular.module('meanWhiteboardApp')
 
             element.on('mouseup', function() {
               element.off('mousemove');
+              mode.handleMouseUp();
             });
         };
 

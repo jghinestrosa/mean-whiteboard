@@ -100,6 +100,11 @@ angular.module('meanWhiteboardApp')
         selectedLayer = layersMap[id];
       },
 
+      // Set canvas elment to a layer
+      setCanvasToLayer: function(id, canvas) {
+        layersMap[id].canvas = canvas;
+      },
+
       // Set context 2d to a layer
       setContextToLayer: function(id, ctx) {
         layersMap[id].ctx = ctx;
@@ -151,18 +156,24 @@ angular.module('meanWhiteboardApp')
           if (index !== -1) {
             var idLayerSelected = selectedLayer.id;
 
+            // if the layer is in the last position, select the previous layer
             if (index === layersArray.length-1) {
               idNewLayerSelected = layersArray[index-1].id;
-
             }
+
+            // if not, select the next layer
             else {
               idNewLayerSelected = layersArray[index+1].id;
             }
+
+            // delete all history related to the layer
+            history.deleteHistoryOfALayer(selectedLayer.id);
 
             this.selectLayer(idNewLayerSelected);
             layersArray.splice(index, 1);
 
             delete layersMap[idLayerSelected];
+
           }
         } 
       }
@@ -171,6 +182,89 @@ angular.module('meanWhiteboardApp')
 
     // Initialize with one layer
     layers.addNewLayer();
+
+    /** API for history **/
+
+    var history = (function() {
+      var undoStack = [],
+          redoStack = [],
+          undoLimit = 20;
+
+      return {
+        addToHistory: function(snapshot) {
+          redoStack = [];
+
+          // If the undoStack is full, remove the first element
+          if (undoStack.length === undoLimit) {
+            undoStack.splice(0, 1);
+          }
+
+          undoStack.push(snapshot);
+        },
+
+        undo: function() {
+
+          if (undoStack.length === 1) {
+            return;
+          }
+
+          var snapshot = undoStack.pop();
+          
+          if (!snapshot) {
+            return snapshot;
+          }
+
+          // If this snapshot was made when the layer was created
+          // then it is skipped because the layer is already created
+          if (snapshot.isANewLayer) {
+            redoStack.push(snapshot);
+            snapshot = undoStack.pop();
+          }
+
+          redoStack.push(snapshot);
+          return undoStack[undoStack.length-1];
+        },
+
+        redo: function() {
+          var snapshot = redoStack.pop();
+
+          if (!snapshot) {
+            return snapshot;
+          }
+
+          // If this snapshot was made when the layer was created
+          // then it is skipped because the layer is already created
+          if (snapshot.isANewLayer) {
+            undoStack.push(snapshot);
+            snapshot = redoStack.pop();
+          }
+
+          undoStack.push(snapshot);
+          return snapshot;
+        },
+
+        deleteHistoryOfALayer: function(id) {
+          var i;
+          id = parseInt(id, 10);
+
+          for (i = 0; i < undoStack.length; i++) {
+            if (undoStack[i].layer.id === id) {
+              undoStack.splice(i, 1);
+              i--;
+            }
+          }
+
+          for (i = 0; i < redoStack.length; i++) {
+            if (redoStack[i].layer.id === id) {
+              redoStack.splice(i, 1);
+              i--;
+            }
+          }
+        }
+
+      };
+    
+    }());
 
     /** Canvas Operations **/
 
@@ -188,14 +282,14 @@ angular.module('meanWhiteboardApp')
     };
 
     // create new Mode and add it to the map of available modes
-    var createNewMode = function(name, globalCompositeOperation, handleMouseDown, handleMouseDrag, handleMouseMove, handleMouseUp) {
+    var createNewMode = function(name, globalCompositeOperation, handlers) {
       var newMode = new Mode({
         name: name,
         globalCompositeOperation: globalCompositeOperation || 'source-over',
-        handleMouseDown: handleMouseDown,
-        handleMouseDrag: handleMouseDrag,
-        handleMouseMove: handleMouseMove,
-        handleMouseUp: handleMouseUp
+        handleMouseDown: handlers.handleMouseDown,
+        handleMouseDrag: handlers.handleMouseDrag,
+        handleMouseMove: handlers.handleMouseMove,
+        handleMouseUp: handlers.handleMouseUp
       });
       modes[name] = newMode;
       return newMode;
@@ -270,12 +364,26 @@ angular.module('meanWhiteboardApp')
         if (event.originalEvent) {
           event = event.originalEvent;
         }
-        draw(selectedLayer.ctx, properties.brushSize
-, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+
+        draw(selectedLayer.ctx, properties.brushSize, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
 
       };
 
-      return createNewMode('brush', 'source-over', handleMouseDown, handleMouseDrag);
+      var handleMouseUp = function() {
+        history.addToHistory({
+          dataURL: selectedLayer.canvas.toDataURL('img/png'),
+          layer: selectedLayer,
+          isANewLayer: false
+        });
+      };
+
+      var handlers = {
+        handleMouseDown: handleMouseDown,
+        handleMouseDrag: handleMouseDrag,
+        handleMouseUp: handleMouseUp,
+      };
+
+      return createNewMode('brush', 'source-over', handlers);
 
     }());
 
@@ -294,7 +402,11 @@ angular.module('meanWhiteboardApp')
       eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
     };
 
-    return createNewMode('eyedropper', 'source-over', handleMouseDown);
+    var handlers = {
+      handleMouseDown: handleMouseDown
+    };
+
+    return createNewMode('eyedropper', 'source-over', handlers);
 
     }());
 
@@ -303,8 +415,13 @@ angular.module('meanWhiteboardApp')
     
       var handleMouseDown = modes.brush.handleMouseDown;
       var handleMouseDrag = modes.brush.handleMouseDrag;
+
+      var handlers = {
+        handleMouseDown: handleMouseDown,
+        handleMouseDrag: handleMouseDrag
+      };
     
-      return createNewMode('eraserBrush', 'destination-out', handleMouseDown, handleMouseDrag);
+      return createNewMode('eraserBrush', 'destination-out', handlers);
 
     }());
 
@@ -339,7 +456,12 @@ angular.module('meanWhiteboardApp')
         draw(selectedLayer.ctx, properties.pencilSize, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
       };
 
-      return createNewMode('pencil', 'source-over', handleMouseDown, handleMouseDrag);
+      var handlers = {
+        handleMouseDown: handleMouseDown,
+        handleMouseDrag: handleMouseDrag
+      };
+
+      return createNewMode('pencil', 'source-over', handlers);
 
     }());
 
@@ -384,6 +506,7 @@ angular.module('meanWhiteboardApp')
       setProperties: setProperties,
       swapColors: swapColors,
       layers: layers,
+      history: history,
       canvasOperations: canvasOperations
     };
   }]);
