@@ -6,6 +6,7 @@ angular.module('meanWhiteboardApp')
     /** canvasFactory **/
     // General properties
     $scope.properties = canvasFactory.properties;
+    $scope.setProperties = canvasFactory.setProperties;
     $scope.swapColors = canvasFactory.swapColors;
 
     // Layer management
@@ -71,10 +72,12 @@ angular.module('meanWhiteboardApp')
     $scope.colorSelector.selectColor = function(selectedColor) {
       $scope.colorSelector.selectedColor = selectedColor;
       if ($scope.colorSelector.isForegroundColor) {
-        $scope.properties.foregroundColor = selectedColor;
+        //$scope.properties.foregroundColor = selectedColor;
+        $scope.setProperties({foregroundColor:selectedColor});
       }
       else {
-        $scope.properties.backgroundColor = selectedColor;
+        //$scope.properties.backgroundColor = selectedColor;
+        $scope.setProperties({backgroundColor:selectedColor});
       }
     };
 

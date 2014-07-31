@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .factory('canvasFactory', ['colorConversionFactory', function (colorConversion) {
+  .factory('canvasFactory', ['colorConversionFactory', 'localStorageFactory', function(colorConversion, localStorage) {
 
-    // General properties
-    var properties = {
+    // General properties by default
+    var defaultProperties = {
       brushSize: 30,
       brushCap: 'round',
       eraserWidth: 5,
@@ -17,15 +17,34 @@ angular.module('meanWhiteboardApp')
       height: 500,
     };
 
+    // General properties
+    var properties = (function() {
+      var savedProperties = localStorage.get('properties');
+
+      if (savedProperties) {
+        return savedProperties;
+      }
+
+      return defaultProperties;
+    
+    }());
+
+
     var setProperties = function(updatedProperties) {
       updatedProperties = updatedProperties || {};
 
-      var prop;
-      for (prop in updatedProperties) {
+      for (var prop in updatedProperties) {
         if (updatedProperties.hasOwnProperty(prop)) {
           properties[prop] = updatedProperties[prop];
         }
       }
+
+      // Save the new properties in localStorage
+      localStorage.save({
+        key:'properties',
+        val: properties
+      });
+
     };
 
     var swapColors = function() {
@@ -33,6 +52,13 @@ angular.module('meanWhiteboardApp')
       var oldForegroundColor = properties.foregroundColor;
       properties.foregroundColor = properties.backgroundColor;
       properties.backgroundColor = oldForegroundColor;
+
+      // Save the new properties in localStorage
+      localStorage.save({
+        key:'properties',
+        val: properties
+      });
+
     };
 
     /** Layers configuration **/
@@ -355,7 +381,6 @@ angular.module('meanWhiteboardApp')
         drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
         drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
         drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
-        console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
         selectedLayer.ctx.beginPath();
         this.handleMouseDrag(event);
       };
