@@ -21,6 +21,7 @@ angular.module('meanWhiteboardApp')
     var properties = (function() {
       var savedProperties = localStorage.get('properties');
 
+      // Restore the last session properties
       if (savedProperties) {
         return savedProperties;
       }
@@ -29,7 +30,8 @@ angular.module('meanWhiteboardApp')
     
     }());
 
-
+    // Set new values for the general properties and
+    // store them in the localStorage
     var setProperties = function(updatedProperties) {
       updatedProperties = updatedProperties || {};
 
@@ -47,8 +49,9 @@ angular.module('meanWhiteboardApp')
 
     };
 
+    // Swap the foreground and background colors and
+    // store the general properties in the localStorage
     var swapColors = function() {
-      console.log('swapColors');
       var oldForegroundColor = properties.foregroundColor;
       properties.foregroundColor = properties.backgroundColor;
       properties.backgroundColor = oldForegroundColor;
@@ -507,11 +510,6 @@ angular.module('meanWhiteboardApp')
     // Function to convert rgb to hex
     var rgbToHex = function(red, green, blue) {
       return '#' + colorConversion.rgbToHex(red, green, blue);
-    };
-
-    // Function to convert hex to rgb
-    var hexToRgb = function(hexValue) {
-      return colorConversion.hexToRgb(hexValue);
     };
 
     var setMode = function(nameMode) {

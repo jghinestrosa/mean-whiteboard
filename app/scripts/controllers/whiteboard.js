@@ -39,22 +39,10 @@ angular.module('meanWhiteboardApp')
       return $scope.getSelectedMode().name === 'pencil';
     };
 
-    // Mouse events management for canvas
-    $scope.handleMouseDown = function(event) {
-      canvasFactory.canvasOperations.handleMouseDown(event);
-    };
-
-    $scope.handleMouseMove = function(event) {
-      canvasFactory.canvasOperations.handleMouseMove(event);
-    };
-
-    $scope.handleMouseUp = function(event) {
-      canvasFactory.canvasOperations.handleMouseUp(event);
-    };
-
     // Mode
     $scope.setMode = canvasFactory.canvasOperations.setMode;
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
+
 
     /** Button Factory **/
     $scope.getButtons = buttonFactory.getButtons;
@@ -65,10 +53,12 @@ angular.module('meanWhiteboardApp')
     $scope.colorSelector.selectedColor = $scope.properties.foregroundColor;
     $scope.colorSelector.isForegroundColor = '';
 
+    // Show or hide the color selector
     $scope.colorSelector.toggleVisibility = function(value) {
       $scope.colorSelector.visible = value;
     };
 
+    // Function to select a color using the color selector
     $scope.colorSelector.selectColor = function(selectedColor) {
       $scope.colorSelector.selectedColor = selectedColor;
       if ($scope.colorSelector.isForegroundColor) {
@@ -81,6 +71,7 @@ angular.module('meanWhiteboardApp')
       }
     };
 
+    // Function to show the color selector
     $scope.colorSelector.show = function(selectedColor, isForegroundColor) {
       $scope.colorSelector.isForegroundColor = isForegroundColor;
       $scope.colorSelector.selectColor(selectedColor);
