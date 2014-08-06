@@ -5,7 +5,7 @@ angular.module('meanWhiteboardApp')
     return {
       restrict: 'A',
       scope: {
-        listenMouseEvents: '&'
+        mode: '=listenMouseEvents'
       },
       link: function (scope, element, attrs) {
         var stopListeningMouseEvents = function() {
@@ -55,8 +55,8 @@ angular.module('meanWhiteboardApp')
           }
         };
 
-        // when the mode is changed, the handlers for the mouse events have to change too
-       scope.$watch('listenMouseEvents()', function(newMode) {
+        // when the mode changes, the handlers for the mouse events have to change too
+       scope.$watch('mode', function(newMode) {
         stopListeningMouseEvents();
         changeMouseEventHandlers(newMode);
        });

@@ -22,6 +22,6 @@
     <div class="layer" ng-repeat="layer in getLayers(true)" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>
   </div>
 </div>
-<div id="whiteboard" class='board' listen-mouse-events="getSelectedMode()">
+<div id="whiteboard" class="board" listen-mouse-events="mode">
   <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers(false)"></canvas>
 </div>

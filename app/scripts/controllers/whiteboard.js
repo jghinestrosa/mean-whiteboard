@@ -40,8 +40,25 @@ angular.module('meanWhiteboardApp')
     };
 
     // Mode
-    $scope.setMode = canvasFactory.canvasOperations.setMode;
+
+    $scope.mode = {};
+
+    $scope.setMode = function(nameMode) {
+      canvasFactory.canvasOperations.setMode(nameMode);
+      var mode = canvasFactory.canvasOperations.getSelectedMode();
+      $scope.mode.name = nameMode;
+      $scope.mode.handleMouseDown = mode.handleMouseDown;
+      $scope.mode.handleMouseDrag = mode.handleMouseDrag;
+      $scope.mode.handleMouseMove = mode.handleMouseMove;
+      $scope.mode.handleMouseUp = mode.handleMouseUp;
+    };
+
+    // Select mode by default
+    $scope.setMode(canvasFactory.canvasOperations.getSelectedMode().name);
+
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
+
+
 
 
     /** Button Factory **/
