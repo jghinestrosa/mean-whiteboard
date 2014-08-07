@@ -447,6 +447,7 @@ angular.module('meanWhiteboardApp')
 
       return {
         name: 'brush',
+        globalCompositeOperation: 'source-over',
         initializePoints: initializePoints,
         calculateMidPoint: calculateMidPoint,
         updatePoints: updatePoints,
@@ -495,6 +496,20 @@ angular.module('meanWhiteboardApp')
       //return createNewMode('eraserBrush', 'destination-out', handlers);
 
     //}());
+    
+    var eraserBrushMode = (function() {
+      return {
+        name: 'eraserBrush',
+        globalCompositeOperation: 'destination-out',
+        initializePoints: brushMode.initializePoints,
+        calculateMidPoint: brushMode.calculateMidPoint,
+        updatePoints: brushMode.updatePoints,
+        press: brushMode.press,
+        draw: brushMode.draw,
+      };
+    }());
+    
+    modes[eraserBrushMode.name] = eraserBrushMode;
 
     /** Pencil Mode **/
     //var pencilMode = (function() {

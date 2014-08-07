@@ -43,89 +43,109 @@ angular.module('meanWhiteboardApp')
 
     $scope.mode = {};
 
+    // Object to store different handlers for mouse events
+    // depending on the mode
+    var modes = {};
+
+    // Handlers for brush mode and eraser brush mode
+    modes.getBrushMode = function(nameMode) {
+      var mode = canvasFactory.canvasOperations.getMode(nameMode);
+
+      return {
+        handleMouseDown: function(e) {
+
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+
+          var selectedLayer = $scope.getSelectedLayer();
+
+          var x = e.layerX - selectedLayer.offsetLeft;
+          var y = e.layerY - selectedLayer.offsetTop;
+          mode.initializePoints(x, y);
+          var points = mode.calculateMidPoint(x, y);
+          var settings = {
+            layerId: selectedLayer.id,
+            brushSize: canvasFactory.properties.brushSize,
+            color: canvasFactory.properties.foregroundColor,
+            brushCap: canvasFactory.properties.brushCap,
+            globalCompositeOperation: mode.globalCompositeOperation,
+            oldPoint: points.oldPoint,
+            currentPoint: points.currentPoint,
+            currentMidPoint: points.currentMidPoint,
+            oldMidPoint: points.oldMidPoint,
+          };
+          mode.press(settings);
+
+          mode.updatePoints();
+
+          // Send the data to the rest of the clients
+          var canvasData = {
+            nameMode: mode.name,
+            execute: 'press',
+            settings: settings
+          };
+          sendMessageToServer('canvasData', canvasData);
+
+        },
+
+        handleMouseDrag: function(e) {
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+
+          var selectedLayer = $scope.getSelectedLayer();
+          var x = e.layerX - selectedLayer.offsetLeft;
+          var y = e.layerY - selectedLayer.offsetTop;
+          var points = mode.calculateMidPoint(x, y);
+
+          var settings = {
+            layerId: selectedLayer.id,
+            brushSize: canvasFactory.properties.brushSize,
+            color: canvasFactory.properties.foregroundColor,
+            brushCap: canvasFactory.properties.brushCap,
+            globalCompositeOperation: canvasFactory.properties.globalCompositeOperation,
+            oldPoint: points.oldPoint,
+            currentPoint: points.currentPoint,
+            currentMidPoint: points.currentMidPoint,
+            oldMidPoint: points.oldMidPoint,
+          };
+
+          // Draw locally
+          mode.draw(settings);
+
+
+          // Send data to the rest of clients using the socket
+          var canvasData = {
+            nameMode: mode.name,
+            execute: 'draw',
+            settings: settings
+          };
+          sendMessageToServer('canvasData', canvasData);
+
+          // Update points after sending the data to the remote
+          // client because points are updated by reference
+          mode.updatePoints();
+        },
+
+        handleMouseUp: function() {
+
+        }
+
+      };
+
+    };
+
     $scope.setMode = function(nameMode) {
       canvasFactory.canvasOperations.setMode(nameMode);
-      var mode = canvasFactory.canvasOperations.getSelectedMode();
       $scope.mode.name = nameMode;
 
-      $scope.mode.handleMouseDown = function(e) {
-        if (e.originalEvent) {
-          e = e.originalEvent;
-        }
-
-        var selectedLayer = $scope.getSelectedLayer();
-
-        var x = e.layerX - selectedLayer.offsetLeft;
-        var y = e.layerY - selectedLayer.offsetTop;
-        mode.initializePoints(x, y);
-        var points = mode.calculateMidPoint(x, y);
-        var settings = {
-          layerId: selectedLayer.id,
-          brushSize: canvasFactory.properties.brushSize,
-          color: canvasFactory.properties.foregroundColor,
-          brushCap: canvasFactory.properties.brushCap,
-          globalCompositeOperation: canvasFactory.properties.globalCompositeOperation,
-          oldPoint: points.oldPoint,
-          currentPoint: points.currentPoint,
-          currentMidPoint: points.currentMidPoint,
-          oldMidPoint: points.oldMidPoint,
-        };
-        mode.press(settings);
-
-        mode.updatePoints();
-
-        // Send the data to the rest of the clients
-        var canvasData = {
-          nameMode: mode.name,
-          execute: 'press',
-          settings: settings
-        };
-        sendMessageToServer('canvasData', canvasData);
-
-      };
-
-      $scope.mode.handleMouseDrag = function(e) {
-        if (e.originalEvent) {
-          e = e.originalEvent;
-        }
-
-        var selectedLayer = $scope.getSelectedLayer();
-        var x = e.layerX - selectedLayer.offsetLeft;
-        var y = e.layerY - selectedLayer.offsetTop;
-        var points = mode.calculateMidPoint(x, y);
-
-        var settings = {
-          layerId: selectedLayer.id,
-          brushSize: canvasFactory.properties.brushSize,
-          color: canvasFactory.properties.foregroundColor,
-          brushCap: canvasFactory.properties.brushCap,
-          globalCompositeOperation: canvasFactory.properties.globalCompositeOperation,
-          oldPoint: points.oldPoint,
-          currentPoint: points.currentPoint,
-          currentMidPoint: points.currentMidPoint,
-          oldMidPoint: points.oldMidPoint,
-        };
-
-        // Draw locally
-        mode.draw(settings);
-
-
-        // Send data to the rest of clients using the socket
-        var canvasData = {
-          nameMode: mode.name,
-          execute: 'draw',
-          settings: settings
-        };
-        sendMessageToServer('canvasData', canvasData);
-
-        // Update points after sending the data to the remote
-        // client because points are updated by reference
-        mode.updatePoints();
-      };
-
-      $scope.mode.handleMouseUp = function() {
-
-      };
+      if (nameMode === 'brush' || nameMode === 'eraserBrush') {
+        var mode = modes.getBrushMode(nameMode);
+        $scope.mode.handleMouseDown = mode.handleMouseDown; 
+        $scope.mode.handleMouseDrag = mode.handleMouseDrag; 
+        $scope.mode.handleMouseUp = mode.handleMouseUp; 
+      }
 
     };
 
