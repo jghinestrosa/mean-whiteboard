@@ -74,17 +74,15 @@ angular.module('meanWhiteboardApp')
 
         mode.updatePoints();
 
-        // socket
-        var message = {
+        // Send the data to the rest of the clients
+        var canvasData = {
           nameMode: mode.name,
           execute: 'press',
           settings: settings
         };
-        socketFactory.emit('message', JSON.stringify(message));
+        socketFactory.emit('canvasData', JSON.stringify(canvasData));
 
       };
-
-      var i = 0;
 
       $scope.mode.handleMouseDrag = function(e) {
         if (e.originalEvent) {
@@ -97,7 +95,6 @@ angular.module('meanWhiteboardApp')
         var points = mode.calculateMidPoint(x, y);
 
         var settings = {
-          i: i++,
           layerId: selectedLayer.id,
           brushSize: canvasFactory.properties.brushSize,
           color: canvasFactory.properties.foregroundColor,
@@ -108,17 +105,22 @@ angular.module('meanWhiteboardApp')
           currentMidPoint: points.currentMidPoint,
           oldMidPoint: points.oldMidPoint,
         };
+
+        // Draw locally
         mode.draw(settings);
 
-        mode.updatePoints();
 
-        // socket
-        var message = {
+        // Send data to the rest of clients using the socket
+        var canvasData = {
           nameMode: mode.name,
           execute: 'draw',
           settings: settings
         };
-        socketFactory.emit('message', JSON.stringify(message));
+        socketFactory.emit('canvasData', JSON.stringify(canvasData));
+
+        // Update points after sending the data to the remote
+        // client because points are updated by reference
+        mode.updatePoints();
       };
 
       $scope.mode.handleMouseUp = function() {
@@ -132,12 +134,13 @@ angular.module('meanWhiteboardApp')
 
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
-    // socket on message
-    socketFactory.on('message', function(data) {
+    // Messages received from other clients through the server
+    // using a socket
+    socketFactory.on('canvasData', function(data) {
       data = JSON.parse(data);
-      //console.log(data.settings.i);
       var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
 
+      // Execute the function
       mode[data.execute](data.settings);
     });
 
