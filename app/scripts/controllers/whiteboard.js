@@ -80,7 +80,7 @@ angular.module('meanWhiteboardApp')
           execute: 'press',
           settings: settings
         };
-        socketFactory.emit('canvasData', JSON.stringify(canvasData));
+        sendMessageToServer('canvasData', canvasData);
 
       };
 
@@ -116,7 +116,7 @@ angular.module('meanWhiteboardApp')
           execute: 'draw',
           settings: settings
         };
-        socketFactory.emit('canvasData', JSON.stringify(canvasData));
+        sendMessageToServer('canvasData', canvasData);
 
         // Update points after sending the data to the remote
         // client because points are updated by reference
@@ -134,8 +134,13 @@ angular.module('meanWhiteboardApp')
 
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
-    // Messages received from other clients through the server
-    // using a socket
+    // Send a message to the server using a socket
+    var sendMessageToServer = function(name, data) {
+      socketFactory.emit(name, JSON.stringify(data));
+    };
+
+
+    /** Messages received from other clients through the server using a socket **/
     socketFactory.on('canvasData', function(data) {
       data = JSON.parse(data);
       var mode = canvasFactory.canvasOperations.getMode(data.nameMode);

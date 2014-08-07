@@ -26,10 +26,6 @@ require('./lib/routes')(app);
 io.on('connection', require('./lib/socket'));
 
 // Start server
-//app.listen(config.port, function () {
-  //console.log('Express server listening on port %d in %s mode', config.port, app.get('env'));
-//});
-
 server.listen(config.port, function () {
   console.log('Express server listening on port %d in %s mode', config.port, app.get('env'));
 });
