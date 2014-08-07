@@ -425,6 +425,7 @@ angular.module('meanWhiteboardApp')
       var draw = function(settings) {
         console.log(settings.i);
         var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
 
         ctx.lineWidth = settings.brushSize;
         ctx.strokeStyle = settings.color;
