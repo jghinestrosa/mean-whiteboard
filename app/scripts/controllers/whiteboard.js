@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory) {
+  .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory, socketFactory) {
 
     /** canvasFactory **/
     // General properties
@@ -47,10 +47,84 @@ angular.module('meanWhiteboardApp')
       canvasFactory.canvasOperations.setMode(nameMode);
       var mode = canvasFactory.canvasOperations.getSelectedMode();
       $scope.mode.name = nameMode;
-      $scope.mode.handleMouseDown = mode.handleMouseDown;
-      $scope.mode.handleMouseDrag = mode.handleMouseDrag;
-      $scope.mode.handleMouseMove = mode.handleMouseMove;
-      $scope.mode.handleMouseUp = mode.handleMouseUp;
+
+      $scope.mode.handleMouseDown = function(e) {
+        if (e.originalEvent) {
+          e = e.originalEvent;
+        }
+
+        var selectedLayer = $scope.getSelectedLayer();
+
+        var x = e.layerX - selectedLayer.offsetLeft;
+        var y = e.layerY - selectedLayer.offsetTop;
+        mode.initializePoints(x, y);
+        var points = mode.calculateMidPoint(x, y);
+        var settings = {
+          layerId: selectedLayer.id,
+          brushSize: canvasFactory.properties.brushSize,
+          color: canvasFactory.properties.foregroundColor,
+          brushCap: canvasFactory.properties.brushCap,
+          globalCompositeOperation: canvasFactory.properties.globalCompositeOperation,
+          oldPoint: points.oldPoint,
+          currentPoint: points.currentPoint,
+          currentMidPoint: points.currentMidPoint,
+          oldMidPoint: points.oldMidPoint,
+        };
+        mode.press(settings);
+
+        mode.updatePoints();
+
+        // socket
+        var message = {
+          nameMode: mode.name,
+          execute: 'press',
+          settings: settings
+        };
+        socketFactory.emit('message', JSON.stringify(message));
+
+      };
+
+      var i = 0;
+
+      $scope.mode.handleMouseDrag = function(e) {
+        if (e.originalEvent) {
+          e = e.originalEvent;
+        }
+
+        var selectedLayer = $scope.getSelectedLayer();
+        var x = e.layerX - selectedLayer.offsetLeft;
+        var y = e.layerY - selectedLayer.offsetTop;
+        var points = mode.calculateMidPoint(x, y);
+
+        var settings = {
+          i: i++,
+          layerId: selectedLayer.id,
+          brushSize: canvasFactory.properties.brushSize,
+          color: canvasFactory.properties.foregroundColor,
+          brushCap: canvasFactory.properties.brushCap,
+          globalCompositeOperation: canvasFactory.properties.globalCompositeOperation,
+          oldPoint: points.oldPoint,
+          currentPoint: points.currentPoint,
+          currentMidPoint: points.currentMidPoint,
+          oldMidPoint: points.oldMidPoint,
+        };
+        mode.draw(settings);
+
+        mode.updatePoints();
+
+        // socket
+        var message = {
+          nameMode: mode.name,
+          execute: 'draw',
+          settings: settings
+        };
+        socketFactory.emit('message', JSON.stringify(message));
+      };
+
+      $scope.mode.handleMouseUp = function() {
+
+      };
+
     };
 
     // Select mode by default
@@ -58,7 +132,14 @@ angular.module('meanWhiteboardApp')
 
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
+    // socket on message
+    socketFactory.on('message', function(data) {
+      data = JSON.parse(data);
+      //console.log(data.settings.i);
+      var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
 
+      mode[data.execute](data.settings);
+    });
 
 
     /** Button Factory **/
