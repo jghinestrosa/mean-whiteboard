@@ -77,8 +77,6 @@ angular.module('meanWhiteboardApp')
           };
           mode.press(settings);
 
-          mode.updatePoints();
-
           // Send the data to the rest of the clients
           var canvasData = {
             nameMode: mode.name,
@@ -86,6 +84,10 @@ angular.module('meanWhiteboardApp')
             settings: settings
           };
           sendMessageToServer('canvasData', canvasData);
+
+          // Update points after sending the data to the remote
+          // client because points are updated by reference
+          mode.updatePoints();
 
         },
 
@@ -135,17 +137,99 @@ angular.module('meanWhiteboardApp')
       };
 
     };
+    
+    // Handlers for pencil mode and eraser pencil mode
+    modes.getPencilMode = function(nameMode) {
+      var mode = canvasFactory.canvasOperations.getMode(nameMode);
+
+      return {
+        handleMouseDown: function(e) {
+
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+
+          var selectedLayer = $scope.getSelectedLayer();
+
+          var x = e.layerX - selectedLayer.offsetLeft;
+          var y = e.layerY - selectedLayer.offsetTop;
+          var settings = {
+            layerId: selectedLayer.id,
+            pencilSize: canvasFactory.properties.pencilSize,
+            color: canvasFactory.properties.foregroundColor,
+            pencilCap: canvasFactory.properties.pencilCap,
+            globalCompositeOperation: mode.globalCompositeOperation,
+            x: x,
+            y: y
+          };
+          mode.press(settings);
+
+          // Send the data to the rest of the clients
+          var canvasData = {
+            nameMode: mode.name,
+            execute: 'press',
+            settings: settings
+          };
+          sendMessageToServer('canvasData', canvasData);
+
+        },
+
+        handleMouseDrag: function(e) {
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+
+          var selectedLayer = $scope.getSelectedLayer();
+          var x = e.layerX - selectedLayer.offsetLeft;
+          var y = e.layerY - selectedLayer.offsetTop;
+          var settings = {
+            layerId: selectedLayer.id,
+            pencilSize: canvasFactory.properties.pencilSize,
+            color: canvasFactory.properties.foregroundColor,
+            pencilCap: canvasFactory.properties.pencilCap,
+            globalCompositeOperation: mode.globalCompositeOperation,
+            x: x,
+            y: y
+          };
+
+          // Draw locally
+          mode.draw(settings);
+
+          // Send data to the rest of clients using the socket
+          var canvasData = {
+            nameMode: mode.name,
+            execute: 'draw',
+            settings: settings
+          };
+          sendMessageToServer('canvasData', canvasData);
+        },
+
+        handleMouseUp: function() {
+
+        }
+
+      };
+
+    };
 
     $scope.setMode = function(nameMode) {
       canvasFactory.canvasOperations.setMode(nameMode);
       $scope.mode.name = nameMode;
 
+      var mode;
       if (nameMode === 'brush' || nameMode === 'eraserBrush') {
-        var mode = modes.getBrushMode(nameMode);
+        mode = modes.getBrushMode(nameMode);
         $scope.mode.handleMouseDown = mode.handleMouseDown; 
         $scope.mode.handleMouseDrag = mode.handleMouseDrag; 
         $scope.mode.handleMouseUp = mode.handleMouseUp; 
       }
+      else if (nameMode === 'pencil' || nameMode === 'eraserPencil') {
+        mode = modes.getPencilMode(nameMode);
+        $scope.mode.handleMouseDown = mode.handleMouseDown; 
+        $scope.mode.handleMouseDrag = mode.handleMouseDrag; 
+        $scope.mode.handleMouseUp = mode.handleMouseUp; 
+      }
+
 
     };
 

@@ -10,7 +10,7 @@ angular.module('meanWhiteboardApp')
       eraserWidth: 5,
       eraserCap: 'round',
       pencilSize: 10,
-      pencilCap: 'round',
+      pencilCap: 'square',
       foregroundColor: '#00FF00',
       backgroundColor: '#ffffff',
       width: 500,
@@ -423,7 +423,6 @@ angular.module('meanWhiteboardApp')
 
       // draw a quadratic curve
       var draw = function(settings) {
-        console.log(settings.i);
         var ctx = layersMap[settings.layerId].ctx;
         ctx.beginPath();
 
@@ -483,20 +482,6 @@ angular.module('meanWhiteboardApp')
     //}());
 
     /** EraserBrush Mode **/
-    //var eraserBrushMode = (function() {
-    
-      //var handleMouseDown = modes.brush.handleMouseDown;
-      //var handleMouseDrag = modes.brush.handleMouseDrag;
-
-      //var handlers = {
-        //handleMouseDown: handleMouseDown,
-        //handleMouseDrag: handleMouseDrag
-      //};
-    
-      //return createNewMode('eraserBrush', 'destination-out', handlers);
-
-    //}());
-    
     var eraserBrushMode = (function() {
       return {
         name: 'eraserBrush',
@@ -512,6 +497,50 @@ angular.module('meanWhiteboardApp')
     modes[eraserBrushMode.name] = eraserBrushMode;
 
     /** Pencil Mode **/
+    var pencilMode = (function() {
+
+      var points = {
+        oldX: 0,
+        oldY: 0,
+      };
+
+      var press = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
+        ctx.moveTo(settings.x, settings.y);
+        points.oldX = settings.x;
+        points.oldY = settings.y;
+        draw(settings);
+      };
+
+      // Draw a line
+      var draw = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
+
+         // Set properties
+        ctx.lineWidth = settings.pencilSize;
+        ctx.strokeStyle = settings.color;
+        ctx.lineCap = settings.pencilCap;
+        ctx.globalCompositeOperation = settings.globalCompositeOperation;
+
+        ctx.moveTo(points.oldX, points.oldY);
+        ctx.lineTo(settings.x, settings.y);
+        ctx.stroke();
+        points.oldX = settings.x;
+        points.oldY = settings.y;
+      };
+
+      return {
+        name: 'pencil',
+        globalCompositeOperation: 'source-over',
+        press: press,
+        draw: draw,
+      };
+
+    }());
+
+    modes[pencilMode.name] = pencilMode;
     //var pencilMode = (function() {
 
       //var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
