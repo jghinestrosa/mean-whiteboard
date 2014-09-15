@@ -2,7 +2,31 @@
 
 angular.module('meanWhiteboardApp')
   .factory('socketFactory', function() {
-    var socket = io.connect();
+    //var socket = io.connect();
+    var socket,
+        disconnectedBefore = false,
+        connected = false;
+
+    var connect = function() {
+      if (disconnectedBefore) {
+        socket.io.reconnect();
+      }
+      else {
+        socket = io.connect();
+      }
+
+      connected = true;
+    };
+
+    var disconnect = function() {
+      socket.io.disconnect();
+      disconnectedBefore = true;
+      connected = false;
+    };
+
+    var isConnected = function() {
+      return connected;
+    };
 
     var on = function(name, callback) {
       socket.on(name, callback);
@@ -16,6 +40,9 @@ angular.module('meanWhiteboardApp')
     };
 
     return {
+      connect: connect,
+      disconnect: disconnect,
+      isConnected: isConnected,
       on: on,
       emit: emit
     };

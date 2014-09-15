@@ -436,6 +436,7 @@ angular.module('meanWhiteboardApp')
         ctx.stroke();
       };
 
+      // TODO: Move this function to the controller
       //var handleMouseUp = function() {
         //history.addToHistory({
           //dataURL: selectedLayer.canvas.toDataURL('img/png'),

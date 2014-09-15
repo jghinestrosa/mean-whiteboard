@@ -77,13 +77,15 @@ angular.module('meanWhiteboardApp')
           };
           mode.press(settings);
 
-          // Send the data to the rest of the clients
-          var canvasData = {
-            nameMode: mode.name,
-            execute: 'press',
-            settings: settings
-          };
-          sendMessageToServer('canvasData', canvasData);
+          if (socketFactory.isConnected()) {
+            // Send the data to the rest of the clients
+            var canvasData = {
+              nameMode: mode.name,
+              execute: 'press',
+              settings: settings
+            };
+            sendMessageToServer('canvasData', canvasData);
+          }
 
           // Update points after sending the data to the remote
           // client because points are updated by reference
@@ -116,14 +118,15 @@ angular.module('meanWhiteboardApp')
           // Draw locally
           mode.draw(settings);
 
-
-          // Send data to the rest of clients using the socket
-          var canvasData = {
-            nameMode: mode.name,
-            execute: 'draw',
-            settings: settings
-          };
-          sendMessageToServer('canvasData', canvasData);
+          if (socketFactory.isConnected()) {
+            // Send data to the rest of clients using the socket
+            var canvasData = {
+              nameMode: mode.name,
+              execute: 'draw',
+              settings: settings
+            };
+            sendMessageToServer('canvasData', canvasData);
+          }
 
           // Update points after sending the data to the remote
           // client because points are updated by reference
@@ -243,15 +246,24 @@ angular.module('meanWhiteboardApp')
       socketFactory.emit(name, JSON.stringify(data));
     };
 
+    $scope.connect = function() {
+      socketFactory.connect();
 
-    /** Messages received from other clients through the server using a socket **/
-    socketFactory.on('canvasData', function(data) {
-      data = JSON.parse(data);
-      var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
+      /** Messages received from other clients through the server using a socket **/
+      socketFactory.on('canvasData', function(data) {
+        data = JSON.parse(data);
+        var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
 
-      // Execute the function
-      mode[data.execute](data.settings);
-    });
+        // Execute the function
+        mode[data.execute](data.settings);
+      });
+    };
+
+    $scope.disconnect = socketFactory.disconnect;
+
+    $scope.isSharingCanvas = function() {
+      return socketFactory.isConnected();
+    };
 
 
     /** Button Factory **/
