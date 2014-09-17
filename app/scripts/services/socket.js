@@ -28,8 +28,16 @@ angular.module('meanWhiteboardApp')
       return connected;
     };
 
-    var on = function(name, callback) {
-      socket.on(name, callback);
+    var on = function(name, callback, scope) {
+      //socket.on(name, callback);
+      socket.on(name, function() {
+        var args = arguments;
+        scope.$apply(function() {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      });
     };
 
     var emit = function(name, data) {

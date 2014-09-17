@@ -3,6 +3,10 @@
 angular.module('meanWhiteboardApp')
   .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory, socketFactory) {
 
+    // Info for socket io messages
+    var LAYERS_DATA = 'layersData',
+        CANVAS_DATA = 'canvasData';
+
     /** canvasFactory **/
     // General properties
     $scope.properties = canvasFactory.properties;
@@ -16,13 +20,13 @@ angular.module('meanWhiteboardApp')
     $scope.getSelectedLayer = canvasFactory.layers.getSelectedLayer;
     $scope.setCanvasToLayer = canvasFactory.layers.setCanvasToLayer;
     $scope.setContextToLayer = canvasFactory.layers.setContextToLayer;
-    $scope.addNewLayer = canvasFactory.layers.addNewLayer;
+    //$scope.addNewLayer = canvasFactory.layers.addNewLayer;
     $scope.setOffsetToLayer = canvasFactory.layers.setOffsetToLayer;
     $scope.setSizeToLayer = canvasFactory.layers.setSizeToLayer;
     $scope.selectLayer = canvasFactory.layers.selectLayer;
-    $scope.moveLayerUp = canvasFactory.layers.moveUp;
-    $scope.moveLayerDown = canvasFactory.layers.moveDown;
-    $scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
+    //$scope.moveLayerUp = canvasFactory.layers.moveUp;
+    //$scope.moveLayerDown = canvasFactory.layers.moveDown;
+    //$scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
 
     // History management
     $scope.addToHistory = canvasFactory.history.addToHistory;
@@ -257,13 +261,50 @@ angular.module('meanWhiteboardApp')
         // Execute the function
         mode[data.execute](data.settings);
       });
+
+      socketFactory.on(LAYERS_DATA, function(data) {
+        data = JSON.parse(data);
+        console.log('layersData received');
+        console.dir(data);
+
+        // Execute the function
+        canvasFactory.layers[data.execute](data.params);
+      }, $scope);
     };
 
     $scope.disconnect = socketFactory.disconnect;
 
+    // Function used for show or not the share canvas button
     $scope.isSharingCanvas = function() {
       return socketFactory.isConnected();
     };
+
+    /** Layers Management **/
+    $scope.addNewLayer = function() {
+      // Add a new layer in local and select it
+      var id = canvasFactory.layers.addNewLayer();
+      canvasFactory.layers.selectLayer(id);
+
+      // Add a new layer in remote but not selecting it
+      if (socketFactory.isConnected()) {
+        var layersData = {
+          execute: 'addNewLayer'
+        };
+
+        sendMessageToServer(LAYERS_DATA, layersData);
+      }
+    };
+
+    $scope.moveLayerUp = function() {
+      var selectedLayer = canvasFactory.layers.getSelectedLayer();
+      canvasFactory.layers.moveUp(selectedLayer);
+    };
+
+    $scope.moveLayerDown = function() {
+      var selectedLayer = canvasFactory.layers.getSelectedLayer();
+      canvasFactory.layers.moveDown(selectedLayer);
+    };
+    $scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
 
 
     /** Button Factory **/

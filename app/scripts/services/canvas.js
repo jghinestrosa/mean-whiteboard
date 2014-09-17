@@ -81,7 +81,7 @@ angular.module('meanWhiteboardApp')
       this.id = id;
       this.globalCompositeOperation = 'source-over';
       this.globalAlpha = 1.0;
-      this.isSelected = true;
+      this.isSelected = false;
     };
 
     /** API for layers **/
@@ -96,14 +96,12 @@ angular.module('meanWhiteboardApp')
         layersMap[id] = newLayer;
         layersArray.push(newLayer);
 
-        // if there was already a selected layer, unselect it first
-        if (selectedLayer) {
-          selectedLayer.isSelected = false;
-        }
-
         // set the latest layer as the selected layer
-        selectedLayer = layersMap[id];
+        //this.selectLayer(id);
+
         numberOfLayers++;
+
+        return id;
       },
 
       getLayers: function(reversed) {
@@ -124,7 +122,11 @@ angular.module('meanWhiteboardApp')
 
       // Select active context
       selectLayer: function(id) {
-        selectedLayer.isSelected = false;
+        // if there was already a selected layer, unselect it first
+        if (selectedLayer) {
+          selectedLayer.isSelected = false;
+        }
+
         layersMap[id].isSelected = true;
         selectedLayer = layersMap[id];
       },
@@ -210,7 +212,7 @@ angular.module('meanWhiteboardApp')
     };
 
     // Initialize with one layer
-    layers.addNewLayer();
+    layers.selectLayer(layers.addNewLayer());
 
     /** API for history **/
 
