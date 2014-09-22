@@ -260,7 +260,7 @@ angular.module('meanWhiteboardApp')
 
         // Execute the function
         mode[data.execute](data.settings);
-      });
+      }, $scope);
 
       socketFactory.on(LAYERS_DATA, function(data) {
         data = JSON.parse(data);
