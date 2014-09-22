@@ -285,7 +285,7 @@ angular.module('meanWhiteboardApp')
       var id = canvasFactory.layers.addNewLayer();
       canvasFactory.layers.selectLayer(id);
 
-      // Add a new layer in remote but not selecting it
+      // Add a new layer in remote canvas but not selecting it
       if (socketFactory.isConnected()) {
         var layersData = {
           execute: 'addNewLayer'
@@ -296,13 +296,33 @@ angular.module('meanWhiteboardApp')
     };
 
     $scope.moveLayerUp = function() {
+      // Move up the selected layer in local canvas
       var selectedLayer = canvasFactory.layers.getSelectedLayer();
-      canvasFactory.layers.moveUp(selectedLayer);
+      canvasFactory.layers.moveUp(selectedLayer.id);
+
+      // Move up the selected layer in remote canvas
+      if (socketFactory.isConnected()) {
+        var layersData = {
+          execute: 'moveUp',
+          params: selectedLayer.id
+        };
+        sendMessageToServer(LAYERS_DATA, layersData);
+      }
     };
 
     $scope.moveLayerDown = function() {
+      // Move down the selected layer in local canvas
       var selectedLayer = canvasFactory.layers.getSelectedLayer();
-      canvasFactory.layers.moveDown(selectedLayer);
+      canvasFactory.layers.moveDown(selectedLayer.id);
+
+      // Move up the selected layer in remote canvas
+      if (socketFactory.isConnected()) {
+        var layersData = {
+          execute: 'moveDown',
+          params: selectedLayer.id
+        };
+        sendMessageToServer(LAYERS_DATA, layersData);
+      }
     };
     $scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
 

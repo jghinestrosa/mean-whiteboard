@@ -153,12 +153,13 @@ angular.module('meanWhiteboardApp')
         layersMap[id].height = height;
       },
 
-      moveUp: function() {
+      moveUp: function(id) {
+        var layer = layersMap[id];
         for (var i = 0; i < layersArray.length; i++) {
-          if (layersArray[i].id === selectedLayer.id) {
+          if (layersArray[i].id === layer.id) {
             if (i !== 0) {
               var previousLayer = layersArray[i-1];
-              layersArray[i-1] = selectedLayer;
+              layersArray[i-1] = layer;
               layersArray[i] = previousLayer;
               break;
             }
@@ -166,12 +167,13 @@ angular.module('meanWhiteboardApp')
         }
       },
 
-      moveDown: function() {
+      moveDown: function(id) {
+        var layer = layersMap[id];
         for (var i = 0; i < layersArray.length; i++) {
-          if (layersArray[i].id === selectedLayer.id) {
+          if (layersArray[i].id === layer.id) {
             if (i !== layersArray.length-1) {
               var nextLayer = layersArray[i+1];
-              layersArray[i+1] = selectedLayer;
+              layersArray[i+1] = layer;
               layersArray[i] = nextLayer;
               break;
             }
