@@ -88,7 +88,7 @@ angular.module('meanWhiteboardApp')
               execute: 'press',
               settings: settings
             };
-            sendMessageToServer('canvasData', canvasData);
+            sendMessageToServer(CANVAS_DATA, canvasData);
           }
 
           // Update points after sending the data to the remote
@@ -129,7 +129,7 @@ angular.module('meanWhiteboardApp')
               execute: 'draw',
               settings: settings
             };
-            sendMessageToServer('canvasData', canvasData);
+            sendMessageToServer(CANVAS_DATA, canvasData);
           }
 
           // Update points after sending the data to the remote
@@ -177,7 +177,7 @@ angular.module('meanWhiteboardApp')
             execute: 'press',
             settings: settings
           };
-          sendMessageToServer('canvasData', canvasData);
+          sendMessageToServer(CANVAS_DATA, canvasData);
 
         },
 
@@ -208,7 +208,7 @@ angular.module('meanWhiteboardApp')
             execute: 'draw',
             settings: settings
           };
-          sendMessageToServer('canvasData', canvasData);
+          sendMessageToServer(CANVAS_DATA, canvasData);
         },
 
         handleMouseUp: function() {
@@ -254,7 +254,7 @@ angular.module('meanWhiteboardApp')
       socketFactory.connect();
 
       /** Messages received from other clients through the server using a socket **/
-      socketFactory.on('canvasData', function(data) {
+      socketFactory.on(CANVAS_DATA, function(data) {
         data = JSON.parse(data);
         var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
 
