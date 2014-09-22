@@ -181,13 +181,14 @@ angular.module('meanWhiteboardApp')
         }
       },
 
-      deleteSelectedLayer: function() {
+      deleteSelectedLayer: function(id) {
         if (numberOfLayers !== 1) {
-          var index = layersArray.indexOf(selectedLayer);
+          var layer = layersMap[id];
+          var index = layersArray.indexOf(layer);
           var idNewLayerSelected;
 
           if (index !== -1) {
-            var idLayerSelected = selectedLayer.id;
+            var idLayerSelected = layer.id;
 
             // if the layer is in the last position, select the previous layer
             if (index === layersArray.length-1) {
@@ -200,12 +201,14 @@ angular.module('meanWhiteboardApp')
             }
 
             // delete all history related to the layer
-            history.deleteHistoryOfALayer(selectedLayer.id);
+            history.deleteHistoryOfALayer(layer.id);
 
             this.selectLayer(idNewLayerSelected);
             layersArray.splice(index, 1);
 
             delete layersMap[idLayerSelected];
+
+            numberOfLayers--;
 
           }
         } 

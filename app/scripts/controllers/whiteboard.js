@@ -324,7 +324,22 @@ angular.module('meanWhiteboardApp')
         sendMessageToServer(LAYERS_DATA, layersData);
       }
     };
-    $scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
+
+    //$scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
+    $scope.deleteSelectedLayer = function() {
+      // Delete the selected layer in local canvas
+      var selectedLayer = canvasFactory.layers.getSelectedLayer();
+      canvasFactory.layers.deleteSelectedLayer(selectedLayer.id);
+
+      // Move up the selected layer in remote canvas
+      if (socketFactory.isConnected()) {
+        var layersData = {
+          execute: 'deleteSelectedLayer',
+          params: selectedLayer.id
+        };
+        sendMessageToServer(LAYERS_DATA, layersData);
+      }
+    };
 
 
     /** Button Factory **/
