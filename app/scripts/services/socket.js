@@ -5,6 +5,7 @@ angular.module('meanWhiteboardApp')
     //var socket = io.connect();
     var socket,
         disconnectedBefore = false,
+        connectedBefore = false,
         connected = false;
 
     var connect = function() {
@@ -28,6 +29,14 @@ angular.module('meanWhiteboardApp')
       return connected;
     };
 
+    var hasBeenConnectedBefore = function() {
+      return connectedBefore;
+    };
+
+    var setConnectedBefore = function(val) {
+      connectedBefore = val;
+    };
+
     var on = function(name, callback, scope) {
       //socket.on(name, callback);
       socket.on(name, function() {
@@ -49,6 +58,8 @@ angular.module('meanWhiteboardApp')
 
     return {
       connect: connect,
+      hasBeenConnectedBefore: hasBeenConnectedBefore,
+      setConnectedBefore: setConnectedBefore,
       disconnect: disconnect,
       isConnected: isConnected,
       on: on,

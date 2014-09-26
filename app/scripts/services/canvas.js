@@ -64,6 +64,48 @@ angular.module('meanWhiteboardApp')
 
     };
 
+    /** State of the whiteboard manager **/
+
+    // Set a specified initial state
+    var setInitialState = function(state) {
+      // Reset layers info
+      numberOfLayers = 0;
+      layersArray = [];
+      layersMap = {};
+      selectedLayer = {};
+
+      // Delete the ng-repeat angular remote info
+      state.layersArray.forEach(function(layer) {
+        if (layer.$$hashKey) {
+          delete layer.$$hashKey;
+        }
+      });
+
+      // Load layers settings
+      layersArray = state.layersArray;
+
+      // Keep the layers objects references in the map
+      layersArray.forEach(function(layer) {
+        layersMap[layer.id] = layer;
+      });
+
+      numberOfLayers = state.numberOfLayers;
+      nextLayerId = state.nextLayerId;
+      layers.selectLayer(state.selectedLayerId);
+    };
+
+    // Get current state
+    var getState = function() {
+      var state = {};
+      state.layersArray = layersArray;
+      state.layersMap = layersMap;
+      state.numberOfLayers = numberOfLayers;
+      state.nextLayerId = layers.getLastLayerId();
+      state.selectedLayerId = selectedLayer.id;
+
+      return state;
+    };
+
     /** Layers configuration **/
 
     var layersMap = {},
@@ -87,9 +129,12 @@ angular.module('meanWhiteboardApp')
     /** API for layers **/
     var layers = {
 
-      addNewLayer:  function() {
+      addNewLayer:  function(id) {
         // create and select a new layer
-        var id = getNextLayerId();
+        if (id === undefined) {
+          id = getNextLayerId();
+        }
+        //id = id || getNextLayerId();
         var newLayer = new Layer(id);
 
         // the new layer is added to the map and the array
@@ -102,6 +147,10 @@ angular.module('meanWhiteboardApp')
         numberOfLayers++;
 
         return id;
+      },
+
+      getLastLayerId: function() {
+        return nextLayerId;
       },
 
       getLayers: function(reversed) {
@@ -627,6 +676,8 @@ angular.module('meanWhiteboardApp')
     return {
       properties: properties,
       setProperties: setProperties,
+      setInitialState: setInitialState,
+      getState: getState,
       swapColors: swapColors,
       layers: layers,
       history: history,

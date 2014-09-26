@@ -23,7 +23,7 @@ require('./lib/config/express')(app);
 require('./lib/routes')(app);
 
 // Socket
-io.on('connection', require('./lib/socket'));
+io.on('connection', require('./lib/socket')(io));
 
 // Start server
 server.listen(config.port, function () {

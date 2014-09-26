@@ -5,7 +5,10 @@ angular.module('meanWhiteboardApp')
 
     // Info for socket io messages
     var LAYERS_DATA = 'layersData',
-        CANVAS_DATA = 'canvasData';
+        CANVAS_DATA = 'canvasData',
+        INITIAL_STATE_REQUEST = 'initialStateRequest',
+        INITIAL_STATE_RESPONSE = 'initialStateResponse',
+        INITIAL_STATE_DATA = 'initialStateData';
 
     /** canvasFactory **/
     // General properties
@@ -253,22 +256,43 @@ angular.module('meanWhiteboardApp')
     $scope.connect = function() {
       socketFactory.connect();
 
-      /** Messages received from other clients through the server using a socket **/
-      socketFactory.on(CANVAS_DATA, function(data) {
-        data = JSON.parse(data);
-        var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
+      if (socketFactory.hasBeenConnectedBefore()) {
+        return;
+      }
 
-        // Execute the function
-        mode[data.execute](data.settings);
-      }, $scope);
+      socketFactory.on('connect', function() {
+        console.log('CONNECTED');
 
-      socketFactory.on(LAYERS_DATA, function(data) {
-        data = JSON.parse(data);
-        console.log('layersData received');
-        console.dir(data);
+        socketFactory.setConnectedBefore(true);
 
-        // Execute the function
-        canvasFactory.layers[data.execute](data.params);
+        /** Messages received from other clients through the server using a socket **/
+        socketFactory.on(CANVAS_DATA, function(data) {
+          data = JSON.parse(data);
+          var mode = canvasFactory.canvasOperations.getMode(data.nameMode);
+
+          // Execute the function
+          mode[data.execute](data.settings);
+        }, $scope);
+
+        socketFactory.on(LAYERS_DATA, function(data) {
+          data = JSON.parse(data);
+
+          // Execute the function
+          canvasFactory.layers[data.execute](data.params);
+        }, $scope);
+
+        // If a new user is connected, an INITIAL_STATE_REQUEST will be received
+        // and the current state of the whiteboard is send to the remote users
+        // in order to synchronize
+        socketFactory.on(INITIAL_STATE_REQUEST, function() {
+          var initialState = canvasFactory.getState();
+          sendMessageToServer(INITIAL_STATE_RESPONSE, initialState);
+        }, $scope);
+
+        socketFactory.on(INITIAL_STATE_DATA, function(data) {
+          data = JSON.parse(data);
+          canvasFactory.setInitialState(data);
+        }, $scope);
       }, $scope);
     };
 
