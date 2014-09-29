@@ -17,6 +17,7 @@ angular.module('meanWhiteboardApp')
     $scope.swapColors = canvasFactory.swapColors;
 
     // Layer management
+    $scope.getLayer = canvasFactory.layers.getLayer;
     $scope.getLayers = canvasFactory.layers.getLayers;
     $scope.getNumberOfLayers = canvasFactory.layers.getNumberOfLayers;
     $scope.getLastLayerAdded = canvasFactory.layers.getLastLayerAdded;

@@ -97,11 +97,18 @@ angular.module('meanWhiteboardApp')
     // Get current state
     var getState = function() {
       var state = {};
-      state.layersArray = layersArray;
+
+      // Layers data
+      state.layersArray = layersArray.slice();
       state.layersMap = layersMap;
       state.numberOfLayers = numberOfLayers;
       state.nextLayerId = layers.getLastLayerId();
       state.selectedLayerId = selectedLayer.id;
+
+      // Canvas data
+      layersArray.forEach(function(layer) {
+        layer.initialDataURL = layers.toDataURL(layer.id);
+      });
 
       return state;
     };
@@ -153,6 +160,10 @@ angular.module('meanWhiteboardApp')
         return nextLayerId;
       },
 
+      getLayer: function(id) {
+        return layersMap[id];
+      },
+
       getLayers: function(reversed) {
         if (reversed) {
           return layersArray.slice().reverse();
@@ -200,6 +211,10 @@ angular.module('meanWhiteboardApp')
       setSizeToLayer: function(id, width, height) {
         layersMap[id].width = width;
         layersMap[id].height = height;
+      },
+
+      toDataURL: function(id) {
+        return layersMap[id].canvas.toDataURL('img/png');
       },
 
       moveUp: function(id) {
