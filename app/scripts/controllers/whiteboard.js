@@ -173,13 +173,15 @@ angular.module('meanWhiteboardApp')
           };
           mode.press(settings);
 
-          // Send the data to the rest of the clients
-          var canvasData = {
-            nameMode: mode.name,
-            execute: 'press',
-            settings: settings
-          };
-          sendMessageToServer(CANVAS_DATA, canvasData);
+          if (socketFactory.isConnected()) {
+            // Send the data to the rest of the clients
+            var canvasData = {
+              nameMode: mode.name,
+              execute: 'press',
+              settings: settings
+            };
+            sendMessageToServer(CANVAS_DATA, canvasData);
+          }
 
         },
 
@@ -204,13 +206,15 @@ angular.module('meanWhiteboardApp')
           // Draw locally
           mode.draw(settings);
 
-          // Send data to the rest of clients using the socket
-          var canvasData = {
-            nameMode: mode.name,
-            execute: 'draw',
-            settings: settings
-          };
-          sendMessageToServer(CANVAS_DATA, canvasData);
+          if (socketFactory.isConnected()) {
+            // Send data to the rest of clients using the socket
+            var canvasData = {
+              nameMode: mode.name,
+              execute: 'draw',
+              settings: settings
+            };
+            sendMessageToServer(CANVAS_DATA, canvasData);
+          }
         },
 
         handleMouseUp: function() {
