@@ -33,9 +33,9 @@ angular.module('meanWhiteboardApp')
     //$scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
 
     // History management
-    $scope.addToHistory = canvasFactory.history.addToHistory;
-    $scope.undo = canvasFactory.history.undo;
-    $scope.redo = canvasFactory.history.redo;
+    //$scope.addToHistory = canvasFactory.history.addToHistory;
+    //$scope.undo = canvasFactory.history.undo;
+    //$scope.redo = canvasFactory.history.redo;
     $scope.isHistoryEmpty = canvasFactory.history.isHistoryEmpty;
 
     // Show tools
@@ -142,7 +142,12 @@ angular.module('meanWhiteboardApp')
         },
 
         handleMouseUp: function() {
-
+          var selectedLayer = $scope.getSelectedLayer();
+          $scope.addToHistory({
+            dataURL: selectedLayer.canvas.toDataURL('img/png'),
+            layer: selectedLayer,
+            isANewLayer: false
+          });
         }
 
       };
@@ -216,11 +221,15 @@ angular.module('meanWhiteboardApp')
         },
 
         handleMouseUp: function() {
-
+          var selectedLayer = $scope.getSelectedLayer();
+          $scope.addToHistory({
+            dataURL: selectedLayer.canvas.toDataURL('img/png'),
+            layer: selectedLayer,
+            isANewLayer: false
+          });
         }
 
       };
-
     };
 
     $scope.setMode = function(nameMode) {
@@ -263,6 +272,9 @@ angular.module('meanWhiteboardApp')
 
       socketFactory.on('connect', function() {
         console.log('CONNECTED');
+
+        // Clear history when begin to share the whiteboard
+        canvasFactory.history.clearHistory();
 
         socketFactory.setConnectedBefore(true);
 
@@ -356,7 +368,7 @@ angular.module('meanWhiteboardApp')
       var selectedLayer = canvasFactory.layers.getSelectedLayer();
       canvasFactory.layers.deleteSelectedLayer(selectedLayer.id);
 
-      // Move up the selected layer in remote canvas
+      // Delete the selected layer in remote canvas
       if (socketFactory.isConnected()) {
         var layersData = {
           execute: 'deleteSelectedLayer',
@@ -366,6 +378,25 @@ angular.module('meanWhiteboardApp')
       }
     };
 
+    /** History Management **/
+    // Disable the history if the whiteboard is being shared
+    $scope.addToHistory = function(snapshot) {
+      if (!socketFactory.isConnected()) {
+        canvasFactory.history.addToHistory(snapshot);
+      }
+    };
+
+    $scope.undo = function() {
+      if (!socketFactory.isConnected()) {
+        return canvasFactory.history.undo();
+      }
+    };
+
+    $scope.redo = function() {
+      if (!socketFactory.isConnected()) {
+        return canvasFactory.history.redo();
+      }
+    };
 
     /** Button Factory **/
     $scope.getButtons = buttonFactory.getButtons;

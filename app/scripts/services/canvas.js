@@ -296,7 +296,7 @@ angular.module('meanWhiteboardApp')
 
           // If the undoStack is full, remove the first element
           if (undoStack.length === undoLimit) {
-            undoStack.splice(0, 1);
+            undoStack.shift();
           }
 
           undoStack.push(snapshot);
@@ -360,8 +360,12 @@ angular.module('meanWhiteboardApp')
               i--;
             }
           }
-        }
+        },
 
+        clearHistory: function() {
+          undoStack = [];
+          redoStack = [];
+        }
       };
     
     }());
