@@ -24,18 +24,11 @@ angular.module('meanWhiteboardApp')
     $scope.getSelectedLayer = canvasFactory.layers.getSelectedLayer;
     $scope.setCanvasToLayer = canvasFactory.layers.setCanvasToLayer;
     $scope.setContextToLayer = canvasFactory.layers.setContextToLayer;
-    //$scope.addNewLayer = canvasFactory.layers.addNewLayer;
     $scope.setOffsetToLayer = canvasFactory.layers.setOffsetToLayer;
     $scope.setSizeToLayer = canvasFactory.layers.setSizeToLayer;
     $scope.selectLayer = canvasFactory.layers.selectLayer;
-    //$scope.moveLayerUp = canvasFactory.layers.moveUp;
-    //$scope.moveLayerDown = canvasFactory.layers.moveDown;
-    //$scope.deleteSelectedLayer = canvasFactory.layers.deleteSelectedLayer;
 
     // History management
-    //$scope.addToHistory = canvasFactory.history.addToHistory;
-    //$scope.undo = canvasFactory.history.undo;
-    //$scope.redo = canvasFactory.history.redo;
     $scope.isHistoryEmpty = canvasFactory.history.isHistoryEmpty;
 
     // Show tools

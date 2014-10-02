@@ -148,9 +148,6 @@ angular.module('meanWhiteboardApp')
         layersMap[id] = newLayer;
         layersArray.push(newLayer);
 
-        // set the latest layer as the selected layer
-        //this.selectLayer(id);
-
         numberOfLayers++;
 
         return id;
@@ -456,28 +453,6 @@ angular.module('meanWhiteboardApp')
         }
       };
 
-      // private function for smooth drawing
-      //var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
-         //set properties
-        //ctx.lineWidth = pencilSize;
-        //ctx.strokeStyle = color;
-        //ctx.lineCap = pencilCap;
-        //ctx.globalCompositeOperation = globalCompositeOperation;
-
-        //drawingPoints.currentPoint.x = x;
-        //drawingPoints.currentPoint.y = y;
-
-        //drawingPoints.currentMidPoint.x = (drawingPoints.currentPoint.x + drawingPoints.oldPoint.x)/2;
-        //drawingPoints.currentMidPoint.y = (drawingPoints.currentPoint.y + drawingPoints.oldPoint.y)/2;
-
-        //ctx.moveTo(drawingPoints.currentMidPoint.x, drawingPoints.currentMidPoint.y);
-        //ctx.quadraticCurveTo(drawingPoints.oldPoint.x, drawingPoints.oldPoint.y, drawingPoints.oldMidPoint.x, drawingPoints.oldMidPoint.y);
-        //ctx.stroke();
-
-         //update points for next iteration
-        //drawingPoints.updatePoints();
-      //};
-
       var initializePoints = function(x, y) {
         drawingPoints.initializePoints(x, y);
       };
@@ -510,15 +485,6 @@ angular.module('meanWhiteboardApp')
         ctx.quadraticCurveTo(settings.oldPoint.x, settings.oldPoint.y, settings.oldMidPoint.x, settings.oldMidPoint.y);
         ctx.stroke();
       };
-
-      // TODO: Move this function to the controller
-      //var handleMouseUp = function() {
-        //history.addToHistory({
-          //dataURL: selectedLayer.canvas.toDataURL('img/png'),
-          //layer: selectedLayer,
-          //isANewLayer: false
-        //});
-      //};
 
       return {
         name: 'brush',
@@ -617,44 +583,6 @@ angular.module('meanWhiteboardApp')
     }());
 
     modes[pencilMode.name] = pencilMode;
-    //var pencilMode = (function() {
-
-      //var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
-         //set properties
-        //ctx.lineWidth = pencilSize;
-        //ctx.strokeStyle = color;
-        //ctx.lineCap = pencilCap;
-        //ctx.globalCompositeOperation = globalCompositeOperation;
-
-        //ctx.lineTo(x,y);
-        //ctx.stroke();
-
-      //};
-    
-      //var handleMouseDown = function(event) {
-        //event = event.originalEvent;
-        //var ctx = selectedLayer.ctx;
-
-        //ctx.beginPath();
-        //ctx.moveTo(event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-        //this.handleMouseDrag(event);
-      //};
-
-      //var handleMouseDrag = function(event) {
-        //if (event.originalEvent) {
-          //event = event.originalEvent;
-        //}
-        //draw(selectedLayer.ctx, properties.pencilSize, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-      //};
-
-      //var handlers = {
-        //handleMouseDown: handleMouseDown,
-        //handleMouseDrag: handleMouseDrag
-      //};
-
-      //return createNewMode('pencil', 'source-over', handlers);
-
-    //}());
 
     var canvasOperations = {},
         defaultMode = brushMode,
