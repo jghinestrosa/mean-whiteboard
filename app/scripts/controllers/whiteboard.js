@@ -229,25 +229,59 @@ angular.module('meanWhiteboardApp')
       };
     };
 
+    // Handlers for pencil mode and eraser pencil mode
+    modes.getEyedropperMode = function(nameMode) {
+      var mode = canvasFactory.canvasOperations.getMode(nameMode);
+
+      return {
+        handleMouseDown: function(e) {
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+
+          var selectedLayer = $scope.getSelectedLayer();
+
+          var x = e.layerX - selectedLayer.offsetLeft;
+          var y = e.layerY - selectedLayer.offsetTop;
+          var settings = {
+            layerId: selectedLayer.id,
+            x: x,
+            y: y
+          };
+          mode.press(settings);
+        }
+      };
+    };
+
     $scope.setMode = function(nameMode) {
       canvasFactory.canvasOperations.setMode(nameMode);
-      $scope.mode.name = nameMode;
 
       var mode;
       if (nameMode === 'brush' || nameMode === 'eraserBrush') {
         mode = modes.getBrushMode(nameMode);
-        $scope.mode.handleMouseDown = mode.handleMouseDown; 
-        $scope.mode.handleMouseDrag = mode.handleMouseDrag; 
-        $scope.mode.handleMouseUp = mode.handleMouseUp; 
+        $scope.mode = {
+          name: nameMode,
+          handleMouseDown: mode.handleMouseDown,
+          handleMouseDrag: mode.handleMouseDrag,
+          handleMouseUp: mode.handleMouseUp
+        };
       }
       else if (nameMode === 'pencil' || nameMode === 'eraserPencil') {
         mode = modes.getPencilMode(nameMode);
-        $scope.mode.handleMouseDown = mode.handleMouseDown; 
-        $scope.mode.handleMouseDrag = mode.handleMouseDrag; 
-        $scope.mode.handleMouseUp = mode.handleMouseUp; 
+        $scope.mode = {
+          name: nameMode,
+          handleMouseDown: mode.handleMouseDown,
+          handleMouseDrag: mode.handleMouseDrag,
+          handleMouseUp: mode.handleMouseUp
+        };
       }
-
-
+      else if (nameMode === 'eyedropper') {
+        mode = modes.getEyedropperMode(nameMode);
+        $scope.mode = {
+          name: nameMode,
+          handleMouseDown: mode.handleMouseDown,
+        };
+      }
     };
 
     // Select mode by default

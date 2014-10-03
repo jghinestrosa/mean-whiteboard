@@ -501,27 +501,20 @@ angular.module('meanWhiteboardApp')
     modes[brushMode.name] = brushMode;
 
     /** Eyedropper Mode **/
-    //var eyedropperMode = (function() {
+    var eyedropperMode = (function() {
+      var press = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        var imageData = ctx.getImageData(settings.x, settings.y, 1, 1);
+        properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
+      };
 
-     //Private function for eyedropper
-    //var eyedropper = function(ctx, x, y) {
-      //var imageData = ctx.getImageData(x, y, 1, 1);
-      //properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
-    //};
+      return {
+        name: 'eyedropper',
+        press: press
+      };
+    }());
 
-    //var handleMouseDown = function(event) {
-        //event = event.originalEvent;
-      //console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
-      //eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-    //};
-
-    //var handlers = {
-      //handleMouseDown: handleMouseDown
-    //};
-
-    //return createNewMode('eyedropper', 'source-over', handlers);
-
-    //}());
+    modes[eyedropperMode.name] = eyedropperMode;
 
     /** EraserBrush Mode **/
     var eraserBrushMode = (function() {
