@@ -99,16 +99,18 @@ angular.module('meanWhiteboardApp')
       var state = {};
 
       // Layers data
-      state.layersArray = layersArray.slice();
-      state.layersMap = layersMap;
+      state.layersArray = [];
+      layersArray.forEach(function(layer) {
+        var copiedLayer = new Layer(layer.id);
+        
+        // Canvas data
+        copiedLayer.initialDataURL = layers.toDataURL(layer.id);
+        state.layersArray.push(copiedLayer);
+      });
+
       state.numberOfLayers = numberOfLayers;
       state.nextLayerId = layers.getLastLayerId();
       state.selectedLayerId = selectedLayer.id;
-
-      // Canvas data
-      layersArray.forEach(function(layer) {
-        layer.initialDataURL = layers.toDataURL(layer.id);
-      });
 
       return state;
     };
