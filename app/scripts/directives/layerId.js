@@ -19,6 +19,18 @@ angular.module('meanWhiteboardApp')
           scope.setOffsetToLayer(id, canvas.offsetLeft, canvas.offsetTop);
           scope.setSizeToLayer(id, canvas.offsetWidth, canvas.offsetHeight);
 
+          // If this layer has been created using the data received
+          // from a remote user, draw the canvas content
+          var layer = scope.getLayer(id);
+          if (layer.initialDataURL) {
+            var img = new Image();
+            img.src = layer.initialDataURL;
+            img.onload = function() {
+              context.clearRect(0, 0, layer.width, layer.height);
+              context.drawImage(img, 0, 0, layer.width, layer.height);
+            };
+          }
+
           // If this canvas element is the selected layer, add its initial state as the first
           // snapshot of the history
           if (scope.getSelectedLayer().id === parseInt(id, 10)) {

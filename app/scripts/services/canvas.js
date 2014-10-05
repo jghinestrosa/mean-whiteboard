@@ -10,7 +10,7 @@ angular.module('meanWhiteboardApp')
       eraserWidth: 5,
       eraserCap: 'round',
       pencilSize: 10,
-      pencilCap: 'round',
+      pencilCap: 'square',
       foregroundColor: '#00FF00',
       backgroundColor: '#ffffff',
       width: 500,
@@ -64,6 +64,57 @@ angular.module('meanWhiteboardApp')
 
     };
 
+    /** State of the whiteboard manager **/
+
+    // Set a specified initial state
+    var setInitialState = function(state) {
+      // Reset layers info
+      numberOfLayers = 0;
+      layersArray = [];
+      layersMap = {};
+      selectedLayer = {};
+
+      // Delete the ng-repeat angular remote info
+      state.layersArray.forEach(function(layer) {
+        if (layer.$$hashKey) {
+          delete layer.$$hashKey;
+        }
+      });
+
+      // Load layers settings
+      layersArray = state.layersArray;
+
+      // Keep the layers objects references in the map
+      layersArray.forEach(function(layer) {
+        layersMap[layer.id] = layer;
+      });
+
+      numberOfLayers = state.numberOfLayers;
+      nextLayerId = state.nextLayerId;
+      layers.selectLayer(state.selectedLayerId);
+    };
+
+    // Get current state
+    var getState = function() {
+      var state = {};
+
+      // Layers data
+      state.layersArray = [];
+      layersArray.forEach(function(layer) {
+        var copiedLayer = new Layer(layer.id);
+        
+        // Canvas data
+        copiedLayer.initialDataURL = layers.toDataURL(layer.id);
+        state.layersArray.push(copiedLayer);
+      });
+
+      state.numberOfLayers = numberOfLayers;
+      state.nextLayerId = layers.getLastLayerId();
+      state.selectedLayerId = selectedLayer.id;
+
+      return state;
+    };
+
     /** Layers configuration **/
 
     var layersMap = {},
@@ -81,29 +132,35 @@ angular.module('meanWhiteboardApp')
       this.id = id;
       this.globalCompositeOperation = 'source-over';
       this.globalAlpha = 1.0;
-      this.isSelected = true;
+      this.isSelected = false;
     };
 
     /** API for layers **/
     var layers = {
 
-      addNewLayer:  function() {
+      addNewLayer:  function(id) {
         // create and select a new layer
-        var id = getNextLayerId();
+        if (id === undefined) {
+          id = getNextLayerId();
+        }
+        //id = id || getNextLayerId();
         var newLayer = new Layer(id);
 
         // the new layer is added to the map and the array
         layersMap[id] = newLayer;
         layersArray.push(newLayer);
 
-        // if there was already a selected layer, unselect it first
-        if (selectedLayer) {
-          selectedLayer.isSelected = false;
-        }
-
-        // set the latest layer as the selected layer
-        selectedLayer = layersMap[id];
         numberOfLayers++;
+
+        return id;
+      },
+
+      getLastLayerId: function() {
+        return nextLayerId;
+      },
+
+      getLayer: function(id) {
+        return layersMap[id];
       },
 
       getLayers: function(reversed) {
@@ -124,7 +181,11 @@ angular.module('meanWhiteboardApp')
 
       // Select active context
       selectLayer: function(id) {
-        selectedLayer.isSelected = false;
+        // if there was already a selected layer, unselect it first
+        if (selectedLayer) {
+          selectedLayer.isSelected = false;
+        }
+
         layersMap[id].isSelected = true;
         selectedLayer = layersMap[id];
       },
@@ -151,12 +212,17 @@ angular.module('meanWhiteboardApp')
         layersMap[id].height = height;
       },
 
-      moveUp: function() {
+      toDataURL: function(id) {
+        return layersMap[id].canvas.toDataURL('img/png');
+      },
+
+      moveUp: function(id) {
+        var layer = layersMap[id];
         for (var i = 0; i < layersArray.length; i++) {
-          if (layersArray[i].id === selectedLayer.id) {
+          if (layersArray[i].id === layer.id) {
             if (i !== 0) {
               var previousLayer = layersArray[i-1];
-              layersArray[i-1] = selectedLayer;
+              layersArray[i-1] = layer;
               layersArray[i] = previousLayer;
               break;
             }
@@ -164,12 +230,13 @@ angular.module('meanWhiteboardApp')
         }
       },
 
-      moveDown: function() {
+      moveDown: function(id) {
+        var layer = layersMap[id];
         for (var i = 0; i < layersArray.length; i++) {
-          if (layersArray[i].id === selectedLayer.id) {
+          if (layersArray[i].id === layer.id) {
             if (i !== layersArray.length-1) {
               var nextLayer = layersArray[i+1];
-              layersArray[i+1] = selectedLayer;
+              layersArray[i+1] = layer;
               layersArray[i] = nextLayer;
               break;
             }
@@ -177,13 +244,14 @@ angular.module('meanWhiteboardApp')
         }
       },
 
-      deleteSelectedLayer: function() {
+      deleteSelectedLayer: function(id) {
         if (numberOfLayers !== 1) {
-          var index = layersArray.indexOf(selectedLayer);
+          var layer = layersMap[id];
+          var index = layersArray.indexOf(layer);
           var idNewLayerSelected;
 
           if (index !== -1) {
-            var idLayerSelected = selectedLayer.id;
+            var idLayerSelected = layer.id;
 
             // if the layer is in the last position, select the previous layer
             if (index === layersArray.length-1) {
@@ -196,12 +264,14 @@ angular.module('meanWhiteboardApp')
             }
 
             // delete all history related to the layer
-            history.deleteHistoryOfALayer(selectedLayer.id);
+            history.deleteHistoryOfALayer(layer.id);
 
             this.selectLayer(idNewLayerSelected);
             layersArray.splice(index, 1);
 
             delete layersMap[idLayerSelected];
+
+            numberOfLayers--;
 
           }
         } 
@@ -210,7 +280,7 @@ angular.module('meanWhiteboardApp')
     };
 
     // Initialize with one layer
-    layers.addNewLayer();
+    layers.selectLayer(layers.addNewLayer());
 
     /** API for history **/
 
@@ -225,7 +295,7 @@ angular.module('meanWhiteboardApp')
 
           // If the undoStack is full, remove the first element
           if (undoStack.length === undoLimit) {
-            undoStack.splice(0, 1);
+            undoStack.shift();
           }
 
           undoStack.push(snapshot);
@@ -289,8 +359,12 @@ angular.module('meanWhiteboardApp')
               i--;
             }
           }
-        }
+        },
 
+        clearHistory: function() {
+          undoStack = [];
+          redoStack = [];
+        }
       };
     
     }());
@@ -345,6 +419,31 @@ angular.module('meanWhiteboardApp')
           x: 0,
           y: 0
         },
+        initializePoints: function(x, y) {
+          this.oldPoint.x = x;
+          this.oldPoint.y = y;
+
+          this.oldMidPoint.x = x;
+          this.oldMidPoint.y = y;
+        },
+        calculateMidPoint: function(x, y) {
+          this.currentPoint.x = x;
+          this.currentPoint.y = y;
+
+          this.currentMidPoint.x = (x + this.oldPoint.x)/2;
+          this.currentMidPoint.y = (y + this.oldPoint.y)/2;
+
+          return {
+            oldPoint: this.oldPoint,
+            currentPoint: this.currentPoint,
+            currentMidPoint: this.currentMidPoint,
+            oldMidPoint: this.oldMidPoint,
+          };
+        },
+        setCurrentPoint: function(x, y) {
+          this.currentMidPoint.x = x;
+          this.currentMidPoint.y = y;
+        },
         updatePoints : function() {
           // update old point for next iteration
           this.oldPoint.x = this.currentPoint.x;
@@ -356,142 +455,129 @@ angular.module('meanWhiteboardApp')
         }
       };
 
-      // private function for smooth drawing
-      var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
-        // set properties
-        ctx.lineWidth = pencilSize;
-        ctx.strokeStyle = color;
-        ctx.lineCap = pencilCap;
-        ctx.globalCompositeOperation = globalCompositeOperation;
+      var initializePoints = function(x, y) {
+        drawingPoints.initializePoints(x, y);
+      };
 
-        drawingPoints.currentPoint.x = x;
-        drawingPoints.currentPoint.y = y;
+      var calculateMidPoint = function(x, y) {
+        return drawingPoints.calculateMidPoint(x, y);
+      };
 
-        drawingPoints.currentMidPoint.x = (drawingPoints.currentPoint.x + drawingPoints.oldPoint.x)/2;
-        drawingPoints.currentMidPoint.y = (drawingPoints.currentPoint.y + drawingPoints.oldPoint.y)/2;
-
-        ctx.moveTo(drawingPoints.currentMidPoint.x, drawingPoints.currentMidPoint.y);
-        ctx.quadraticCurveTo(drawingPoints.oldPoint.x, drawingPoints.oldPoint.y, drawingPoints.oldMidPoint.x, drawingPoints.oldMidPoint.y);
-        ctx.stroke();
-
-        // update points for next iteration
+      var updatePoints = function() {
         drawingPoints.updatePoints();
       };
 
-      var handleMouseDown = function(event) {
-        event = event.originalEvent;
-        drawingPoints.oldPoint.x = event.layerX-selectedLayer.offsetLeft;
-        drawingPoints.oldPoint.y = event.layerY-selectedLayer.offsetTop;
-        drawingPoints.oldMidPoint.x = drawingPoints.oldPoint.x;
-        drawingPoints.oldMidPoint.y = drawingPoints.oldPoint.y;
-        selectedLayer.ctx.beginPath();
-        this.handleMouseDrag(event);
+      var press = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
+        draw(settings);
       };
 
-      var handleMouseDrag = function(event) {
-        if (event.originalEvent) {
-          event = event.originalEvent;
-        }
+      // draw a quadratic curve
+      var draw = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
 
-        draw(selectedLayer.ctx, properties.brushSize, properties.brushCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+        ctx.lineWidth = settings.brushSize;
+        ctx.strokeStyle = settings.color;
+        ctx.lineCap = settings.brushCap;
+        ctx.globalCompositeOperation = settings.globalCompositeOperation;
 
+        ctx.moveTo(settings.currentMidPoint.x, settings.currentMidPoint.y);
+        ctx.quadraticCurveTo(settings.oldPoint.x, settings.oldPoint.y, settings.oldMidPoint.x, settings.oldMidPoint.y);
+        ctx.stroke();
       };
 
-      var handleMouseUp = function() {
-        history.addToHistory({
-          dataURL: selectedLayer.canvas.toDataURL('img/png'),
-          layer: selectedLayer,
-          isANewLayer: false
-        });
+      return {
+        name: 'brush',
+        globalCompositeOperation: 'source-over',
+        initializePoints: initializePoints,
+        calculateMidPoint: calculateMidPoint,
+        updatePoints: updatePoints,
+        press: press,
+        draw: draw,
       };
-
-      var handlers = {
-        handleMouseDown: handleMouseDown,
-        handleMouseDrag: handleMouseDrag,
-        handleMouseUp: handleMouseUp,
-      };
-
-      return createNewMode('brush', 'source-over', handlers);
 
     }());
+
+    modes[brushMode.name] = brushMode;
 
     /** Eyedropper Mode **/
     var eyedropperMode = (function() {
+      var press = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        var imageData = ctx.getImageData(settings.x, settings.y, 1, 1);
+        properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
+      };
 
-    // Private function for eyedropper
-    var eyedropper = function(ctx, x, y) {
-      var imageData = ctx.getImageData(x, y, 1, 1);
-      properties.foregroundColor = rgbToHex(imageData.data[0], imageData.data[1], imageData.data[2]);
-    };
-
-    var handleMouseDown = function(event) {
-        event = event.originalEvent;
-      console.log('x: ' + (event.layerX-selectedLayer.offsetLeft) + ', y: ' + (event.layerY-selectedLayer.offsetTop));
-      eyedropper(selectedLayer.ctx, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-    };
-
-    var handlers = {
-      handleMouseDown: handleMouseDown
-    };
-
-    return createNewMode('eyedropper', 'source-over', handlers);
-
+      return {
+        name: 'eyedropper',
+        press: press
+      };
     }());
+
+    modes[eyedropperMode.name] = eyedropperMode;
 
     /** EraserBrush Mode **/
     var eraserBrushMode = (function() {
-    
-      var handleMouseDown = modes.brush.handleMouseDown;
-      var handleMouseDrag = modes.brush.handleMouseDrag;
-
-      var handlers = {
-        handleMouseDown: handleMouseDown,
-        handleMouseDrag: handleMouseDrag
+      return {
+        name: 'eraserBrush',
+        globalCompositeOperation: 'destination-out',
+        initializePoints: brushMode.initializePoints,
+        calculateMidPoint: brushMode.calculateMidPoint,
+        updatePoints: brushMode.updatePoints,
+        press: brushMode.press,
+        draw: brushMode.draw,
       };
-    
-      return createNewMode('eraserBrush', 'destination-out', handlers);
-
     }());
+    
+    modes[eraserBrushMode.name] = eraserBrushMode;
 
     /** Pencil Mode **/
     var pencilMode = (function() {
 
-      var draw = function(ctx, pencilSize, pencilCap, color, globalCompositeOperation, x, y) {
-        // set properties
-        ctx.lineWidth = pencilSize;
-        ctx.strokeStyle = color;
-        ctx.lineCap = pencilCap;
-        ctx.globalCompositeOperation = globalCompositeOperation;
-
-        ctx.lineTo(x,y);
-        ctx.stroke();
-
+      var points = {
+        oldX: 0,
+        oldY: 0,
       };
-    
-      var handleMouseDown = function(event) {
-        event = event.originalEvent;
-        var ctx = selectedLayer.ctx;
 
+      var press = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
         ctx.beginPath();
-        ctx.moveTo(event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
-        this.handleMouseDrag(event);
+        ctx.moveTo(settings.x, settings.y);
+        points.oldX = settings.x;
+        points.oldY = settings.y;
+        draw(settings);
       };
 
-      var handleMouseDrag = function(event) {
-        if (event.originalEvent) {
-          event = event.originalEvent;
-        }
-        draw(selectedLayer.ctx, properties.pencilSize, properties.pencilCap, properties.foregroundColor, selectedMode.globalCompositeOperation, event.layerX-selectedLayer.offsetLeft, event.layerY-selectedLayer.offsetTop);
+      // Draw a line
+      var draw = function(settings) {
+        var ctx = layersMap[settings.layerId].ctx;
+        ctx.beginPath();
+
+         // Set properties
+        ctx.lineWidth = settings.pencilSize;
+        ctx.strokeStyle = settings.color;
+        ctx.lineCap = settings.pencilCap;
+        ctx.globalCompositeOperation = settings.globalCompositeOperation;
+
+        ctx.moveTo(points.oldX, points.oldY);
+        ctx.lineTo(settings.x, settings.y);
+        ctx.stroke();
+        points.oldX = settings.x;
+        points.oldY = settings.y;
       };
 
-      var handlers = {
-        handleMouseDown: handleMouseDown,
-        handleMouseDrag: handleMouseDrag
+      return {
+        name: 'pencil',
+        globalCompositeOperation: 'source-over',
+        press: press,
+        draw: draw,
       };
-
-      return createNewMode('pencil', 'source-over', handlers);
 
     }());
+
+    modes[pencilMode.name] = pencilMode;
 
     var canvasOperations = {},
         defaultMode = brushMode,
@@ -512,11 +598,16 @@ angular.module('meanWhiteboardApp')
       return '#' + colorConversion.rgbToHex(red, green, blue);
     };
 
+    var getMode = function(nameMode) {
+      return modes[nameMode];
+    };
+
     var setMode = function(nameMode) {
       selectedMode = modes[nameMode];
     };
 
     canvasOperations.setMode = setMode;
+    canvasOperations.getMode = getMode;
     canvasOperations.getDefaultMode = getDefaultMode;
     canvasOperations.getSelectedMode = getSelectedMode;
 
@@ -527,6 +618,8 @@ angular.module('meanWhiteboardApp')
     return {
       properties: properties,
       setProperties: setProperties,
+      setInitialState: setInitialState,
+      getState: getState,
       swapColors: swapColors,
       layers: layers,
       history: history,
