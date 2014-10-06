@@ -3,7 +3,7 @@
 angular.module('meanWhiteboardApp', [
   'ngRoute'
 ])
-  .config(function ($routeProvider, $locationProvider) {
+  .config(function ($routeProvider, $locationProvider, $compileProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'partials/whiteboard',
@@ -18,4 +18,6 @@ angular.module('meanWhiteboardApp', [
       });
       
     $locationProvider.html5Mode(true);
+
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|data):/);
   });

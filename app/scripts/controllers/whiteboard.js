@@ -430,7 +430,8 @@ angular.module('meanWhiteboardApp')
     };
 
     /** Save whiteboard as image **/
-    $scope.imageSaved = '';
+    $scope.imageSaved = '#';
+    $scope.showImageSaved = false;
 
     $scope.saveAsImage = function() {
       var finalCanvas = document.createElement('canvas');
@@ -444,6 +445,7 @@ angular.module('meanWhiteboardApp')
       });
 
       $scope.imageSaved = finalCanvas.toDataURL('img/png');
+      $scope.showImageSaved = true;
     };
 
     /** Button Factory **/
