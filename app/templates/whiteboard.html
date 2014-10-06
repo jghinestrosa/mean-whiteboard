@@ -2,6 +2,7 @@
 <div id="tools" drag>
   <button undo-redo="undo()" ng-show="!isSharingCanvas()">Undo</button>
   <button undo-redo="redo()" ng-show="!isSharingCanvas()">Redo</button>
+  <button ng-click="saveAsImage()">Save</button>
   <button ng-click="connect()" ng-show="!isSharingCanvas()">Share canvas</button>
   <button ng-click="disconnect()" ng-show="isSharingCanvas()">Stop share canvas</button>
   <button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>

@@ -429,6 +429,23 @@ angular.module('meanWhiteboardApp')
       }
     };
 
+    /** Save whiteboard as image **/
+    $scope.imageSaved = '';
+
+    $scope.saveAsImage = function() {
+      var finalCanvas = document.createElement('canvas');
+      var ctx = finalCanvas.getContext('2d');
+      var layers = canvasFactory.layers.getLayers(false);
+      finalCanvas.width = layers[0].width;
+      finalCanvas.height = layers[0].height;
+
+      layers.forEach(function(layer) {
+        ctx.drawImage(layer.canvas, 0, 0, finalCanvas.width, finalCanvas.height);
+      });
+
+      $scope.imageSaved = finalCanvas.toDataURL('img/png');
+    };
+
     /** Button Factory **/
     $scope.getButtons = buttonFactory.getButtons;
 
