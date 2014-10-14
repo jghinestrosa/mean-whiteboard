@@ -25,9 +25,10 @@ angular.module('meanWhiteboardApp')
           if (layer.initialDataURL) {
             var img = new Image();
             img.src = layer.initialDataURL;
-            img.onload = function() {
+            img.onload = function(e) {
               context.clearRect(0, 0, layer.width, layer.height);
-              context.drawImage(img, 0, 0, layer.width, layer.height);
+              //context.drawImage(img, 0, 0, layer.width, layer.height);
+              context.drawImage(img, 0, 0, e.target.width, e.target.height);
             };
           }
 

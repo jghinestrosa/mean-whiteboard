@@ -361,6 +361,9 @@ angular.module('meanWhiteboardApp')
 
         sendMessageToServer(LAYERS_DATA, layersData);
       }
+
+      // Return the new layer created
+      return canvasFactory.layers.getLayer(id);
     };
 
     $scope.moveLayerUp = function() {
