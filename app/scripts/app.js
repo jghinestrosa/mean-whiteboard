@@ -13,6 +13,10 @@ angular.module('meanWhiteboardApp', [
           buttonFactory: 'buttonFactory'
         }
       })
+      .when('/uploadPicture', {
+        templateUrl: 'partials/uploadPicture',
+        controller: 'UploadPictureCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

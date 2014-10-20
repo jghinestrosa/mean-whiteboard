@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory, socketFactory) {
+  .controller('WhiteboardCtrl', function ($scope, $location, canvasFactory, buttonFactory, socketFactory, uploadPictureFactory) {
 
     // Info for socket io messages
     var LAYERS_DATA = 'layersData',
@@ -38,6 +38,13 @@ angular.module('meanWhiteboardApp')
 
     $scope.showPencilSize = function() {
       return $scope.getSelectedMode().name === 'pencil';
+    };
+
+    // Upload picture
+    $scope.uploadPicture = function() {
+      var whiteboardAsImage = getWhiteboardAsImage();
+      uploadPictureFactory.setPictureToUpload(whiteboardAsImage);
+      $location.url('/uploadPicture');
     };
 
     // Mode
@@ -436,8 +443,9 @@ angular.module('meanWhiteboardApp')
     $scope.imageSaved = '#';
     $scope.showImageSaved = false;
 
-    $scope.saveAsImage = function() {
-      var finalCanvas = document.createElement('canvas');
+    // TODO: Add this to canvasFactory? Make this a $scope method?
+    var getWhiteboardAsImage = function() {
+     var finalCanvas = document.createElement('canvas');
       var ctx = finalCanvas.getContext('2d');
       var layers = canvasFactory.layers.getLayers(false);
       finalCanvas.width = layers[0].width;
@@ -447,7 +455,11 @@ angular.module('meanWhiteboardApp')
         ctx.drawImage(layer.canvas, 0, 0, finalCanvas.width, finalCanvas.height);
       });
 
-      $scope.imageSaved = finalCanvas.toDataURL('img/png');
+      return finalCanvas.toDataURL('img/png');
+    };
+
+    $scope.saveAsImage = function() {
+      $scope.imageSaved = getWhiteboardAsImage();
       $scope.showImageSaved = true;
     };
 

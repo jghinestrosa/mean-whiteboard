@@ -152,11 +152,11 @@
   clear: both;
 }
 
-input, label {
+#color-values input, #color-values label {
   float: left;
 }
 
-label {
+#color-values label {
   clear: left;
   text-align: left;
   width: 10px;
