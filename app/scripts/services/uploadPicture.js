@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .factory('uploadPictureFactory', function uploadPicture() {
-    
+  .factory('uploadPictureFactory', ['$http', function uploadPicture($http) {
+
+    var UPLOAD_URL = '/uploadPicture';
     var pictureToUpload;
 
     var setPictureToUpload = function(dataURL) {
@@ -13,9 +14,21 @@ angular.module('meanWhiteboardApp')
       return pictureToUpload;
     };
 
-    return {
-      setPictureToUpload: setPictureToUpload,
-      getPictureToUpload: getPictureToUpload
+    var upload = function(form) {
+      if (!pictureToUpload || !form) {
+        return false;
+      }
+
+      form.picture = pictureToUpload;
+      $http.post(UPLOAD_URL, form).success(function(data) {
+        console.log('Correctly uploaded');
+      });
     };
 
-  });
+    return {
+      setPictureToUpload: setPictureToUpload,
+      getPictureToUpload: getPictureToUpload,
+      upload: upload
+    };
+
+  }]);
