@@ -8,9 +8,9 @@ angular.module('meanWhiteboardApp')
     $scope.pictures = [];
     
     $scope.getGalleryPictures = function() {
-      $http.get(GALLERY_PICTURES_URL).success(function(data) {
+      $http.get(GALLERY_PICTURES_URL).success(function(pictures) {
         console.log('OK');
-        console.log(data);
+        $scope.pictures = pictures;
       });
     };
 

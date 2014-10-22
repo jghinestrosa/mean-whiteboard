@@ -3,10 +3,10 @@
 angular.module('meanWhiteboardApp')
   .directive('galleryPicture', function () {
     return {
-      template: '<div></div>',
+      templateUrl: 'templates/galleryPicture.html',
       restrict: 'E',
       link: function postLink(scope, element, attrs) {
-        element.text('this is the galleryPicture directive');
+        
       }
     };
   });
