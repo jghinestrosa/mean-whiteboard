@@ -6,6 +6,7 @@ angular.module('meanWhiteboardApp')
     var UPLOAD_URL = '/uploadPicture';
     var pictureToUpload;
 
+    // Store the picture from WhiteboardCtrl
     var setPictureToUpload = function(dataURL) {
       pictureToUpload = dataURL;
     };
@@ -14,6 +15,7 @@ angular.module('meanWhiteboardApp')
       return pictureToUpload;
     };
 
+    // Upload a picture to the server
     var upload = function(form) {
       if (!pictureToUpload || !form) {
         return false;
