@@ -3,7 +3,7 @@
 angular.module('meanWhiteboardApp')
   .factory('uploadPictureFactory', ['$http', function uploadPicture($http) {
 
-    var UPLOAD_URL = '/uploadPicture';
+    var UPLOAD_URL = '/bd/uploadPicture';
     var pictureToUpload;
 
     // Store the picture from WhiteboardCtrl

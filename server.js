@@ -20,11 +20,11 @@ var mongodb = require('mongodb');
 // Express settings
 require('./lib/config/express')(app);
 
-// Routing
-require('./lib/routes')(app);
-
 // MongoDB
 require('./lib/mongodb')(app, mongodb);
+
+// Routing
+require('./lib/routes')(app);
 
 // Socket
 io.on('connection', require('./lib/socket')(io));
