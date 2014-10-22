@@ -17,6 +17,10 @@ angular.module('meanWhiteboardApp', [
         templateUrl: 'partials/uploadPicture',
         controller: 'UploadPictureCtrl'
       })
+      .when('/gallery', {
+        templateUrl: 'partials/gallery',
+        controller: 'GalleryCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

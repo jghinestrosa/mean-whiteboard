@@ -47,6 +47,10 @@ angular.module('meanWhiteboardApp')
       $location.url('/uploadPicture');
     };
 
+    $scope.goToGallery = function() {
+      $location.url('/gallery');
+    };
+
     // Mode
 
     $scope.mode = {};
