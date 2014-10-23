@@ -29,8 +29,8 @@
 <div id="whiteboard" class="board" listen-mouse-events="mode" drop-file="dropFileHandler()">
   <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers(false)"></canvas>
 </div>
-<div id="saved-whiteboard-wrap" ng-show='showImageSaved'>
-  <div id="saved-whiteboard-box">
+<div id="saved-whiteboard-wrap" ng-show='showImageSaved' ng-click="showImageSaved=false">
+  <div id="saved-whiteboard-box" ng-click="$event.stopPropagation()">
     <p>Whiteboard saved!</p>
     <img id="saved-whiteboard" src="{{imageSaved}}">
     <a target="_blank" ng-href="{{imageSaved}}"><button>Download</button></a>
