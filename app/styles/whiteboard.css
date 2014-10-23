@@ -70,10 +70,18 @@ canvas {
   clear: left;
 }
 
+#tools {
+  padding: 10px;
+}
+
 #tools button {
   position: relative;
   float: left;
   clear: left;
+}
+
+#tools:hover, #layers-manager:hover {
+  cursor: move;
 }
 
 #saved-whiteboard-wrap {
@@ -84,6 +92,14 @@ canvas {
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   z-index: 6;
+}
+
+#layers-manager {
+  padding: 10px;
+}
+
+#layers-buttons:hover, #layers:hover {
+  cursor: auto;
 }
 
 #saved-whiteboard-box {

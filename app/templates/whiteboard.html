@@ -1,11 +1,11 @@
 <color-selector visible="colorSelector.visible" initial-color="colorSelector.selectedColor" select-color="colorSelector.selectColor(color)"></color-selector>
 <div id="tools" drag>
-  <button undo-redo="undo()" ng-show="!isSharingCanvas()">Undo</button>
-  <button undo-redo="redo()" ng-show="!isSharingCanvas()">Redo</button>
-  <button ng-click="saveAsImage()">Save</button>
-  <button ng-click="uploadPicture()">Upload</button>
-  <button ng-click="connect()" ng-show="!isSharingCanvas()">Share canvas</button>
-  <button ng-click="disconnect()" ng-show="isSharingCanvas()">Stop share canvas</button>
+  <button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>
+  <button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>
+  <button ng-click="saveAsImage()" ng-mousedown="$event.stopPropagation()">Save</button>
+  <button ng-click="uploadPicture()" ng-mousedown="$event.stopPropagation()">Upload</button>
+  <button ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Share canvas</button>
+  <button ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Stop share canvas</button>
   <button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>
   <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" value="" min="1" max="100">
   <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" value="" min="1" max="100">
@@ -17,10 +17,10 @@
 </div>
 <div id="layers-manager" drag>
   <div id="layers-buttons">
-    <div ng-click="addNewLayer()">+</div>
-    <div ng-click="moveLayerDown()">^</div>
-    <div ng-click="moveLayerUp()">v</div>
-    <div ng-click="deleteSelectedLayer()">x</div>
+    <div ng-click="addNewLayer()" ng-mousedown="$event.stopPropagation()">+</div>
+    <div ng-click="moveLayerDown()" ng-mousedown="$event.stopPropagation()">^</div>
+    <div ng-click="moveLayerUp()" ng-mousedown="$event.stopPropagation()">v</div>
+    <div ng-click="deleteSelectedLayer()" ng-mousedown="$event.stopPropagation()">x</div>
   </div>
   <div id="layers">
     <div class="layer" ng-repeat="layer in getLayers(true)" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>

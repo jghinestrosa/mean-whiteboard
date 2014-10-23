@@ -8,7 +8,7 @@ angular.module('meanWhiteboardApp')
         handler: '&undoRedo'
       },
       link: function postLink(scope, element, attrs) {
-        element.on('click', function() {
+        element.on('click', function(e) {
           var snapshot = scope.handler();
 
           if (!snapshot) {
