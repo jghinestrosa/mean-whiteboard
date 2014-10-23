@@ -29,6 +29,14 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <header id="toolbar" ng-controller="ToolbarCtrl">
+      <h1>MEAN Whiteboard</h1>
+      <nav>
+        <a href="/">Draw</a>
+        <a href="/gallery">Gallery</a>
+      </nav>
+    </header>
+
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
 
@@ -62,6 +70,7 @@
         <script src="scripts/controllers/whiteboard.js"></script>
         <script src="scripts/controllers/uploadPicture.js"></script>
         <script src="scripts/controllers/gallery.js"></script>
+        <script src="scripts/controllers/toolbar.js"></script>
         <script src="scripts/services/canvas.js"></script>
         <script src="scripts/services/filter.js"></script>
         <script src="scripts/services/button.js"></script>

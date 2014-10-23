@@ -5,6 +5,26 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow: hidden;
+}
+
+#toolbar {
+  width: 100%;
+  border: 1px solid black;
+  display: inline-block;
+}
+
+#toolbar h1 {
+  margin: 0px;
+  float: left;
+}
+
+header nav {
+  float: right;
+  position: relative;
+  top: 50%; /* NOT WORKING */
+  /*position: relative;*/
+  /*left: 500px;*/
 }
 
 .menu-bar {
