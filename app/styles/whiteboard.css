@@ -24,6 +24,10 @@ canvas {
 	height: 55px;
 }
 
+#selectedColors:hover {
+  cursor: auto;
+}
+
 #backgroundColor {
 	position:absolute;
 	z-index: 1;

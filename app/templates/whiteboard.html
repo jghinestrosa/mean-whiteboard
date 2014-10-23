@@ -7,8 +7,8 @@
   <button ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Share canvas</button>
   <button ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Stop share canvas</button>
   <button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>
-  <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" value="" min="1" max="100">
-  <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" value="" min="1" max="100">
+  <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
+  <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
   <div id="selectedColors" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">
     <div id="foregroundColor" selected-color="properties.foregroundColor" ng-click="colorSelector.show(properties.foregroundColor, true)"></div>
     <div id="backgroundColor" selected-color="properties.backgroundColor" ng-click="colorSelector.show(properties.backgroundColor, false)"></div>
