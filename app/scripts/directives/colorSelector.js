@@ -229,6 +229,7 @@ angular.module('meanWhiteboardApp')
         // move the circle cursor
         var listenMouseEventsInSelector = function() {
           selectorClickable.on('mousedown', function(e) {
+            e.preventDefault();
             
             console.dir(e);
             
