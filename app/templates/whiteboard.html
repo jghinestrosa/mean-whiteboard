@@ -27,6 +27,7 @@
   </div>
 </div>
 <div id="whiteboard" class="board" listen-mouse-events="mode" drop-file="dropFileHandler()">
+  <div id="whiteboard-background"></div>
   <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers(false)"></canvas>
 </div>
 <div id="saved-whiteboard-wrap" ng-show='showImageSaved' ng-click="showImageSaved=false">

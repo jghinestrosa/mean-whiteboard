@@ -7,10 +7,11 @@ angular.module('meanWhiteboardApp')
       restrict: 'E',
       link: function(scope, element, attrs) {
         var whiteboard = angular.element('#whiteboard');
-        whiteboard.css({
-          width: $window.innerWidth,
-          height: $window.innerHeight,
-        });
+        var whiteboardBackground = angular.element('#whiteboard-background');
+        var windowSize =  {width: $window.innerWidth, height: $window.innerHeight};
+
+        whiteboard.css(windowSize);
+        whiteboardBackground.css(windowSize);
         
       }
     };

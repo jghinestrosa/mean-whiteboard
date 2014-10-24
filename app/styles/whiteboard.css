@@ -14,6 +14,11 @@ canvas {
   height: 100%;
 }
 
+#whiteboard-background {
+  background: linear-gradient(45deg, #DDDDDD 25%, transparent 26%), linear-gradient(45deg, #DDDDDD 25%, transparent 26%) 10px 10px, linear-gradient(225deg, #DDDDDD 25%, transparent 26%), linear-gradient(225deg, #DDDDDD 25%, transparent 26%) 10px 10px;
+  background-size: 20px 20px;
+}
+
 #selectedColors {
 	position: relative;
   float: left;
@@ -64,7 +69,9 @@ canvas {
   top: 50px;
   left: 0;
   border: 1px solid black;
+  padding: 10px;
   display: inline-block;
+  background: #ffffff;
   z-index: 5;
 }
 
@@ -72,10 +79,6 @@ canvas {
   width: 40px;
   float: left;
   clear: left;
-}
-
-#tools {
-  padding: 10px;
 }
 
 #tools button {
@@ -100,6 +103,7 @@ canvas {
 
 #layers-manager {
   padding: 10px;
+  background: #ffffff;
 }
 
 #layers-buttons:hover, #layers:hover {
