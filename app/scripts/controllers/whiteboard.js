@@ -60,16 +60,9 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
 
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           mode.initializePoints(x, y);
           var points = mode.calculateMidPoint(x, y);
           var settings = {
@@ -101,14 +94,8 @@ angular.module('meanWhiteboardApp')
 
         },
 
-        handleMouseDrag: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDrag: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var points = mode.calculateMidPoint(x, y);
 
           var settings = {
@@ -151,7 +138,6 @@ angular.module('meanWhiteboardApp')
         }
 
       };
-
     };
     
     // Handlers for pencil mode and eraser pencil mode
@@ -159,16 +145,8 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             pencilSize: canvasFactory.properties.pencilSize,
@@ -192,14 +170,8 @@ angular.module('meanWhiteboardApp')
 
         },
 
-        handleMouseDrag: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDrag: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             pencilSize: canvasFactory.properties.pencilSize,

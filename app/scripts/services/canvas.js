@@ -484,7 +484,7 @@ angular.module('meanWhiteboardApp')
         ctx.globalCompositeOperation = settings.globalCompositeOperation;
 
         ctx.moveTo(settings.currentMidPoint.x, settings.currentMidPoint.y);
-        ctx.quadraticCurveTo(settings.oldPoint.x, settings.oldPoint.y, settings.oldMidPoint.x, settings.oldMidPoint.y);
+        ctx.quadraticCurveTo(settings.oldPoint.x+1, settings.oldPoint.y+1, settings.oldMidPoint.x, settings.oldMidPoint.y);
         ctx.stroke();
       };
 

@@ -9,22 +9,57 @@ angular.module('meanWhiteboardApp')
       },
       link: function (scope, element, attrs) {
         var stopListeningMouseEvents = function() {
-          element.off('mousedown mousemove mouseup');
+          element.off('mousedown mousemove mouseup touchstart touchmove touchend');
         };
 
         // For brush, eraser and pencil modes
         var changeToSomeDrawingMode = function(mode) {
-            element.on('mousedown', function(e) {
-              mode.handleMouseDown(e);
 
-              // listen mouseMove events only when the mouse is pressed (dragging)
-              element.on('mousemove', mode.handleMouseDrag);
-            });
+          /** Touch Events **/
+          element.on('touchstart', function(e) {
+            // Don't fire mousedown event
+            e.preventDefault();
 
-            element.on('mouseup', function() {
-              element.off('mousemove');
-              mode.handleMouseUp();
+            // X and Y minus whiteboard div offset, minus the border width of the whiteboard div
+            var x = e.originalEvent.targetTouches[0].clientX - e.currentTarget.offsetLeft - element[0].clientLeft;
+            var y = e.originalEvent.targetTouches[0].clientY - e.currentTarget.offsetTop - element[0].clientTop;
+            mode.handleMouseDown(x, y);
+          });
+
+          element.on('touchmove', function(e) {
+            // Prevent scrolling while painting
+            e.preventDefault();
+
+            var x = e.originalEvent.targetTouches[0].clientX - e.currentTarget.offsetLeft - element[0].clientLeft;
+            var y = e.originalEvent.targetTouches[0].clientY - e.currentTarget.offsetTop - element[0].clientTop;
+            mode.handleMouseDrag(x, y);
+          });
+
+          element.on('touchend', function() {
+            console.log('touchend');
+            mode.handleMouseUp();
+          });
+
+          /** Mouse Events **/
+          element.on('mousedown', function(e) {
+            console.log('mousedown');
+            var x = e.originalEvent.layerX;
+            var y = e.originalEvent.layerY;
+            mode.handleMouseDown(x, y);
+
+            //listen mouseMove events only when the mouse is pressed (dragging)
+            element.on('mousemove', function(e) {
+              var x = e.originalEvent.layerX;
+              var y = e.originalEvent.layerY;
+              mode.handleMouseDrag(x, y);
             });
+          });
+
+          element.on('mouseup', function() {
+            element.off('mousemove');
+            mode.handleMouseUp();
+          });
+
         };
 
         // For eyedropper mode
