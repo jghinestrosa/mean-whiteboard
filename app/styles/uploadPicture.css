@@ -1,15 +1,24 @@
 #form-wrapper {
-  text-align: center;
   position: relative;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 #upload-picture-form {
   position: relative;
+  margin: 0 auto;
   top: 25%;
   border: 1px solid black;
   border-radius: 20px;
   display: inline-block;
-  padding: 50px;
+  padding: 20px;
+  text-align: center;
+}
+
+#upload-picture-form h1 {
+  padding: 0;
+  margin: 0;
 }
 
 #upload-picture-form label {
@@ -18,8 +27,9 @@
 
 #upload-picture-form img {
   border: 1px solid black;
+  margin-top: 20px;
   /* TODO: Make width and height variable */
-  width: 500px;
-  height: 300px;
+  width: 300px;
+  height: 150px;
   display: inline-block;
 }

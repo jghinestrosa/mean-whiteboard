@@ -23,6 +23,7 @@ header nav {
   float: right;
   position: relative;
   top: 50%; /* NOT WORKING */
+  right: 10px;
   /*position: relative;*/
   /*left: 500px;*/
 }
