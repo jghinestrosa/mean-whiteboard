@@ -65,10 +65,18 @@ angular.module('meanWhiteboardApp')
         // For eyedropper mode
         var changeToEyedropperMode = function(mode) {
             element.on('mousedown', function(e) {
+              var x = e.originalEvent.layerX;
+              var y = e.originalEvent.layerY;
               
               // it is needed to use $apply because the model is being changed and
               // another directive has to be notified to update the DOM
-              scope.$apply(mode.handleMouseDown(e));
+              scope.$apply(mode.handleMouseDown(x, y));
+            });
+
+            element.on('touchstart', function(e) {
+            var x = e.originalEvent.targetTouches[0].clientX - e.currentTarget.offsetLeft - element[0].clientLeft;
+            var y = e.originalEvent.targetTouches[0].clientY - e.currentTarget.offsetTop - element[0].clientTop;
+              scope.$apply(mode.handleMouseDown(x, y));
             });
         };
 

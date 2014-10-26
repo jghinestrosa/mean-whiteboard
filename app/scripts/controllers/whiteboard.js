@@ -213,15 +213,8 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             x: x,
