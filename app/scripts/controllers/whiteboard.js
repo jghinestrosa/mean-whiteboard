@@ -47,6 +47,13 @@ angular.module('meanWhiteboardApp')
       $location.url('/uploadPicture');
     };
 
+    // Paint tools
+    $scope.paintToolsVisible = false;
+
+    $scope.togglePaintTools = function() {
+      $scope.paintToolsVisible = !$scope.paintToolsVisible;
+    };
+
     // Mode
 
     $scope.mode = {};

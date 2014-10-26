@@ -72,11 +72,14 @@ canvas {
   position: absolute;
   top: 50px;
   left: 0;
-  border: 1px solid black;
   padding: 10px;
   display: inline-block;
   background: #ffffff;
+  border: 1px solid black;
   z-index: 5;
+
+  transition-property: margin;
+  transition-duration: 1s;
 }
 
 .brush-size {
@@ -93,6 +96,25 @@ canvas {
 
 #tools:hover, #layers-manager:hover {
   cursor: move;
+}
+
+#tools-content {
+  display: inline-block;
+  position: relative;
+  right: 0;
+  float: left;
+}
+
+#tools-tab {
+  background: none repeat scroll 0 0 #ffffff;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  height: 40px;
+  left: 100%;
+  margin-left: 10px;
+  position: relative;
+  width: 20px
 }
 
 #saved-whiteboard-wrap {
