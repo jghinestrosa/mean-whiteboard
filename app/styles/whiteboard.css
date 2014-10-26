@@ -80,6 +80,14 @@ canvas {
   z-index: 5;
   display: none;
 
+  /*transition-property: margin;*/
+  /*transition-duration: 1s;*/
+
+  /*-webkit-transition-property: margin;*/
+  /*-webkit-transition-duration: 1s;*/
+}
+
+.tab {
   transition-property: margin;
   transition-duration: 1s;
 }
@@ -96,7 +104,7 @@ canvas {
   clear: left;
 }
 
-#tools:hover, #layers-manager:hover {
+#layers-manager:hover {
   cursor: move;
 }
 

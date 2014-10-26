@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('meanWhiteboardApp', [
-  'ngRoute'
+  'ngRoute',
+  'ngTouch'
 ])
   .config(function ($routeProvider, $locationProvider, $compileProvider) {
     $routeProvider

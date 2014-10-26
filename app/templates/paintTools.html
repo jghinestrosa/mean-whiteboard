@@ -1,4 +1,4 @@
-<div id="tools" drag tab="paintToolsVisible" tab-side="left">
+<div id="tools" tab="paintToolsVisible" tab-side="left" ng-swipe-left="setPaintToolsVisible(false)" ng-mousedown="$event.preventDefault()">
   <div id="tools-content">
     <button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>
     <button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>
@@ -15,5 +15,5 @@
       <div id="swapColors" swap-colors="swapColors()"></div>
     </div>
   </div>
-  <div id="tools-tab" ng-click="togglePaintTools()"></div>
+  <div id="tools-tab" ng-click="togglePaintTools($event)" ng-swipe-right="setPaintToolsVisible(true)"></div>
 </div>

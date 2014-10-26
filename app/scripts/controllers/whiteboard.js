@@ -54,6 +54,10 @@ angular.module('meanWhiteboardApp')
       $scope.paintToolsVisible = !$scope.paintToolsVisible;
     };
 
+    $scope.setPaintToolsVisible = function(visible) {
+      $scope.paintToolsVisible = visible;
+    };
+
     // Mode
 
     $scope.mode = {};

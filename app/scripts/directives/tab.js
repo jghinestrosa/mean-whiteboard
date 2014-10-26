@@ -13,7 +13,7 @@ angular.module('meanWhiteboardApp')
         var elementHeight = element.height();
         var tabSide = attrs.tabSide;
 
-        var hide = function() {
+        var closeTab = function() {
           if (tabSide === 'left') {
             element.css({'margin-left': -elementWidth});
           }
@@ -28,7 +28,7 @@ angular.module('meanWhiteboardApp')
           }
         };
 
-        var show = function() {
+        var openTab = function() {
           if (tabSide === 'left') {
             element.css({'margin-left': '0px'});
           }
@@ -45,21 +45,21 @@ angular.module('meanWhiteboardApp')
 
         scope.$watch('visible', function(visible) {
           if (visible) {
-            show();
+            openTab();
           }
           else {
-            hide();
+            closeTab();
           }
         });
 
-        // The initial state is hidden
-        hide();
+        // The initial state is closed
+        closeTab();
+        element.css({'display': 'inline-block'});
 
-        element.on('transitionend', function() {
-          console.log('transition end');
-          element.css({'display': 'inline-block'});
-          element.off('transitionend');
-        });
+        // Hack for showing the tab without initial transition
+        setTimeout(function() {
+          element.addClass('tab');
+        }, 50);
       }
     };
   });
