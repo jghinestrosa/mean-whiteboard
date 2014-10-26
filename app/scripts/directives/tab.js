@@ -54,6 +54,12 @@ angular.module('meanWhiteboardApp')
 
         // The initial state is hidden
         hide();
+
+        element.on('transitionend', function() {
+          console.log('transition end');
+          element.css({'display': 'inline-block'});
+          element.off('transitionend');
+        });
       }
     };
   });

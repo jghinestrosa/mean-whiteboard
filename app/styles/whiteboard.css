@@ -73,10 +73,11 @@ canvas {
   top: 50px;
   left: 0;
   padding: 10px;
-  display: inline-block;
+  /*display: inline-block;*/
   background: #ffffff;
   border: 1px solid black;
   z-index: 5;
+  display: none;
 
   transition-property: margin;
   transition-duration: 1s;
