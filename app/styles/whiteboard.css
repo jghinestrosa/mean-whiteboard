@@ -1,6 +1,7 @@
 .board {
   position: relative;
-  top: 0;
+  top: -5px;
+  /*top: 0;*/
   left: 0;
   border: 2px solid black;
   width: 1920px;
