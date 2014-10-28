@@ -79,17 +79,11 @@ canvas {
   border: 1px solid black;
   z-index: 5;
   display: none;
-
-  /*transition-property: margin;*/
-  /*transition-duration: 1s;*/
-
-  /*-webkit-transition-property: margin;*/
-  /*-webkit-transition-duration: 1s;*/
 }
 
 .tab {
   transition-property: margin;
-  transition-duration: 1s;
+  transition-duration: 0.5s;
 }
 
 .brush-size {
