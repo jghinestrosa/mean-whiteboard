@@ -275,6 +275,13 @@ angular.module('meanWhiteboardApp')
 
           }
         } 
+      },
+
+      deleteAllLayers: function() {
+        layersMap = {};
+        layersArray = [];
+        numberOfLayers = 0;
+        nextLayerId = 0; // TODO: Be careful
       }
 
     };
@@ -368,6 +375,15 @@ angular.module('meanWhiteboardApp')
       };
     
     }());
+
+    /** Reset actual state **/
+    var resetState = function() {
+      layers.deleteAllLayers();
+      history.clearHistory();
+
+      // Re-initialize with one layer
+      layers.selectLayer(layers.addNewLayer());
+    };
 
     /** Canvas Operations **/
 
@@ -623,6 +639,7 @@ angular.module('meanWhiteboardApp')
       swapColors: swapColors,
       layers: layers,
       history: history,
+      resetState: resetState,
       canvasOperations: canvasOperations
     };
   }]);

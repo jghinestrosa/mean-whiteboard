@@ -1,5 +1,6 @@
 <div id="tools" tab="paintToolsVisible" tab-side="left" ng-swipe-left="setPaintToolsVisible(false)" ng-mousedown="$event.preventDefault()">
   <div id="tools-content">
+    <button ng-click="resetWhiteboard()" ng-mousedown="$event.stopPropagation()">New</button>
     <button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>
     <button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>
     <button ng-click="saveAsImage()" ng-mousedown="$event.stopPropagation()">Save</button>

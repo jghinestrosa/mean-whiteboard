@@ -8,7 +8,8 @@ angular.module('meanWhiteboardApp')
         CANVAS_DATA = 'canvasData',
         INITIAL_STATE_REQUEST = 'initialStateRequest',
         INITIAL_STATE_RESPONSE = 'initialStateResponse',
-        INITIAL_STATE_DATA = 'initialStateData';
+        INITIAL_STATE_DATA = 'initialStateData',
+        RESET_WHITEBOARD = 'resetWhiteboard';
 
     /** canvasFactory **/
     // General properties
@@ -56,6 +57,15 @@ angular.module('meanWhiteboardApp')
 
     $scope.setPaintToolsVisible = function(visible) {
       $scope.paintToolsVisible = visible;
+    };
+
+    // New whiteboard
+    $scope.resetWhiteboard = function() {
+      canvasFactory.resetState();
+
+      if (socketFactory.isConnected()) {
+        sendMessageToServer(RESET_WHITEBOARD);
+      }
     };
 
     // Mode
@@ -274,7 +284,10 @@ angular.module('meanWhiteboardApp')
 
     // Send a message to the server using a socket
     var sendMessageToServer = function(name, data) {
-      socketFactory.emit(name, JSON.stringify(data));
+      if (data) {
+        data = JSON.stringify(data);
+      }
+      socketFactory.emit(name, data);
     };
 
     $scope.connect = function() {
@@ -320,6 +333,12 @@ angular.module('meanWhiteboardApp')
           data = JSON.parse(data);
           canvasFactory.setInitialState(data);
         }, $scope);
+
+        // Reset the whiteboard
+        socketFactory.on(RESET_WHITEBOARD, function() {
+          canvasFactory.resetState();
+        }, $scope);
+
       }, $scope);
     };
 
