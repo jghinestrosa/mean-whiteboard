@@ -228,6 +228,21 @@ angular.module('meanWhiteboardApp')
 
         // move the circle cursor
         var listenMouseEventsInSelector = function() {
+          
+          var handleMouseMove = function(e) {
+            e.preventDefault();
+
+            // jQuery support
+            if (e.originalEvent) {
+              e = e.originalEvent;
+            }
+            var x = (e.offsetX || e.layerX) - radius;
+            var y = (e.offsetY || e.layerY) - radius;
+            scope.setCircleCursorPosition(x, y);
+            scope.$apply(scope.setSaturationValueFromXY(x,y));
+          };
+
+          // Listen events when the mouse is down (mousedown fires touchstart event)
           selectorClickable.on('mousedown', function(e) {
             e.preventDefault();
             
@@ -243,26 +258,35 @@ angular.module('meanWhiteboardApp')
             scope.setCircleCursorPosition(x, y);
             scope.$apply(scope.setSaturationValueFromXY(x,y));
 
-            selectorClickable.on('mousemove', function(e) {
-              // jQuery support
-              if (e.originalEvent) {
-                e = e.originalEvent;
-              }
-              var x = (e.offsetX || e.layerX) - radius;
-              var y = (e.offsetY || e.layerY) - radius;
-              scope.setCircleCursorPosition(x, y);
-              scope.$apply(scope.setSaturationValueFromXY(x,y));
-            });
-
+            // Handle mouse (not touch) movement only when the mouse is down
+            selectorClickable.on('mousemove', handleMouseMove);
           });
 
           selectorClickable.on('mouseup mouseleave', function() {
             selectorClickable.off('mousemove');
           });
+
+          /** Touch support **/
+          selectorClickable.on('touchmove', handleMouseMove);
         };
 
-        // move the arrows of the hue bar
+        // Move the arrows of the hue bar
         var listenMouseEventsInHueBar = function() {
+          
+          var handleMouseMove = function(e) {
+            e.preventDefault();
+
+            // jQuery support
+            if (e.originalEvent) {
+              e = e.originalEvent;
+            }
+
+            var y = e.offsetY || e.layerY;
+            scope.setArrowsPosition(y);
+            scope.$apply(scope.setHueFromY(y));
+          };
+
+          // Listen events when the mouse is down (mousedown fires touchstart event)
           hueBarClickable.on('mousedown', function(e) {
             // jQuery support
             if (e.originalEvent) {
@@ -273,28 +297,22 @@ angular.module('meanWhiteboardApp')
             scope.setArrowsPosition(y);
             scope.$apply(scope.setHueFromY(y));
 
-            hueBarClickable.on('mousemove', function(e) {
-              // jQuery support
-              if (e.originalEvent) {
-                e = e.originalEvent;
-              }
-
-              var y = e.offsetY || e.layerY;
-              scope.setArrowsPosition(y);
-              scope.$apply(scope.setHueFromY(y));
-            });
+            hueBarClickable.on('mousemove', handleMouseMove);
 
           });
 
           hueBarClickable.on('mouseup mouseleave', function() {
             hueBarClickable.off('mousemove');
           });
+
+          /** Touch support **/
+          hueBarClickable.on('touchmove', handleMouseMove);
         };
 
         listenMouseEventsInSelector();
         listenMouseEventsInHueBar();
 
-        // set the color selector visible or not
+        // Set the color selector visible or not
         scope.$watch('visible', function(newVal) {
           if (newVal) {
             element.css('display', 'inline-block');
