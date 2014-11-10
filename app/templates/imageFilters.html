@@ -1,0 +1,12 @@
+<div id="filters-box-wrapper" ng-show="filtersVisible">
+  <div id="filters-box">
+    <div>
+      <select id="select-filter" ng-model="filterSelected" ng-options="filter.name for filter in filters">
+        <!--<option ng-repeat="filter in filters">{{filter.name}}</option>-->
+      </select>
+    </div>
+    <!--<button ng-click="$log.log(filterSelected)">OK</button>-->
+    <button ng-click="applyFilter()">OK</button>
+    <button ng-click="setFiltersVisible(false)">Cancel</button>
+  </div>
+</div>

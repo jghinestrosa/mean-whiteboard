@@ -32,6 +32,20 @@ angular.module('meanWhiteboardApp')
     // History management
     $scope.isHistoryEmpty = canvasFactory.history.isHistoryEmpty;
 
+    // Filters
+    $scope.filters = canvasFactory.filters;
+    $scope.filtersVisible = false;
+    $scope.filterSelected = $scope.filters[0];
+
+    $scope.applyFilter = function() {
+      var canvas = canvasFactory.layers.getSelectedLayer().canvas;
+      $scope.filterSelected.filter(canvas, canvas.width, canvas.height);
+    };
+
+    $scope.setFiltersVisible = function(visible) {
+      $scope.filtersVisible = visible;
+    };
+
     // Show tools
     $scope.showBrushSize = function() {
       return $scope.getSelectedMode().name === 'brush';
