@@ -15,9 +15,13 @@ var config = require('./lib/config/config');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+var mongodb = require('mongodb');
 
 // Express settings
 require('./lib/config/express')(app);
+
+// MongoDB
+require('./lib/mongodb')(app, mongodb);
 
 // Routing
 require('./lib/routes')(app);

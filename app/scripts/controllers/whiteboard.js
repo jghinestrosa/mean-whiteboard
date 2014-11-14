@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('meanWhiteboardApp')
-  .controller('WhiteboardCtrl', function ($scope, canvasFactory, buttonFactory, socketFactory) {
+  .controller('WhiteboardCtrl', function ($scope, $location, canvasFactory, buttonFactory, socketFactory, uploadPictureFactory) {
 
     // Info for socket io messages
     var LAYERS_DATA = 'layersData',
         CANVAS_DATA = 'canvasData',
         INITIAL_STATE_REQUEST = 'initialStateRequest',
         INITIAL_STATE_RESPONSE = 'initialStateResponse',
-        INITIAL_STATE_DATA = 'initialStateData';
+        INITIAL_STATE_DATA = 'initialStateData',
+        RESET_WHITEBOARD = 'resetWhiteboard';
 
     /** canvasFactory **/
     // General properties
@@ -31,6 +32,20 @@ angular.module('meanWhiteboardApp')
     // History management
     $scope.isHistoryEmpty = canvasFactory.history.isHistoryEmpty;
 
+    // Filters
+    $scope.filters = canvasFactory.filters;
+    $scope.filtersVisible = false;
+    $scope.filterSelected = $scope.filters[0];
+
+    $scope.applyFilter = function() {
+      var canvas = canvasFactory.layers.getSelectedLayer().canvas;
+      $scope.filterSelected.filter(canvas, canvas.width, canvas.height);
+    };
+
+    $scope.setFiltersVisible = function(visible) {
+      $scope.filtersVisible = visible;
+    };
+
     // Show tools
     $scope.showBrushSize = function() {
       return $scope.getSelectedMode().name === 'brush';
@@ -38,6 +53,33 @@ angular.module('meanWhiteboardApp')
 
     $scope.showPencilSize = function() {
       return $scope.getSelectedMode().name === 'pencil';
+    };
+
+    // Upload picture
+    $scope.uploadPicture = function() {
+      var whiteboardAsImage = getWhiteboardAsImage();
+      uploadPictureFactory.setPictureToUpload(whiteboardAsImage);
+      $location.url('/uploadPicture');
+    };
+
+    // Paint tools
+    $scope.paintToolsVisible = false;
+
+    $scope.togglePaintTools = function() {
+      $scope.paintToolsVisible = !$scope.paintToolsVisible;
+    };
+
+    $scope.setPaintToolsVisible = function(visible) {
+      $scope.paintToolsVisible = visible;
+    };
+
+    // New whiteboard
+    $scope.resetWhiteboard = function() {
+      canvasFactory.resetState();
+
+      if (socketFactory.isConnected()) {
+        sendMessageToServer(RESET_WHITEBOARD);
+      }
     };
 
     // Mode
@@ -53,16 +95,9 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
 
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           mode.initializePoints(x, y);
           var points = mode.calculateMidPoint(x, y);
           var settings = {
@@ -94,14 +129,8 @@ angular.module('meanWhiteboardApp')
 
         },
 
-        handleMouseDrag: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDrag: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var points = mode.calculateMidPoint(x, y);
 
           var settings = {
@@ -144,7 +173,6 @@ angular.module('meanWhiteboardApp')
         }
 
       };
-
     };
     
     // Handlers for pencil mode and eraser pencil mode
@@ -152,16 +180,8 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             pencilSize: canvasFactory.properties.pencilSize,
@@ -185,14 +205,8 @@ angular.module('meanWhiteboardApp')
 
         },
 
-        handleMouseDrag: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDrag: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             pencilSize: canvasFactory.properties.pencilSize,
@@ -234,15 +248,8 @@ angular.module('meanWhiteboardApp')
       var mode = canvasFactory.canvasOperations.getMode(nameMode);
 
       return {
-        handleMouseDown: function(e) {
-          if (e.originalEvent) {
-            e = e.originalEvent;
-          }
-
+        handleMouseDown: function(x, y) {
           var selectedLayer = $scope.getSelectedLayer();
-
-          var x = e.layerX - selectedLayer.offsetLeft;
-          var y = e.layerY - selectedLayer.offsetTop;
           var settings = {
             layerId: selectedLayer.id,
             x: x,
@@ -291,7 +298,10 @@ angular.module('meanWhiteboardApp')
 
     // Send a message to the server using a socket
     var sendMessageToServer = function(name, data) {
-      socketFactory.emit(name, JSON.stringify(data));
+      if (data) {
+        data = JSON.stringify(data);
+      }
+      socketFactory.emit(name, data);
     };
 
     $scope.connect = function() {
@@ -337,6 +347,12 @@ angular.module('meanWhiteboardApp')
           data = JSON.parse(data);
           canvasFactory.setInitialState(data);
         }, $scope);
+
+        // Reset the whiteboard
+        socketFactory.on(RESET_WHITEBOARD, function() {
+          canvasFactory.resetState();
+        }, $scope);
+
       }, $scope);
     };
 
@@ -361,6 +377,9 @@ angular.module('meanWhiteboardApp')
 
         sendMessageToServer(LAYERS_DATA, layersData);
       }
+
+      // Return the new layer created
+      return canvasFactory.layers.getLayer(id);
     };
 
     $scope.moveLayerUp = function() {
@@ -427,6 +446,30 @@ angular.module('meanWhiteboardApp')
       if (!socketFactory.isConnected()) {
         return canvasFactory.history.redo();
       }
+    };
+
+    /** Save whiteboard as image **/
+    $scope.imageSaved = '#';
+    $scope.showImageSaved = false;
+
+    // TODO: Add this to canvasFactory? Make this a $scope method?
+    var getWhiteboardAsImage = function() {
+     var finalCanvas = document.createElement('canvas');
+      var ctx = finalCanvas.getContext('2d');
+      var layers = canvasFactory.layers.getLayers(false);
+      finalCanvas.width = layers[0].width;
+      finalCanvas.height = layers[0].height;
+
+      layers.forEach(function(layer) {
+        ctx.drawImage(layer.canvas, 0, 0, finalCanvas.width, finalCanvas.height);
+      });
+
+      return finalCanvas.toDataURL('img/png');
+    };
+
+    $scope.saveAsImage = function() {
+      $scope.imageSaved = getWhiteboardAsImage();
+      $scope.showImageSaved = true;
     };
 
     /** Button Factory **/

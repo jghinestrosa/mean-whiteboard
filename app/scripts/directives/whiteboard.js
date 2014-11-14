@@ -6,12 +6,6 @@ angular.module('meanWhiteboardApp')
       templateUrl: 'templates/whiteboard.html',
       restrict: 'E',
       link: function(scope, element, attrs) {
-        var whiteboard = angular.element('#whiteboard');
-        whiteboard.css({
-          width: $window.innerWidth,
-          height: $window.innerHeight,
-        });
-        
       }
     };
   }]);

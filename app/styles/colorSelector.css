@@ -152,20 +152,20 @@
   clear: both;
 }
 
-input, label {
+#color-values input, #color-values label {
   float: left;
 }
 
-label {
+#color-values input {
+  text-transform: uppercase;
+}
+
+#color-values label {
   clear: left;
   text-align: left;
   width: 10px;
   padding-right: 10px;
   margin-bottom: 7px;
-}
-
-input {
-  text-transform: uppercase;
 }
 
 #color-selector-content button {

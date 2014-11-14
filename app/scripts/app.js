@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('meanWhiteboardApp', [
-  'ngRoute'
+  'ngRoute',
+  'ngTouch'
 ])
-  .config(function ($routeProvider, $locationProvider) {
+  .config(function ($routeProvider, $locationProvider, $compileProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'partials/whiteboard',
@@ -13,9 +14,19 @@ angular.module('meanWhiteboardApp', [
           buttonFactory: 'buttonFactory'
         }
       })
+      .when('/uploadPicture', {
+        templateUrl: 'partials/uploadPicture',
+        controller: 'UploadPictureCtrl'
+      })
+      .when('/gallery', {
+        templateUrl: 'partials/gallery',
+        controller: 'GalleryCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
       
     $locationProvider.html5Mode(true);
+
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|data):/);
   });

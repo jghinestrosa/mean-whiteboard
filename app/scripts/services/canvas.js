@@ -275,6 +275,13 @@ angular.module('meanWhiteboardApp')
 
           }
         } 
+      },
+
+      deleteAllLayers: function() {
+        layersMap = {};
+        layersArray = [];
+        numberOfLayers = 0;
+        nextLayerId = 0; // TODO: Be careful
       }
 
     };
@@ -368,6 +375,15 @@ angular.module('meanWhiteboardApp')
       };
     
     }());
+
+    /** Reset actual state **/
+    var resetState = function() {
+      layers.deleteAllLayers();
+      history.clearHistory();
+
+      // Re-initialize with one layer
+      layers.selectLayer(layers.addNewLayer());
+    };
 
     /** Canvas Operations **/
 
@@ -484,7 +500,7 @@ angular.module('meanWhiteboardApp')
         ctx.globalCompositeOperation = settings.globalCompositeOperation;
 
         ctx.moveTo(settings.currentMidPoint.x, settings.currentMidPoint.y);
-        ctx.quadraticCurveTo(settings.oldPoint.x, settings.oldPoint.y, settings.oldMidPoint.x, settings.oldMidPoint.y);
+        ctx.quadraticCurveTo(settings.oldPoint.x+1, settings.oldPoint.y+1, settings.oldMidPoint.x, settings.oldMidPoint.y);
         ctx.stroke();
       };
 
@@ -614,6 +630,48 @@ angular.module('meanWhiteboardApp')
     // Initialize mode
     canvasOperations.setMode(defaultMode.name);
 
+    /** Filters **/
+
+    var filters = [
+      {
+        name: 'Grayscale',
+        filter: function(canvas, width, height) {
+          var ctx = canvas.getContext('2d');
+          var imageData = ctx.getImageData(0, 0, width, height);
+          var data = imageData.data;
+          var brightness;
+
+          for (var i = 0; i < data.length; i += 4) {
+            brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+            data[i] = brightness;
+            data[i + 1] = brightness;
+            data[i + 2] = brightness;
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+
+        }
+      },
+
+      {
+        name: 'Invert',
+        filter: function(canvas, width, height) {
+          var ctx = canvas.getContext('2d');
+          var imageData = ctx.getImageData(0, 0, width, height);
+          var data = imageData.data;
+
+          for (var i = 0; i < data.length; i += 4) {
+            data[i] = 255 - data[i];
+            data[i + 1] = 255 - data[i + 1];
+            data[i + 2] = 255 - data[i + 2];
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+
+        }
+      }
+    ];
+
     /** Factory **/
     return {
       properties: properties,
@@ -623,6 +681,8 @@ angular.module('meanWhiteboardApp')
       swapColors: swapColors,
       layers: layers,
       history: history,
-      canvasOperations: canvasOperations
+      resetState: resetState,
+      canvasOperations: canvasOperations,
+      filters: filters
     };
   }]);

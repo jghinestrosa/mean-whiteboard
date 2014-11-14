@@ -1,8 +1,11 @@
 .board {
   position: relative;
+  top: -5px;
+  /*top: 0;*/
+  left: 0;
   border: 2px solid black;
-  width: 100%;
-  height: 100%;
+  width: 1920px;
+  height: 1080px;
 }
 
 canvas {
@@ -14,6 +17,13 @@ canvas {
   height: 100%;
 }
 
+#whiteboard-background {
+  width: 1920px;
+  height: 1080px;
+  background: linear-gradient(45deg, #DDDDDD 25%, transparent 26%), linear-gradient(45deg, #DDDDDD 25%, transparent 26%) 10px 10px, linear-gradient(225deg, #DDDDDD 25%, transparent 26%), linear-gradient(225deg, #DDDDDD 25%, transparent 26%) 10px 10px;
+  background-size: 20px 20px;
+}
+
 #selectedColors {
 	position: relative;
   float: left;
@@ -22,6 +32,10 @@ canvas {
 	display: inline-block;
 	width: 45px;
 	height: 55px;
+}
+
+#selectedColors:hover {
+  cursor: auto;
 }
 
 #backgroundColor {
@@ -59,9 +73,17 @@ canvas {
   position: absolute;
   top: 50px;
   left: 0;
+  padding: 10px;
+  /*display: inline-block;*/
+  background: #ffffff;
   border: 1px solid black;
-  display: inline-block;
   z-index: 5;
+  display: none;
+}
+
+.tab {
+  transition-property: margin;
+  transition-duration: 0.5s;
 }
 
 .brush-size {
@@ -74,4 +96,88 @@ canvas {
   position: relative;
   float: left;
   clear: left;
+}
+
+#layers-manager:hover {
+  cursor: move;
+}
+
+#tools-content {
+  display: inline-block;
+  position: relative;
+  right: 0;
+  float: left;
+}
+
+#tools-tab {
+  background: none repeat scroll 0 0 #ffffff;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  height: 40px;
+  left: 100%;
+  margin-left: 10px;
+  position: relative;
+  width: 20px
+}
+
+#saved-whiteboard-wrap {
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 6;
+}
+
+#layers-manager {
+  padding: 10px;
+  background: #ffffff;
+}
+
+#layers-buttons:hover, #layers:hover {
+  cursor: auto;
+}
+
+#saved-whiteboard-box {
+  position: relative;
+  top: 15%;
+  margin: 0 auto;
+  /*left: 25%;*/
+  /*width: 50%;*/
+  /*height: 60%;*/
+  display: inline-block;
+  border: 1px solid black;
+  background: white;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 5px 5px 10px #000000;
+  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+#saved-whiteboard-box p {
+  font-size: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+#saved-whiteboard {
+  margin-top: 20px;
+  position: relative;
+  /* TODO: not responsive **/
+  width: 500px;
+  height: 200px;
+  border: 2px solid black;
+  clear: both;
+}
+
+#saved-whiteboard-box button {
+  clear: both;
+  margin: 0 auto;
+  margin-top: 10px;
+  display: block;
 }

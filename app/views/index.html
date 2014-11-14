@@ -20,12 +20,23 @@
     <link rel="stylesheet" href="styles/whiteboard.css">
     <link rel="stylesheet" href="styles/colorSelector.css">
     <link rel="stylesheet" href="styles/layers.css">
+    <link rel="stylesheet" href="styles/uploadPicture.css">
+    <link rel="stylesheet" href="styles/gallery.css">
+    <link rel="stylesheet" href="styles/imageFilters.css">
     <!-- endbuild -->
   </head>
   <body ng-app="meanWhiteboardApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
+    <header id="toolbar" ng-controller="ToolbarCtrl" >
+      <h1>MEAN Whiteboard</h1>
+      <nav>
+        <a href="/">Draw</a>
+        <a href="/gallery">Gallery</a>
+      </nav>
+    </header>
 
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
@@ -52,18 +63,23 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/whiteboard.js"></script>
+        <script src="scripts/controllers/uploadPicture.js"></script>
+        <script src="scripts/controllers/gallery.js"></script>
+        <script src="scripts/controllers/toolbar.js"></script>
         <script src="scripts/services/canvas.js"></script>
         <script src="scripts/services/filter.js"></script>
         <script src="scripts/services/button.js"></script>
         <script src="scripts/services/socket.js"></script>
         <script src="scripts/services/colorConversion.js"></script>
         <script src="scripts/services/localStorage.js"></script>
+        <script src="scripts/services/uploadPicture.js"></script>
         <script src="scripts/directives/whiteboard.js"></script>
         <script src="scripts/directives/layerId.js"></script>
         <script src="scripts/directives/listenMouseEvents.js"></script>
@@ -77,6 +93,12 @@
         <script src="scripts/directives/listenKeyupHex.js"></script>
         <script src="scripts/directives/drag.js"></script>
         <script src="scripts/directives/undoRedo.js"></script>
+        <script src="scripts/directives/dropFile.js"></script>
+        <script src="scripts/directives/submitCallback.js"></script>
+        <script src="scripts/directives/galleryPicture.js"></script>
+        <script src="scripts/directives/paintTools.js"></script>
+        <script src="scripts/directives/tab.js"></script>
+        <script src="scripts/directives/imageFilters.js"></script>
         <!-- endbuild -->
 </body>
 </html>
