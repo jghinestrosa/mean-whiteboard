@@ -12,7 +12,9 @@ angular.module('meanWhiteboardApp')
         RESET_WHITEBOARD = 'resetWhiteboard',
         GET_ALL_ROOMS = 'getAllRooms',
         ROOMS = 'rooms',
-        CREATE_NEW_ROOM  = 'createNewRoom';
+        CREATE_NEW_ROOM  = 'createNewRoom',
+        JOIN_ROOM = 'join',
+        JOINED = 'joined';
 
     /** canvasFactory **/
     // General properties
@@ -300,7 +302,7 @@ angular.module('meanWhiteboardApp')
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
     // Rooms available
-    $scope.rooms = [];
+    $scope.rooms = {};
 
     // The name of a new room
     $scope.newRoomName = '';
@@ -372,6 +374,11 @@ angular.module('meanWhiteboardApp')
           $scope.rooms = JSON.parse(rooms);
         }, $scope);
 
+        // Joined to a room correctly
+        socketFactory.on(JOINED, function() {
+          $scope.showRoomSelector(false);
+        }, $scope);
+
         // Request all rooms available and show the room selector
         sendMessageToServer(GET_ALL_ROOMS);
         $scope.showRoomSelector(true);
@@ -399,8 +406,15 @@ angular.module('meanWhiteboardApp')
     // Create a new room for sharing canvas
     $scope.createNewRoom = function() {
       if ($scope.newRoomName !== '') {
-        sendMessageToServer(CREATE_NEW_ROOM, $scope.newRoomName);
+        sendMessageToServer(CREATE_NEW_ROOM, {roomId: $scope.newRoomName});
         $scope.newRoomName = '';
+      }
+    };
+
+    $scope.joinRoom = function() {
+      if ($scope.selectedRoom !== '') {
+        sendMessageToServer(JOIN_ROOM, {roomId: $scope.selectedRoom});
+        $scope.selectedRoom = '';
       }
     };
 
