@@ -1,0 +1,42 @@
+#select-room-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 6;
+}
+
+#select-room-box {
+  position: relative;
+  top: 25%;
+  display: inline-block;
+  padding: 20px;
+  border: 1px solid black;
+  background: white;
+}
+
+#select-room-box h1 {
+  padding: 0;
+  margin-top: 10px;
+}
+
+#rooms-wrapper {
+  border: 1px solid black;
+  margin-bottom: 10px;
+}
+
+.room {
+  border: 1px solid black;
+}
+
+.room:hover {
+  cursor: pointer;
+  background: #ace0f1;
+}
+
+.roomSelected {
+  background: #ace0f1;
+}

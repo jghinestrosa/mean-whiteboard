@@ -9,7 +9,10 @@ angular.module('meanWhiteboardApp')
         INITIAL_STATE_REQUEST = 'initialStateRequest',
         INITIAL_STATE_RESPONSE = 'initialStateResponse',
         INITIAL_STATE_DATA = 'initialStateData',
-        RESET_WHITEBOARD = 'resetWhiteboard';
+        RESET_WHITEBOARD = 'resetWhiteboard',
+        GET_ALL_ROOMS = 'getAllRooms',
+        ROOMS = 'rooms',
+        CREATE_NEW_ROOM  = 'createNewRoom';
 
     /** canvasFactory **/
     // General properties
@@ -296,6 +299,17 @@ angular.module('meanWhiteboardApp')
 
     $scope.getSelectedMode = canvasFactory.canvasOperations.getSelectedMode;
 
+    // Rooms available
+    $scope.rooms = [];
+
+    // The name of a new room
+    $scope.newRoomName = '';
+
+    // Selected room
+    $scope.selectedRoom = '';
+
+    var roomSelectorVisible = false;
+
     // Send a message to the server using a socket
     var sendMessageToServer = function(name, data) {
       if (data) {
@@ -353,10 +367,51 @@ angular.module('meanWhiteboardApp')
           canvasFactory.resetState();
         }, $scope);
 
+        // Rooms available
+        socketFactory.on(ROOMS, function(rooms) {
+          $scope.rooms = JSON.parse(rooms);
+        }, $scope);
+
+        // Request all rooms available and show the room selector
+        sendMessageToServer(GET_ALL_ROOMS);
+        $scope.showRoomSelector(true);
+
       }, $scope);
+
     };
 
-    $scope.disconnect = socketFactory.disconnect;
+    $scope.showRoomSelector = function(value) {
+      roomSelectorVisible = value;
+    };
+
+    $scope.isRoomSelectorVisible = function() {
+      return roomSelectorVisible;
+    };
+
+    $scope.selectRoom = function(roomId) {
+      $scope.selectedRoom = roomId;
+    };
+
+    $scope.isRoomSelected = function(roomId) {
+      return $scope.selectedRoom === roomId;
+    };
+
+    // Create a new room for sharing canvas
+    $scope.createNewRoom = function() {
+      if ($scope.newRoomName !== '') {
+        sendMessageToServer(CREATE_NEW_ROOM, $scope.newRoomName);
+        $scope.newRoomName = '';
+      }
+    };
+
+    $scope.disconnect = function() {
+      socketFactory.disconnect();
+
+      if ($scope.isRoomSelectorVisible()) {
+        $scope.showRoomSelector(false);
+      }
+
+    };
 
     // Function used for show or not the share canvas button
     $scope.isSharingCanvas = function() {

@@ -1,0 +1,13 @@
+<div id="select-room-wrapper" ng-show="isRoomSelectorVisible()" ng-click="disconnect()">
+  <div id="select-room-box">
+    <h1>Rooms</h1>
+    <div id="rooms-wrapper">
+      <div class="room" ng-class="{'roomSelected': isRoomSelected(room)}" ng-repeat="room in rooms" ng-click="selectRoom(room)">
+        <p>{{room}}</p>
+      </div>
+    </div>
+    <input type="text" name="roomName" value="" placeholder="Enter a new room name" ng-model="newRoomName">
+    <button ng-disabled="newRoomName === ''" ng-click="createNewRoom()">New</button>
+    <button ng-disabled="selectedRoom === ''">Join</button>
+  </div>
+</div>
