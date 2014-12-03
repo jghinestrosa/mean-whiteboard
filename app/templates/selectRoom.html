@@ -1,6 +1,9 @@
 <div id="select-room-wrapper" ng-show="isRoomSelectorVisible()" ng-click="disconnect()">
   <div id="select-room-box" ng-click="$event.stopPropagation()">
     <h1>Rooms</h1>
+    <div id="nickname">
+      <label for="Nickname">Nickname</label><input type="text" name="Nickname" value="" placeholder="Enter a nickname" ng-model="nickname">
+    </div>
     <div id="rooms-wrapper">
       <div class="room" ng-class="{'roomSelected': isRoomSelected(room)}" ng-repeat="(room, participants) in rooms" ng-click="selectRoom(room)">
         <p>{{room}} - {{participants}} people</p>
@@ -8,6 +11,6 @@
     </div>
     <input type="text" name="roomName" value="" placeholder="Enter a new room name" ng-model="newRoomName">
     <button ng-disabled="newRoomName === ''" ng-click="createNewRoom()">New</button>
-    <button ng-disabled="selectedRoom === ''" ng-click="joinRoom()">Join</button>
+    <button ng-disabled="selectedRoom === '' || nickname === ''" ng-click="joinRoom()">Join</button>
   </div>
 </div>

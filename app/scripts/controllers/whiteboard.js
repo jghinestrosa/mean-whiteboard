@@ -389,7 +389,6 @@ angular.module('meanWhiteboardApp')
         // Chat message received
         socketFactory.on(CHAT_MESSAGE, function(message) {
           $scope.chatMessages.lastReceived = message;
-          console.log(message);
         }, $scope);
 
         // Request all rooms available and show the room selector
@@ -433,8 +432,8 @@ angular.module('meanWhiteboardApp')
     };
 
     $scope.joinRoom = function() {
-      if ($scope.selectedRoom !== '') {
-        sendMessageToServer(JOIN_ROOM, {roomId: $scope.selectedRoom});
+      if ($scope.selectedRoom !== '' && $scope.nickname !== '') {
+        sendMessageToServer(JOIN_ROOM, {nickname: $scope.nickname, roomId: $scope.selectedRoom});
         $scope.selectedRoom = '';
       }
     };

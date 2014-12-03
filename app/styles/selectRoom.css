@@ -23,6 +23,14 @@
   margin-top: 10px;
 }
 
+#select-room-box label {
+  padding: 5px;
+}
+
+#nickname {
+  margin-bottom: 10px;
+}
+
 #rooms-wrapper {
   border: 1px solid black;
   margin-bottom: 10px;
