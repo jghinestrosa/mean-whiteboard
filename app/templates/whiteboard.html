@@ -16,6 +16,7 @@
   <div id="whiteboard-background"></div>
   <canvas layer-id="{{layer.id}}" ng-repeat="layer in getLayers(false)"></canvas>
 </div>
+<chat-box></chat-box>
 <select-room></select-room>
 <div id="saved-whiteboard-wrap" ng-show='showImageSaved' ng-click="showImageSaved=false">
   <div id="saved-whiteboard-box" ng-click="$event.stopPropagation()">

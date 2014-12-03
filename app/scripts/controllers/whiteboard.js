@@ -14,7 +14,8 @@ angular.module('meanWhiteboardApp')
         ROOMS = 'rooms',
         CREATE_NEW_ROOM  = 'createNewRoom',
         JOIN_ROOM = 'join',
-        JOINED = 'joined';
+        JOINED = 'joined',
+        CHAT_MESSAGE = 'chatMessage';
 
     /** canvasFactory **/
     // General properties
@@ -310,7 +311,13 @@ angular.module('meanWhiteboardApp')
     // Selected room
     $scope.selectedRoom = '';
 
-    var roomSelectorVisible = false;
+    var roomSelectorVisible = false; 
+
+    // Chat messages
+    $scope.chatMessages = {
+      lastSent: '',
+      lastReceived: ''
+    };
 
     // Send a message to the server using a socket
     var sendMessageToServer = function(name, data) {
@@ -379,12 +386,26 @@ angular.module('meanWhiteboardApp')
           $scope.showRoomSelector(false);
         }, $scope);
 
+        // Chat message received
+        socketFactory.on(CHAT_MESSAGE, function(message) {
+          $scope.chatMessages.lastReceived = message;
+          console.log(message);
+        }, $scope);
+
         // Request all rooms available and show the room selector
         sendMessageToServer(GET_ALL_ROOMS);
         $scope.showRoomSelector(true);
 
       }, $scope);
 
+    };
+
+    $scope.sendChatMessage = function() {
+      sendMessageToServer(CHAT_MESSAGE, {msg: $scope.chatMessages.lastSent});
+    };
+
+    $scope.clearLastChatMessageSent = function() {
+      $scope.chatMessages.lastSent = '';
     };
 
     $scope.showRoomSelector = function(value) {
