@@ -1,14 +1,22 @@
 <div id="tools" tab="paintToolsVisible" tab-side="left" ng-swipe-left="setPaintToolsVisible(false)" ng-mousedown="$event.preventDefault()">
   <div id="tools-content">
-    <button ng-click="resetWhiteboard()" ng-mousedown="$event.stopPropagation()">New</button>
-    <button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>
-    <button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>
-    <button ng-click="saveAsImage()" ng-mousedown="$event.stopPropagation()">Save</button>
-    <button ng-click="uploadPicture()" ng-mousedown="$event.stopPropagation()">Upload</button>
-    <button ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Share canvas</button>
-    <button ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Stop share canvas</button>
+    <ul>
+      <li ng-click="resetWhiteboard()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-document"></li>
+      <li undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-reply"></li>
+      <li undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-forward"></li>
+      <li ng-click="saveAsImage()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-android-download"></li>
+      <li ng-click="uploadPicture()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-android-upload"></li>
+      <li ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-ios-people"></li>
+      <li ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-ios-person"></li>
+      <li ng-click="setFiltersVisible(true)" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-funnel"></li>
+    </ul>
+    <!--<button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>-->
+    <!--<button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>-->
+    <!--<button ng-click="saveAsImage()" ng-mousedown="$event.stopPropagation()">Save</button>-->
+    <!--<button ng-click="uploadPicture()" ng-mousedown="$event.stopPropagation()">Upload</button>-->
+    <!--<button ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Share canvas</button>-->
+    <!--<button ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Stop share canvas</button>-->
     <button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>
-    <button ng-click="setFiltersVisible(true)" ng-mousedown="$event.stopPropagation()">Filters</button>
     <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
     <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
     <div id="selectedColors" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">

@@ -3,10 +3,10 @@
 <image-filters></image-filters>
 <div id="layers-manager" drag>
   <div id="layers-buttons">
-    <div ng-click="addNewLayer()" ng-mousedown="$event.stopPropagation()">+</div>
-    <div ng-click="moveLayerDown()" ng-mousedown="$event.stopPropagation()">^</div>
-    <div ng-click="moveLayerUp()" ng-mousedown="$event.stopPropagation()">v</div>
-    <div ng-click="deleteSelectedLayer()" ng-mousedown="$event.stopPropagation()">x</div>
+    <div ng-click="addNewLayer()" ng-mousedown="$event.stopPropagation()" class="button button-icon ion-plus"></div>
+    <div ng-click="moveLayerDown()" ng-mousedown="$event.stopPropagation()" class="button button-icon ion-chevron-up"></div>
+    <div ng-click="moveLayerUp()" ng-mousedown="$event.stopPropagation()" class="button button-icon ion-chevron-down"></div>
+    <div ng-click="deleteSelectedLayer()" ng-mousedown="$event.stopPropagation()" class="button button-icon ion-close"></div>
   </div>
   <div id="layers">
     <div class="layer" ng-repeat="layer in getLayers(true)" ng-class="{'layer-selected': layer.isSelected}" ng-click="selectLayer(layer.id)" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">Layer {{layer.id}}</div>
