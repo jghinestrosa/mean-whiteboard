@@ -319,6 +319,10 @@ angular.module('meanWhiteboardApp')
       lastReceived: ''
     };
 
+    $scope.chatTab = {
+      visible: false
+    };
+
     // Send a message to the server using a socket
     var sendMessageToServer = function(name, data) {
       if (data) {
