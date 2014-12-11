@@ -1,0 +1,44 @@
+#chat-box-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 210px;
+  height: 210px; /* chat-box height + chat-box-tab height*/
+  padding: 10px;
+}
+
+#chat-box {
+  background: white;
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  padding: 10px;
+  z-index: 6;
+}
+
+#chat-box-tab {
+  position: relative;
+  top: 1px;
+  width: 40px;
+  height: 10px;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  background: white;
+}
+
+#chat-messages {
+  border: 1px solid black;
+  list-style-type: none;
+  width: 195px;
+  height: 150px;
+  overflow: auto;
+}
+
+#chat-box li {
+ padding: 5px 10px; 
+}
+
+#chat-messages li:nth-child(odd) {
+  background: #eee;
+}
