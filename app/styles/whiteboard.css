@@ -28,7 +28,7 @@ canvas {
 	position: relative;
   float: left;
   clear: left;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
 	display: inline-block;
 	width: 45px;
 	height: 55px;
@@ -63,10 +63,15 @@ canvas {
 	position: absolute;
 	width:8px;
 	height:8px;
-	border: 1px solid black;
-	background-color: #0f0;
+	/*border: 1px solid black;*/
+	/*background-color: #0f0;*/
 	top: 0px;
 	right: 5px;
+}
+
+#swapColors:hover {
+  cursor: pointer;
+  color: #4E8EF7;
 }
 
 #tools {

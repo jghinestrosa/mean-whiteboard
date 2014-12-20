@@ -9,9 +9,11 @@ angular.module('meanWhiteboardApp')
       },
       link: function postLink(scope, element, attrs) {
 
-        var elementWidth = element.width();
-        var elementHeight = element.height();
+        var elementWidth = element.outerWidth();
+        var elementHeight = element.outerHeight();
         var tabSide = attrs.tabSide;
+
+        console.log('width: ' + elementWidth);
 
         var closeTab = function() {
           if (tabSide === 'left') {
@@ -53,7 +55,7 @@ angular.module('meanWhiteboardApp')
         });
 
         // The initial state is closed
-        closeTab();
+        //closeTab();
         element.css({'display': 'inline-block'});
 
         // Hack for showing the tab without initial transition

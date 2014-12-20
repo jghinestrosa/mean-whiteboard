@@ -3,11 +3,14 @@
   right: 0;
   bottom: 0;
   width: 210px;
-  height: 210px; /* chat-box height + chat-box-tab height*/
+  height: 220px; /* chat-box height + chat-box-tab height*/
   padding: 10px;
 }
 
 #chat-box {
+  position: absolute;
+  bottom: 0;
+  right: 0;
   background: white;
   width: 200px;
   height: 200px;
@@ -17,14 +20,27 @@
 }
 
 #chat-box-tab {
-  position: relative;
-  top: 1px;
+  position: absolute;
+  top: 0;
   width: 40px;
-  height: 10px;
+  height: 20px;
+  margin-top: -21px;
   border-top: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid black;
   background: white;
+}
+
+#chat-box-tab:hover {
+  cursor: pointer;
+}
+
+#chat-box-tab div {
+  text-align: center;
+}
+
+#chat-box-tab div:hover {
+  color: #4E8EF7;
 }
 
 #chat-messages {

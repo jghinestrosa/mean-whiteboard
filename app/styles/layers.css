@@ -22,8 +22,14 @@
 }
 
 #layers-buttons div {
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   display: inline-block;
+  padding: 3px;
+}
+
+#layers-buttons div:hover {
+  cursor: pointer;
+  color: #4E8EF7;
 }
 
 .layer-selected {
