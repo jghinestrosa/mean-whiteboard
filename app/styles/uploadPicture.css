@@ -5,7 +5,10 @@
   vertical-align: middle;
   width: 100%;
   height: 100%;
-  background: green;
+}
+
+#form-wrapper img {
+  background: white;
 }
 
 #upload-picture-form {
@@ -17,7 +20,45 @@
   display: inline-block;
   padding: 20px;
   text-align: center;
-  background: #ffffff;
+  background: #E0E0E0;
+}
+
+.form-button {
+  border: none;
+  border-radius: 3px;
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 5px 10px;
+  color: white;
+}
+
+.form-button:hover {
+  cursor: pointer;
+}
+
+.upload-button {
+  background: linear-gradient(to bottom, rgba(72, 181, 18, 1) 0%, rgba(61, 153, 15, 1) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.upload-button:hover {
+  background: linear-gradient(to bottom, rgba(72,181,18,1) 0%,rgba(27,119,0,1) 100%);
+}
+
+.upload-button:active {
+  background: rgba(27,119,0,1);
+}
+
+.go-back-button {
+  background: linear-gradient(to bottom, rgba(229,50,22,1) 0%,rgba(132,0,0,1) 100%);
+  padding: 5px 5px;
+}
+
+.go-back-button:hover {
+  background: linear-gradient(to bottom, rgba(229,50,22,1) 0%,rgba(96,0,0,1) 100%);
+}
+
+.go-back-button:active {
+  background: rgba(132,0,0,1);
 }
 
 #upload-picture-form h1 {
@@ -26,7 +67,8 @@
 }
 
 #upload-picture-form label {
-  margin-right: 20px;
+  margin-right: 10px;
+  font-family: 'Dosis', sans-serif;
 }
 
 #upload-picture-form img {

@@ -1,7 +1,7 @@
-<div id="form-wrapper">
+<div class="gradient-blue" id="form-wrapper">
   <form id="upload-picture-form" action="#" method="POST" submit-callback="submit()" accept-charset="utf-8">
 
-    <h1>Upload picture</h1>
+    <h1 class="title">Upload picture</h1>
     <img ng-src="{{pictureToUpload}}">
     <p><label for="title">Title</label><input type="text" ng-model="form.title" name="title" value="" id="title" required></p>
     <p><label for="description">Description</label><textarea id="description" ng-model="form.description" required></textarea></p>
@@ -9,7 +9,7 @@
     <p><label for="email">Email</label><input type="email" ng-model="form.email" name="email" value="" id="email" novalidate="false"></p>
     <p><label for="web">Web</label><input type="url" ng-model="form.url" name="web" value="" id="web"></p>
 
-    <p><input type="submit" value="Upload"></p>
-    <button ng-click="goBack()">Go back</button>
+    <p><input type="submit" value="Upload" class="form-button upload-button"></p>
+    <button class="form-button go-back-button" ng-click="goBack()">Go back</button>
   </form>
 </div>
