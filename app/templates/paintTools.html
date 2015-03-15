@@ -11,6 +11,8 @@
       <li ng-click="setFiltersVisible(true)" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-funnel"></li>
       <li ng-click="setMode('brush')" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-paintbrush"></li>
       <li ng-click="setMode('pencil')" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-edit"></li>
+      <li ng-click="setMode('eraserBrush')" ng-mousedown="$event.stopPropagation()" class="button button-icon icon ion-edit eraser"></li>
+      <li ng-click="setMode('eyedropper')" ng-mousedown="$event.stopPropagation()" class="oi" data-glyph="eyedropper" aria-hidden="true"></li>
     </ul>
     <!--<button undo-redo="undo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Undo</button>-->
     <!--<button undo-redo="redo()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Redo</button>-->
@@ -19,11 +21,11 @@
     <!--<button ng-click="connect()" ng-show="!isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Share canvas</button>-->
     <!--<button ng-click="disconnect()" ng-show="isSharingCanvas()" ng-mousedown="$event.stopPropagation()">Stop share canvas</button>-->
     <!--<button ng-repeat="(key, value) in getButtons()" ng-click="setMode(value.name)" ng-mousedown="$event.stopPropagation()">{{value.name}}</button>-->
-    <button ng-click="setMode('eyedropper')" ng-mousedown="$event.stopPropagation()">eyedropper</button>
-    <button ng-click="setMode('eraserBrush')" ng-mousedown="$event.stopPropagation()">eraserBrush</button>
-    <input type="number" name="brush-size" class="brush-size" ng-model="properties.brushSize" ng-show="showBrushSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
-    <input type="number" name="pencil-size" class="brush-size" ng-model="properties.pencilSize" ng-show="showPencilSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
-    <div id="selectedColors" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">
+    <!--<button ng-click="setMode('eyedropper')" ng-mousedown="$event.stopPropagation()">eyedropper</button>-->
+    <!--<button ng-click="setMode('eraserBrush')" ng-mousedown="$event.stopPropagation()">eraserBrush</button>-->
+    <input type="number" name="brush-size" class="brush-size tools-offset" ng-model="properties.brushSize" ng-show="showBrushSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
+    <input type="number" name="pencil-size" class="brush-size tools-offset" ng-model="properties.pencilSize" ng-show="showPencilSize()" ng-mousedown="$event.stopPropagation()" value="" min="1" max="100">
+    <div id="selectedColors" class="tools-offset" ng-mousedown="$event.stopPropagation(); $event.preventDefault();">
       <div id="foregroundColor" selected-color="properties.foregroundColor" ng-click="colorSelector.show(properties.foregroundColor, true)"></div>
       <div id="backgroundColor" selected-color="properties.backgroundColor" ng-click="colorSelector.show(properties.backgroundColor, false)"></div>
       <div id="swapColors" swap-colors="swapColors()" class="button button-icon icon ion-arrow-swap"></div>

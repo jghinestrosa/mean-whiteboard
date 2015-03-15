@@ -78,12 +78,27 @@ canvas {
   position: absolute;
   top: 50px;
   left: 0;
-  padding: 10px;
+  padding: 10px 10px 10px 0;
   /*display: inline-block;*/
   background: #ffffff;
   border: 1px solid black;
   z-index: 5;
   display: none;
+}
+
+#tools-content li {
+  text-align: center;
+  /*display: inline-block;*/
+}
+
+.eraser {
+  transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.tools-offset {
+  margin-left: 5px;
 }
 
 .tab {
