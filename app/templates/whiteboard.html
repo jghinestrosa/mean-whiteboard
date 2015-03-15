@@ -20,8 +20,8 @@
 <select-room></select-room>
 <div id="saved-whiteboard-wrap" ng-show='showImageSaved' ng-click="showImageSaved=false">
   <div id="saved-whiteboard-box" ng-click="$event.stopPropagation()">
-    <p>Whiteboard saved!</p>
+    <p class="title">Whiteboard saved!</p>
     <img id="saved-whiteboard" src="{{imageSaved}}">
-    <a target="_blank" ng-href="{{imageSaved}}"><button>Download</button></a>
+    <a target="_blank" ng-href="{{imageSaved}}"><button class="form-button upload-button">Download</button></a>
   </div>
 </div>

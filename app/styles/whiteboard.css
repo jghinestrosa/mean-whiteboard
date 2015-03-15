@@ -182,7 +182,7 @@ canvas {
   /*height: 60%;*/
   display: inline-block;
   border: 1px solid black;
-  background: white;
+  background: #E0E0E0;
   border-radius: 10px;
   text-align: center;
   box-shadow: 5px 5px 10px #000000;
@@ -205,6 +205,7 @@ canvas {
   height: 200px;
   border: 2px solid black;
   clear: both;
+  background: white;
 }
 
 #saved-whiteboard-box button {
@@ -212,6 +213,10 @@ canvas {
   margin: 0 auto;
   margin-top: 10px;
   display: block;
+}
+
+#saved-whiteboard-box a:link {
+  text-decoration: none;
 }
 
 @media screen
