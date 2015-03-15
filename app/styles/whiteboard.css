@@ -153,11 +153,6 @@ canvas {
   z-index: 6;
 }
 
-#layers-manager {
-  padding: 10px;
-  background: #ffffff;
-}
-
 #layers-buttons:hover, #layers:hover {
   cursor: auto;
 }

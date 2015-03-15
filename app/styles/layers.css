@@ -5,12 +5,16 @@
   top: 50px;
   left: 150px;
   z-index: 5;
+  background: #ffffff;
+  padding: 2px 10px 10px;
 }
 
 #layers {
   position: relative;
   float: left;
   clear: left;
+  font-family: "Dosis",sans-serif;
+  width: 100%;
 }
 
 .layer {
@@ -19,6 +23,8 @@
   position: relative;
   float: left;
   clear: left;
+  width: 100%;
+  text-align: center;
 }
 
 #layers-buttons div {
