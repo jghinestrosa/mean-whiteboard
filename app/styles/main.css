@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Lobster);
+
 /* Space out content a bit */
 html, body {
   /*padding-top: 20px;*/
@@ -13,6 +15,11 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+.title {
+  font-family: 'Lobster', cursive;
+  text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
 }
 
 #toolbar {
