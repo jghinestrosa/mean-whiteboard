@@ -88,6 +88,7 @@ canvas {
 
 #tools-content li {
   text-align: center;
+  font-size: 1em;
   /*display: inline-block;*/
 }
 
@@ -211,4 +212,13 @@ canvas {
   margin: 0 auto;
   margin-top: 10px;
   display: block;
+}
+
+@media screen
+and (max-width : 360px) {
+
+#tools-content li {
+  font-size: 0.6em;
+}
+
 }
