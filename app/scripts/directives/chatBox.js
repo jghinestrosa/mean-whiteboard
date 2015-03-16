@@ -9,6 +9,24 @@ angular.module('meanWhiteboardApp')
       replace: true,
       link: function postLink(scope, element, attrs) {
 
+        var chatBoxWrapper = angular.element('#chat-box-wrapper');
+        var chatBox = angular.element('#chat-box');
+        var chatTab = angular.element('#chat-box-tab');
+
+        chatBoxWrapper.on('transitionend', function() {
+          console.log('transitionend');
+          console.log(chatBoxWrapper.css('margin-bottom'));
+          if (chatBoxWrapper.css('margin-bottom') !== '0px') {
+            chatBox.hide();
+          }
+        });
+
+        chatTab.on('click touch', function() {
+          if (scope.chatTab.visible) {
+            chatBox.show();
+          }
+        });
+
         // The list of chat messages
         var messagesList = angular.element('#chat-messages');
 

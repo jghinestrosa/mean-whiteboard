@@ -8,23 +8,25 @@
 }
 
 #chat-box {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  /*position: absolute;*/
+  /*bottom: 0;*/
+  /*right: 0;*/
+  display: none;
   background: white;
   width: 200px;
   height: 200px;
   border: 1px solid black;
   padding: 10px;
+  padding-bottom: 0;
   z-index: 6;
 }
 
 #chat-box-tab {
-  position: absolute;
+  /*position: absolute;*/
   top: 0;
   width: 40px;
   height: 20px;
-  margin-top: -21px;
+  /*margin-top: -21px;*/
   border-top: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid black;

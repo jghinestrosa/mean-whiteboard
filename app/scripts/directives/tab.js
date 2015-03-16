@@ -9,9 +9,26 @@ angular.module('meanWhiteboardApp')
       },
       link: function postLink(scope, element, attrs) {
 
-        var elementWidth = element.outerWidth();
-        var elementHeight = element.outerHeight();
+        var tabWrapperId = attrs.tabWrapper;
+        var tabId = attrs.tabElement;
+        var elementWidth;
+        var elementHeight;
+
+        if (tabWrapperId && tabId) {
+          element = angular.element('#' + tabWrapperId);
+          var tab = angular.element('#' + tabId);
+
+          elementWidth = element.outerWidth() - tab.outerWidth();
+          elementHeight = element.outerHeight() - tab.outerHeight() - 5; // TODO: Fix this hack for chat box tab
+        }
+        else {
+          elementWidth = element.outerWidth();
+          elementHeight = element.outerHeight();
+        }
+
         var tabSide = attrs.tabSide;
+
+        //console.log('tabWrapper: ', attrs.tabWrapper);
 
         console.log('width: ' + elementWidth);
 
