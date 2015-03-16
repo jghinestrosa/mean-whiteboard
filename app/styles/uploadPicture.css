@@ -79,3 +79,31 @@
   height: 150px;
   display: inline-block;
 }
+
+@media screen
+and (max-height : 640px) {
+  #upload-picture-form img {
+    width: 200px;
+    height: 100px;
+  }
+
+  #upload-picture-form {
+    padding: 7px;
+  }
+
+  #upload-picture-form .title {
+    font-size: 2em;
+  }
+
+  #upload-picture-form label {
+    /*font-size: 0.5em;*/
+  }
+  #upload-picture-form p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  #upload-picture-form .form-button {
+    font-size: 0.7em;
+  }
+}
