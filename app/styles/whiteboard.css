@@ -220,10 +220,61 @@ canvas {
 }
 
 @media screen
-and (max-width : 360px) {
-
-#tools-content li {
-  font-size: 0.6em;
+and (max-width : 768px) {
+  #tools-content li {
+    font-size: 0.65em;
+  }
 }
 
+@media screen
+and (max-width : 640px) {
+  #tools-content li {
+    font-size: 0.4em;
+  }
+
+  #tools-content input {
+    width: 15px;
+  }
+
+  #selectedColors {
+    /*height: 55px;*/
+    /*width: 45px;*/
+    height: 35px;
+    width: 28px;
+  }
+
+  #foregroundColor {
+    height: 15px;
+    width: 15px;
+  }
+
+  #backgroundColor {
+    height: 15px;
+    width: 15px;
+  }
+}
+
+@media screen
+and (max-width : 360px) {
+  #tools-content li {
+    font-size: 0.7em;
+  }
+}
+
+@media screen
+and (max-width : 320px) {
+  #tools-content li {
+    font-size: 0.6em;
+  }
+
+  #saved-whiteboard {
+    width: 250px;
+    height: 100px;
+  }
+
+  #saved-whiteboard-box {
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
