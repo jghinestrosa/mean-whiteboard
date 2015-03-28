@@ -6,7 +6,7 @@
     </div>
     <div id="rooms-wrapper">
       <div class="room" ng-class="{'roomSelected': isRoomSelected(room)}" ng-repeat="(room, participants) in rooms" ng-click="selectRoom(room)">
-        <p>{{room}} - {{participants}} people</p>
+        <p>{{room}} - {{participants}} users</p>
       </div>
     </div>
     <input type="text" name="roomName" value="" placeholder="Enter a new room name" ng-model="newRoomName">
