@@ -10,13 +10,38 @@
   text-align: center;
 }
 
+#pictures {
+  text-align: center;
+  /*margin-top: 30px;*/
+}
+
 .gallery-picture {
   display: inline-block;
   border: 1px solid black;
-  border-radius: 20px;
+  /*border-radius: 20px;*/
   text-align: center;
+
+
+  background: #E0E0E0;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #000000;
+  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+
 }
 
 .gallery-picture img {
   border: 1px solid black;
+  background: white;
+  width: 300px;
+  height: 150px;
+}
+
+#picture-title {
+  font-size: 1.5em;
+}
+
+#picture-author {
+  font-family: 'Dosis', sans-serif;
 }

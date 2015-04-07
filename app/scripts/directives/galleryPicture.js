@@ -6,7 +6,7 @@ angular.module('meanWhiteboardApp')
       templateUrl: 'templates/galleryPicture.html',
       restrict: 'E',
       link: function postLink(scope, element, attrs) {
-        
+
       }
     };
   });
