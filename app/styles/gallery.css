@@ -45,3 +45,14 @@
 #picture-author {
   font-family: 'Dosis', sans-serif;
 }
+
+.picture-nav {
+  color: white;
+  font-size: 2em;
+  padding: 30px;
+}
+
+.picture-nav:hover {
+  cursor: pointer;
+  color: #4E8EF7;
+}

@@ -1,7 +1,9 @@
 <div id="gallery" class="gradient-blue">
   <h1 class="title">Gallery</h1>
   <div id="pictures">
+      <span id="previous-picture" class="ion-chevron-left picture-nav" ng-click="getPreviousPicture()"></span>
     <!--<gallery-picture ng-repeat="picture in pictures"></gallery-picture>-->
     <gallery-picture></gallery-picture>
+      <span id="next-picture "class="ion-chevron-right picture-nav" ng-click="getNextPicture()"></span>
   </div>
 </div>

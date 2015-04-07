@@ -29,6 +29,9 @@ angular.module('meanWhiteboardApp')
     };
 
     $scope.getPreviousPicture = function() {
+      if (pictureId === 1) {
+        return;
+      }
       pictureId--;
       getGalleryPicture(pictureId);
     };
