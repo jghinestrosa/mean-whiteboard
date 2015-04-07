@@ -43,6 +43,9 @@ angular.module('meanWhiteboardApp')
           /** Mouse Events **/
           element.on('mousedown', function(e) {
             console.log('mousedown');
+            // Not selecting the text in other divs
+            e.preventDefault();
+
             var x = e.originalEvent.layerX;
             var y = e.originalEvent.layerY;
             mode.handleMouseDown(x, y);
