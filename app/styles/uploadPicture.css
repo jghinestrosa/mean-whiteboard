@@ -68,6 +68,9 @@
 
 #upload-picture-form label {
   margin-right: 10px;
+  display: inline-block;
+  width: 80px;
+  text-align: right;
   font-family: 'Dosis', sans-serif;
 }
 
