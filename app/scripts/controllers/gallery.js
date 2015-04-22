@@ -5,9 +5,16 @@ angular.module('meanWhiteboardApp')
 
     var GALLERY_PICTURES_URL = '/bd/galleryPictures';
     var pictureId = 1;
+    var numberOfPictures;
 
     $scope.pictures = [];
     $scope.picture = {};
+
+    var getNumberOfPictures = function() {
+      $http.get('/bd/count').success(function(count) {
+        numberOfPictures = parseInt(count, 10);
+      });
+    };
     
     $scope.getGalleryPictures = function() {
       $http.get(GALLERY_PICTURES_URL).success(function(pictures) {
@@ -24,8 +31,10 @@ angular.module('meanWhiteboardApp')
     };
 
     $scope.getNextPicture = function() {
-      pictureId++;
-      getGalleryPicture(pictureId);
+      if (pictureId !== numberOfPictures) {
+        pictureId++;
+        getGalleryPicture(pictureId);
+      }
     };
 
     $scope.getPreviousPicture = function() {
@@ -36,6 +45,7 @@ angular.module('meanWhiteboardApp')
       getGalleryPicture(pictureId);
     };
 
+    getNumberOfPictures();
     //$scope.getGalleryPictures();
     getGalleryPicture(pictureId);
 
